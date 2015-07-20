@@ -1,4 +1,4 @@
-﻿namespace FSharp.ProjectTemplate
+namespace AntaniXml
 
 /// Documentation for my library
 ///

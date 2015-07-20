@@ -10,8 +10,8 @@ Introducing your project
 Say more
 
 *)
-#r "FSharp.ProjectScaffold.dll"
-open FSharp.ProjectScaffold
+#r "AntaniXml.dll"
+open AntaniXml
 
 Library.hello 0
 (**

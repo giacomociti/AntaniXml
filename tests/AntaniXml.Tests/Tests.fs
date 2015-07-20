@@ -1,6 +1,6 @@
-﻿module FSharp.ProjectScaffold.Tests
+module AntaniXml.Tests
 
-open FSharp.ProjectTemplate
+open AntaniXml
 open NUnit.Framework
 
 [<Test>]
