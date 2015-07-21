@@ -47,7 +47,14 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Library.fs" />
+    <Compile Include="XsdDomain.fs" />
+    <Compile Include="XsdFactory.fs" />
+    <Compile Include="LexicalMappings.fs" />
+    <Compile Include="ConstrainedGenerators.fs" />
+    <Compile Include="FacetBasedGenerators.fs" />
+    <Compile Include="AtomicGenerators.fs" />
+    <Compile Include="XmlGenerator.fs" />
+    <Compile Include="XmlElementGenerator.fs" />
     <None Include="Script.fsx" />
     <None Include="paket.references" />
     <None Include="paket.template" />

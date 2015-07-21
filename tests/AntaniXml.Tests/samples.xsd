@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:simpleType name="int1">
+		<xs:restriction base="xs:int">
+			<xs:minInclusive value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="num" type="xs:int"/>
+	<xs:element name="num1" type="int1"/>
+	<xs:element name="num1-5">
+		<xs:simpleType>
+			<xs:restriction base="int1">
+				<xs:maxExclusive value="5"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<!--   LIST   -->
+	<xs:simpleType name="abcListType">
+		<xs:list>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:pattern value="a|b|c"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:list>
+	</xs:simpleType>
+	<xs:element name="abcList" type="abcListType"/>
+	<xs:element name="abcList3">
+		<xs:simpleType>
+			<xs:restriction base="abcListType">
+				<xs:minLength value="3"/>
+				<xs:pattern value="a b c|a c b" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="abcList2-3">
+		<xs:simpleType>
+			<xs:restriction>
+				<xs:simpleType>
+					<xs:restriction base="abcListType">
+						<xs:maxLength value="3"  />
+					</xs:restriction>
+				</xs:simpleType>
+				<xs:minLength value="2"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<!--   UNION    -->
+	<xs:simpleType name="intOptionalType">
+	  <xs:union memberTypes="xs:integer">
+		<xs:simpleType>
+		  <xs:restriction base="xs:string">
+			<xs:enumeration value="undefined"/>
+		  </xs:restriction>
+		</xs:simpleType>
+	  </xs:union>
+	</xs:simpleType>
+	<xs:element name="intOptional" type="intOptionalType" />
+
+	<xs:element name="unionOfunion">
+		<xs:simpleType>
+			<xs:union memberTypes="xs:boolean intOptionalType">
+			<xs:simpleType>
+				<xs:restriction base="xs:date">
+					<xs:minInclusive value="2010-12-12"/>		
+				</xs:restriction>
+			</xs:simpleType>
+			</xs:union>
+		</xs:simpleType>
+	</xs:element>
+
+</xs:schema>

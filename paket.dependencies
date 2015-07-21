@@ -3,6 +3,7 @@ source https://nuget.org/api/v2
 nuget FSharp.Formatting
 nuget Fare
 nuget FsCheck
+nuget FsCheck.NUnit
 nuget NUnit 
 nuget NUnit.Runners
 nuget FAKE
