@@ -1,31 +1,28 @@
-[![Issue Stats](http://issuestats.com/github/fsprojects/ProjectScaffold/badge/issue)](http://issuestats.com/github/fsprojects/ProjectScaffold)
-[![Issue Stats](http://issuestats.com/github/fsprojects/ProjectScaffold/badge/pr)](http://issuestats.com/github/fsprojects/ProjectScaffold)
+[![Issue Stats](http://issuestats.com/github/giacomociti/AntaniXml/badge/issue)](http://issuestats.com/github/giacomociti/AntaniXml)
+[![Issue Stats](http://issuestats.com/github/giacomociti/AntaniXml/badge/pr)](http://issuestats.com/github/giacomociti/AntaniXml)
 
-# ProjectScaffold
+# AntaniXml
 
-This project can be used to scaffold a prototypical .NET solution including file system layout and tooling. This includes a build process that: 
+AntaniXml is a .NET library for generating random xml based on a schema.
+This is useful mainly for testing, especially to produce stress test data, but also for unit and property based testing.
+Of course generating samples may also help in figuring out concretely what kind of xml is defined by a certain schema.
 
-* updates all AssemblyInfo files
-* compiles the application and runs all test projects
-* generates [SourceLinks](https://github.com/ctaggart/SourceLink)
-* generates API docs based on XML document tags
-* generates [documentation based on Markdown files](http://fsprojects.github.io/ProjectScaffold/writing-docs.html)
-* generates [NuGet](http://www.nuget.org) packages
-* and allows a simple [one step release process](http://fsprojects.github.io/ProjectScaffold/release-process.html).
+The API is straightforward, just obtain a generator from a factory method:
 
-In order to start the scaffolding process run 
+	var gen = XmlElementGenerator.CreateFromSchemaUri("po.xsd", 
+		elmName: "PurchaseOrder", elmNs: string.Empty);
 
-    $ build.cmd // on windows    
-    $ build.sh  // on mono
-    
-Read the [Getting started tutorial](http://fsprojects.github.io/ProjectScaffold/index.html#Getting-started) to learn more.
+specifyng the xsd file and the element definition within the schema to use as a template.
+Then you call the Generate method to get the desired number of samples:
 
-Documentation: http://fsprojects.github.io/ProjectScaffold
+	XElement[] samples = gen.Generate(10);
 
-## Maintainer(s)
+There is also a GenerateInfinite method allowing never ending sequences of random xml to be created on demand.
 
-- [@forki](https://github.com/forki)
-- [@pblasucci](https://github.com/pblasucci)
-- [@sergey-tihon](https://github.com/sergey-tihon)
+AntaniXml is built on top of the awesome [FsCheck] (https://github.com/fscheck/FsCheck) library, and it's easy to use 
+for property based testing with FsCheck.
+Property based testing is an interesting and effective technique. FsCheck is well documented to get you started.
+Here we provide *Arbitrary* instances for the given schemas so that you can feed tests with random (but valid) xml.
 
-The default maintainer account for projects under "fsprojects" is [@fsprojectsgit](https://github.com/fsprojectsgit) - F# Community Project Incubation Space (repo management)
+
+
