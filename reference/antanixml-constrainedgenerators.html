@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>ConstrainedGenerators - AntaniXml</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content="Giacomo Citi"/>
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
+
+    <link type="text/css" rel="stylesheet" href="/AntaniXml/content/style.css" />
+    <script type="text/javascript" src="/AntaniXml/content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="http://fsharp.org">fsharp.org</a></li>
+          <li><a href="http://github.com/giacomociti/AntaniXml">github page</a></li>
+        </ul>
+        <h3 class="muted"><a href="/AntaniXml/index.html">AntaniXml</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+
+
+
+<h1>ConstrainedGenerators</h1>
+<p>
+  <span>Namespace: AntaniXml</span><br />
+</p>
+<div class="xmldoc">
+</div>
+
+<!-- Render nested types and modules, if there are any -->
+  <h2>Nested types and modules</h2>
+  <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="antanixml-constrainedgenerators-constrgen-1.html">ConstrGen<'a></a>
+          </td>
+          <td class="xmldoc"><p>a generator paired with a property satisfied by its samples</p>
+
+
+</td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+  <h3>Functions and values</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Function or value</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '38', 38)" onmouseover="showTip(event, '38', 38)">
+            all gens x
+          </code>
+          <div class="tip" id="38">
+            <strong>Signature:</strong> gens:ConstrGen&lt;&#39;?7147&gt; list -&gt; x:&#39;?7147 -&gt; bool<br />
+                          <strong>Type parameters:</strong> '?7147          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L11-11" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>logical and of the properties of all generators in a list</p>
+
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '39', 39)" onmouseover="showTip(event, '39', 39)">
+            canParse parse x
+          </code>
+          <div class="tip" id="39">
+            <strong>Signature:</strong> parse:(&#39;?7158 -&gt; &#39;?7159) -&gt; x:&#39;?7158 -&gt; bool<br />
+                          <strong>Type parameters:</strong> '?7158, '?7159          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L55-55" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '40', 40)" onmouseover="showTip(event, '40', 40)">
+            lexMap m g
+          </code>
+          <div class="tip" id="40">
+            <strong>Signature:</strong> m:LexMap&lt;&#39;?7161&gt; -&gt; g:ConstrGen&lt;&#39;?7161&gt; -&gt; ConstrGen&lt;string&gt;<br />
+                          <strong>Type parameters:</strong> '?7161          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L58-58" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '41', 41)" onmouseover="showTip(event, '41', 41)">
+            map f g
+          </code>
+          <div class="tip" id="41">
+            <strong>Signature:</strong> f:(&#39;?7163 -&gt; &#39;?7163) -&gt; g:ConstrGen&lt;&#39;?7163&gt; -&gt; ConstrGen&lt;&#39;?7163&gt;<br />
+                          <strong>Type parameters:</strong> '?7163          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L69-69" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '42', 42)" onmouseover="showTip(event, '42', 42)">
+            mix gens
+          </code>
+          <div class="tip" id="42">
+            <strong>Signature:</strong> gens:ConstrGen&lt;&#39;?7153&gt; list -&gt; Gen&lt;&#39;?7153&gt;<br />
+                          <strong>Type parameters:</strong> '?7153          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L45-45" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '43', 43)" onmouseover="showTip(event, '43', 43)">
+            probe samplesNo gens
+          </code>
+          <div class="tip" id="43">
+            <strong>Signature:</strong> samplesNo:int -&gt; gens:ConstrGen&lt;&#39;?7149&gt; list -&gt; (ConstrGen&lt;&#39;?7149&gt; * (&#39;?7149 list * &#39;?7149 list)) list<br />
+                          <strong>Type parameters:</strong> '?7149          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L16-16" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>each generator is paired with two lists: the first list with
+the samples satisfying the properties of all the generators,
+the other list with the remaining samples</p>
+
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '44', 44)" onmouseover="showTip(event, '44', 44)">
+            probeAndMix gens
+          </code>
+          <div class="tip" id="44">
+            <strong>Signature:</strong> gens:ConstrGen&lt;&#39;?7151&gt; list -&gt; Gen&lt;&#39;?7151&gt; option * (ConstrGen&lt;&#39;?7151&gt; * (&#39;?7151 list * &#39;?7151 list)) list<br />
+                          <strong>Type parameters:</strong> '?7151          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L30-30" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>mix generators by choosing the best (if can be reasonably built)
+and enforcing on it also the properties of the other ones</p>
+
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '45', 45)" onmouseover="showTip(event, '45', 45)">
+            tryParse parse x
+          </code>
+          <div class="tip" id="45">
+            <strong>Signature:</strong> parse:(&#39;?7155 -&gt; &#39;?7156) -&gt; x:&#39;?7155 -&gt; &#39;?7156 option<br />
+                          <strong>Type parameters:</strong> '?7155, '?7156          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L51-51" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+        </div>
+        <div class="span3">
+          <img src="/AntaniXml/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />  
+          <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+            <li class="nav-header">AntaniXml</li>
+            <li><a href="/AntaniXml/index.html">Home page</a></li>
+            <li class="divider"></li>
+            <li><a href="http://nuget.org/packages/AntaniXml">Get Library via NuGet</a></li>
+            <li><a href="http://github.com/giacomociti/AntaniXml">Source Code on GitHub</a></li>
+            <li><a href="/AntaniXml/license.html">License</a></li>
+            <li><a href="/AntaniXml/release-notes.html">Release Notes</a></li>
+            
+            <li class="nav-header">Getting started</li>
+            <li><a href="/AntaniXml/tutorial.html">Sample tutorial</a></li>
+
+            <li class="nav-header">Documentation</li>
+            <li><a href="/AntaniXml/reference/index.html">API Reference</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a href="http://github.com/giacomociti/AntaniXml"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
+  </body>
+  </html>

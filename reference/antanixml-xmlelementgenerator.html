@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>XmlElementGenerator - AntaniXml</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content="Giacomo Citi"/>
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
+
+    <link type="text/css" rel="stylesheet" href="/AntaniXml/content/style.css" />
+    <script type="text/javascript" src="/AntaniXml/content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="http://fsharp.org">fsharp.org</a></li>
+          <li><a href="http://github.com/giacomociti/AntaniXml">github page</a></li>
+        </ul>
+        <h3 class="muted"><a href="/AntaniXml/index.html">AntaniXml</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+
+
+
+<h1>XmlElementGenerator</h1>
+<p>
+  <span>Namespace: AntaniXml</span><br />
+</p>
+<div class="xmldoc">
+<p>Factory for random generators of xml elements</p>
+
+
+</div>
+  <h3>Static members</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Static member</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '208', 208)" onmouseover="showTip(event, '208', 208)">
+            CreateArbFromSchemaText(...)
+          </code>
+          <div class="tip" id="208">
+            <strong>Signature:</strong> (xsdText:string * elmName:string * elmNs:string) -&gt; Arbitrary&lt;XElement&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XmlElementGenerator.fs#L71-71" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>The object created embeds a random generator of xml elements and it is
+suitable for property based testing with FsCheck.</p>
+
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '209', 209)" onmouseover="showTip(event, '209', 209)">
+            CreateArbFromSchemaUri(...)
+          </code>
+          <div class="tip" id="209">
+            <strong>Signature:</strong> (xsdUri:string * elmName:string * elmNs:string) -&gt; Arbitrary&lt;XElement&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XmlElementGenerator.fs#L66-66" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>The object created embeds a random generator of xml elements and it is
+suitable for property based testing with FsCheck.</p>
+
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '210', 210)" onmouseover="showTip(event, '210', 210)">
+            CreateFromSchemaText(...)
+          </code>
+          <div class="tip" id="210">
+            <strong>Signature:</strong> (xsdText:string * elmName:string * elmNs:string) -&gt; IXmlElementGenerator<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XmlElementGenerator.fs#L61-61" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Creates a random generator of xml elements with the given name and
+namespace. The element definition is expected at the top level of
+the xsd schema provided as a text string</p>
+
+<h2>Parameters</h2>
+
+<ul>
+<li><code>xsdText</code> - xsd schema as a text string.</li>
+<li><code>elmName</code> - Name of the element for which to create a generator.</li>
+<li><code>elmNs</code> - element namespace; may be empty.</li>
+</ul>
+
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '211', 211)" onmouseover="showTip(event, '211', 211)">
+            CreateFromSchemaUri(...)
+          </code>
+          <div class="tip" id="211">
+            <strong>Signature:</strong> (xsdUri:string * elmName:string * elmNs:string) -&gt; IXmlElementGenerator<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XmlElementGenerator.fs#L50-50" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Creates a random generator of xml elements with the given name and
+namespace. The element definition is expected at the top level of
+the provided schema.</p>
+
+<h2>Parameters</h2>
+
+<ul>
+<li><code>xsdUri</code> - Uri of the xsd schema.</li>
+<li><code>elmName</code> - Name of the element for which to create a generator.</li>
+<li><code>elmNs</code> - element namespace; may be empty.</li>
+</ul>
+
+
+
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+        </div>
+        <div class="span3">
+          <img src="/AntaniXml/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />  
+          <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+            <li class="nav-header">AntaniXml</li>
+            <li><a href="/AntaniXml/index.html">Home page</a></li>
+            <li class="divider"></li>
+            <li><a href="http://nuget.org/packages/AntaniXml">Get Library via NuGet</a></li>
+            <li><a href="http://github.com/giacomociti/AntaniXml">Source Code on GitHub</a></li>
+            <li><a href="/AntaniXml/license.html">License</a></li>
+            <li><a href="/AntaniXml/release-notes.html">Release Notes</a></li>
+            
+            <li class="nav-header">Getting started</li>
+            <li><a href="/AntaniXml/tutorial.html">Sample tutorial</a></li>
+
+            <li class="nav-header">Documentation</li>
+            <li><a href="/AntaniXml/reference/index.html">API Reference</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a href="http://github.com/giacomociti/AntaniXml"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
+  </body>
+  </html>
