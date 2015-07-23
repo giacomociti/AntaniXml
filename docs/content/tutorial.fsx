@@ -6,10 +6,10 @@
 #r "System.Xml.Linq"
 
 (**
-Introducing your project
+AntaniXml Tutorial
 ========================
 
-Say more
+TBD
 
 *)
 #r "AntaniXml.dll"
@@ -19,5 +19,5 @@ let gen = XmlElementGenerator.CreateFromSchemaUri("po.xsd", "PurchaseOrder", "")
 let samples = gen.Generate 10
 
 (**
-Some more info
+TBD
 *)

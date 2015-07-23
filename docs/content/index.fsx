@@ -4,18 +4,18 @@
 #I "../../bin/AntaniXml"
 #r "FsCheck.dll"
 #r "System.Xml.Linq"
+#r "AntaniXml.dll"
+open AntaniXml
 
 (**
-AntaniXml
-======================
 
-Documentation
+AntaniXml is a .NET library for generating random xml based on a schema.
 
 <div class="row">
   <div class="span1"></div>
   <div class="span6">
     <div class="well well-small" id="nuget">
-      The AntaniXml library can be <a href="https://nuget.org/packages/AntaniXml">installed from NuGet</a>:
+      The AntaniXml library can (NOT YET) be <a href="https://nuget.org/packages/AntaniXml">installed from NuGet</a>:
       <pre>PM> Install-Package AntaniXml</pre>
     </div>
   </div>
@@ -25,47 +25,39 @@ Documentation
 Example
 -------
 
-This example demonstrates creating and using a generator for an element in a schema.
+The API is straightforward, just obtain a generator from a factory method:
+
+	var gen = XmlElementGenerator.CreateFromSchemaUri("po.xsd", 
+		elmName: "PurchaseOrder", elmNs: string.Empty);
+
+specifyng the xsd file and the element definition within the schema to use as a template.
+Then you call the Generate method to get the desired number of samples:
+
+	XElement[] samples = gen.Generate(10);
+
+The above example is in C#. The F# equivalent is the following:
 
 *)
-#r "AntaniXml.dll"
-open AntaniXml
 
-(** first you create a generator
-*)
 let gen = XmlElementGenerator.CreateFromSchemaUri("po.xsd", "PurchaseOrder", "")
-
-(** and then use it to create samples
-*)
-
-
-let samples = gen.Generate 2
-
-
+let samples = gen.Generate 10
 
 (**
-Some more info
+In fact the library is implemented in F#. 
 
-Samples & documentation
+Documentation
 -----------------------
 
-The library comes with comprehensible documentation. 
-It can include tutorials automatically generated from `*.fsx` files in [the content folder][content]. 
-The API reference is automatically generated from Markdown comments in the library implementation.
-
- * [Tutorial](tutorial.html) contains a further explanation of this sample library.
+ * [Tutorial](tutorial.html) contains a further explanation of this library.
 
  * [API Reference](reference/index.html) contains automatically generated documentation for all types, modules
-   and functions in the library. This includes additional brief samples on using most of the
-   functions.
+   and functions in the library.
  
 Contributing and copyright
 --------------------------
 
 The project is hosted on [GitHub][gh] where you can [report issues][issues], fork 
-the project and submit pull requests. If you're adding a new public API, please also 
-consider adding [samples][content] that can be turned into a documentation. You might
-also want to read the [library design notes][readme] to understand how it works.
+the project and submit pull requests. 
 
 The library is available under Public Domain license, which allows modification and 
 redistribution for both commercial and non-commercial purposes. For more information see the 
