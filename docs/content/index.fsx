@@ -1,7 +1,9 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
-#I "../../bin"
+#I "../../bin/AntaniXml"
+#r "FsCheck.dll"
+#r "System.Xml.Linq"
 
 (**
 AntaniXml
@@ -23,13 +25,23 @@ Documentation
 Example
 -------
 
-This example demonstrates using a function defined in this sample library.
+This example demonstrates creating and using a generator for an element in a schema.
 
 *)
 #r "AntaniXml.dll"
 open AntaniXml
 
-printfn "hello = %i" <| Library.hello 0
+(** first you create a generator
+*)
+let gen = XmlElementGenerator.CreateFromSchemaUri("po.xsd", "PurchaseOrder", "")
+
+(** and then use it to create samples
+*)
+
+
+let samples = gen.Generate 2
+
+
 
 (**
 Some more info
@@ -59,9 +71,9 @@ The library is available under Public Domain license, which allows modification 
 redistribution for both commercial and non-commercial purposes. For more information see the 
 [License file][license] in the GitHub repository. 
 
-  [content]: https://github.com/fsprojects/AntaniXml/tree/master/docs/content
-  [gh]: https://github.com/fsprojects/AntaniXml
-  [issues]: https://github.com/fsprojects/AntaniXml/issues
-  [readme]: https://github.com/fsprojects/AntaniXml/blob/master/README.md
-  [license]: https://github.com/fsprojects/AntaniXml/blob/master/LICENSE.txt
+  [content]: https://github.com/giacomociti/AntaniXml/tree/master/docs/content
+  [gh]: https://github.com/giacomociti/AntaniXml
+  [issues]: https://github.com/giacomociti/AntaniXml/issues
+  [readme]: https://github.com/giacomociti/AntaniXml/blob/master/README.md
+  [license]: https://github.com/giacomociti/AntaniXml/blob/master/LICENSE.txt
 *)
