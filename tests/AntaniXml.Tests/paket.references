@@ -3,3 +3,4 @@ NUnit.Runners
 FsCheck
 Fare
 FsCheck.NUnit
+NUnitTestAdapter
