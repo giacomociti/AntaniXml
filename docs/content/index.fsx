@@ -15,7 +15,7 @@ AntaniXml is a .NET library for generating random xml based on a schema.
   <div class="span1"></div>
   <div class="span6">
     <div class="well well-small" id="nuget">
-      The AntaniXml library can (NOT YET) be <a href="https://nuget.org/packages/AntaniXml">installed from NuGet</a>:
+      It can be <a href="https://nuget.org/packages/AntaniXml">installed from NuGet</a>:
       <pre>PM> Install-Package AntaniXml</pre>
     </div>
   </div>
@@ -24,25 +24,19 @@ AntaniXml is a .NET library for generating random xml based on a schema.
 
 Example
 -------
-
-The API is straightforward, just obtain a generator from a factory method:
-
-	var gen = XmlElementGenerator.CreateFromSchemaUri("po.xsd", 
-		elmName: "PurchaseOrder", elmNs: string.Empty);
-
-specifyng the xsd file and the element definition within the schema to use as a template.
-Then you call the Generate method to get the desired number of samples:
-
-	XElement[] samples = gen.Generate(10);
-
-The above example is in C#. The F# equivalent is the following:
+The basic usage from C# is shown [here][readme] but the library is developed in [F#](http://fsharp.org) so here's an F# version of the same example:
 
 *)
 
-printfn "hello = %i" <| Library.hello 0
+let gen = XmlElementGenerator.CreateFromSchemaUri("po.xsd", "purchaseOrder", "")
+let samples = gen.Generate 10
 
 (**
-In fact the library is implemented in F#. 
+
+There is also a `GenerateInfinite` method allowing never ending sequences of random xml to be created on demand.
+This may be handy for stress testing so that you don't have to produce and store up-front huge amounts of data.
+
+
 
 Documentation
 -----------------------

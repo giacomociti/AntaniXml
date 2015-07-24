@@ -9,7 +9,10 @@
 AntaniXml Tutorial
 ========================
 
-...
+The main purpose of generating random xml is to produce test data.
+The public API comprises factory methods to create xml generators.
+
+
 
 The core modules are not intended to be directly called by client code (in the future this may change
 in order to provide some *hook* to tweak generators)
@@ -24,7 +27,7 @@ union and lists for simple types, whitespace handling etc.
 
 #### Xsd Factory
 This module is in charge of parsing xsd files and creating models according to XsdDomain data types.
-Parsing xsd is a complex task, and for this we rely on the .net BCL library (namespace Xmlchema..).
+Parsing xsd is a complex task, and for this we rely on the .NET BCL library (namespace System.Xml.Schema).
 Converting the Schema Object Model (SOM) provided by the BCL library into our own simpler model is not strictly necessary.
 But allows us to focus on..
 
@@ -71,10 +74,10 @@ In W3C terms, parse is a map from the lexical space to the value space of the gi
 Usually we implement it relying on `System.XmlConvert`.
 The format function instead maps values to lexical representations. 
 It returns a string list because the same value may have multiple representations (e.g a plus sign may optionally prefix a number).
+*)
 
 
 
-Library.hello 0
 (**
 Some more info
 *)

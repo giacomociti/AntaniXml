@@ -10,14 +10,12 @@ Of course generating samples may also help in figuring out concretely what kind 
 The API is straightforward, just obtain a generator from a factory method:
 
 	var gen = XmlElementGenerator.CreateFromSchemaUri("po.xsd", 
-		elmName: "PurchaseOrder", elmNs: string.Empty);
+		elmName: "purchaseOrder", elmNs: string.Empty);
 
 specifyng the xsd file and the element definition within the schema to use as a template.
 Then you call the Generate method to get the desired number of samples:
 
 	XElement[] samples = gen.Generate(10);
-
-There is also a GenerateInfinite method allowing never ending sequences of random xml to be created on demand.
 
 AntaniXml is built on top of the awesome [FsCheck] (https://github.com/fscheck/FsCheck) library, and it's easy to use 
 for property based testing with FsCheck.
