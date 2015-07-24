@@ -55,9 +55,11 @@
     <Compile Include="AtomicGenerators.fs" />
     <Compile Include="XmlGenerator.fs" />
     <Compile Include="XmlElementGenerator.fs" />
-    <None Include="Script.fsx" />
     <None Include="paket.references" />
     <None Include="paket.template" />
+    <None Include="Scripts\load-references.fsx" />
+    <None Include="Scripts\load-project.fsx" />
+    <None Include="Script.fsx" />
   </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
