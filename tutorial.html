@@ -35,31 +35,68 @@
           
 <h1><a name="AntaniXml-Tutorial" class="anchor" href="#AntaniXml-Tutorial">AntaniXml Tutorial</a></h1>
 
-<p>TBD</p>
+<p>The main purpose of generating random xml is to produce test data.
+The public API comprises factory methods to create xml generators.</p>
 
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-<span class="l">2: </span>
-<span class="l">3: </span>
-<span class="l">4: </span>
-<span class="l">5: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">&quot;AntaniXml.dll&quot;</span>
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="i">AntaniXml</span>
+<p>The core modules are not intended to be directly called by client code (in the future this may change
+in order to provide some <em>hook</em> to tweak generators)
+Anyway here's an overview for those interested in implementation details (contributions are welcome).
+The library is written in F# and organized in modulues.</p>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="i">gen</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="t">XmlElementGenerator</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="f">CreateFromSchemaUri</span>(<span class="s">&quot;po.xsd&quot;</span>, <span class="s">&quot;PurchaseOrder&quot;</span>, <span class="s">&quot;&quot;</span>)
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs5', 5)" onmouseover="showTip(event, 'fs5', 5)" class="i">samples</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs2', 6)" onmouseover="showTip(event, 'fs2', 6)" class="i">gen</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs6', 7)" onmouseover="showTip(event, 'fs6', 7)" class="f">Generate</span> <span class="n">10</span>
-</code></pre></td>
-</tr>
-</table>
+<h4><a name="Xsd-Domain" class="anchor" href="#Xsd-Domain">Xsd Domain</a></h4>
 
-<p>TBD</p>
+<p>This module provides types to represent a schema.
+F# data types like discriminated unions allow for very clear definitions.
+The XML schema specification is rich and complex, so this module provides a simplified view.
+Nevertheless, we cover a few specific (and sometimes tricky) concepts, like nillable values, fixed values,
+union and lists for simple types, whitespace handling etc.</p>
 
-<div class="tip" id="fs1">namespace AntaniXml</div>
-<div class="tip" id="fs2">val gen : IXmlElementGenerator<br /><br />Full name: Tutorial.gen</div>
-<div class="tip" id="fs3">type XmlElementGenerator =<br />&#160;&#160;static member CreateArbFromSchemaText : xsdText:string * elmName:string * elmNs:string -&gt; Arbitrary&lt;XElement&gt;<br />&#160;&#160;static member CreateArbFromSchemaUri : xsdUri:string * elmName:string * elmNs:string -&gt; Arbitrary&lt;XElement&gt;<br />&#160;&#160;static member CreateFromSchemaText : xsdText:string * elmName:string * elmNs:string -&gt; IXmlElementGenerator<br />&#160;&#160;static member CreateFromSchemaUri : xsdUri:string * elmName:string * elmNs:string -&gt; IXmlElementGenerator<br />&#160;&#160;static member private createGen : xmlSchema:XmlSchemaSet * elmName:string * elmNs:string -&gt; Gen&lt;XElement&gt;<br />&#160;&#160;static member private createGen&#39; : xmlSchema:XmlSchemaSet * elmName:string * elmNs:string -&gt; IXmlElementGenerator<br /><br />Full name: AntaniXml.XmlElementGenerator</div>
-<div class="tip" id="fs4">static member XmlElementGenerator.CreateFromSchemaUri : xsdUri:string * elmName:string * elmNs:string -&gt; IXmlElementGenerator</div>
-<div class="tip" id="fs5">val samples : System.Xml.Linq.XElement array<br /><br />Full name: Tutorial.samples</div>
-<div class="tip" id="fs6">abstract member IXmlElementGenerator.Generate : n:int -&gt; System.Xml.Linq.XElement array</div>
+<h4><a name="Xsd-Factory" class="anchor" href="#Xsd-Factory">Xsd Factory</a></h4>
+
+<p>This module is in charge of parsing xsd files and creating models according to XsdDomain data types.
+Parsing xsd is a complex task, and for this we rely on the .NET BCL library (namespace System.Xml.Schema).
+Converting the Schema Object Model (SOM) provided by the BCL library into our own simpler model is not strictly necessary.
+But allows us to focus on..</p>
+
+<h4><a name="Xml-Generator" class="anchor" href="#Xml-Generator">Xml Generator</a></h4>
+
+<h4><a name="Constrained-Generators" class="anchor" href="#Constrained-Generators">Constrained Generators</a></h4>
+
+<h4><a name="Known-Limitations" class="anchor" href="#Known-Limitations">Known Limitations</a></h4>
+
+<p><a href="http://www.w3.org/XML/Schema">XML Schema</a> is rich and complex, it's inevitable to have some limitations.
+A few ones are known and listed below. Some of them may hopefully be addressed in the future.
+But likely there are many more unknown limitations. If you find one please raise an <a href="https://github.com/fsprojects/AntaniXml/issues">issue</a>.
+Anyway don't be too scared of this disclaimer. I think AntaniXml can cope with many nuances and support many features 
+(like regex thanks to <a href="https://github.com/moodmosaic/Fare">Fare</a>).</p>
+
+<ul>
+<li><p>recursive schemas -
+at the moment, we simply throws an exception when an element definition refers to itself.</p></li>
+<li>identity and subset constraint -
+they goes against the 'generative' nature of schemas.</li>
+</ul>
+
+<h3><a name="Design-notes" class="anchor" href="#Design-notes">Design notes</a></h3>
+
+<h2><a name="Generators-for-simple-datatypes" class="anchor" href="#Generators-for-simple-datatypes">Generators for simple datatypes</a></h2>
+
+<p>Generation of random values for simple datatypes is mainly based on FsCheck generators.
+Each simple datatype is mapped to a suitable CLR type (e.g. <code>xs:int</code> to <code>System.Int32</code>, <code>xs:integer</code> to <code>System.Numerics.BigInteger</code>...) 
+for which an <a href="https://github.com/fscheck/FsCheck">FsCheck</a> generator already exists or can be easily built.
+Anyway this is not enough. In case of constraining facets (like MaxLength) we have to narrow the set of values that can be generated.
+An easy option is to drop generated values that violate a constraint. But we may en up discarding too many values.
+Suppose we have the constraint of Length = 5. We should not generate strings of arbitrary length and then retain only those with length 5.
+So we need more specific generators for each kind of constraint.</p>
+
+<p>And for each simple datatype we need parse and format functions.
+In W3C terms, parse is a map from the lexical space to the value space of the given datatype.
+Usually we implement it relying on <code>System.XmlConvert</code>.
+The format function instead maps values to lexical representations. 
+It returns a string list because the same value may have multiple representations (e.g a plus sign may optionally prefix a number).</p>
+
+<p>Some more info</p>
+
 
         </div>
         <div class="span3">
