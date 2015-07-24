@@ -7,6 +7,7 @@ nuget FsCheck.NUnit
 nuget NUnit 
 nuget NUnit.Runners
 nuget FAKE
+nuget NUnitTestAdapter
 nuget SourceLink.Fake
 
 github fsharp/FAKE modules/Octokit/Octokit.fsx
