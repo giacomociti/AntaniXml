@@ -40,6 +40,7 @@ This may be handy for stress testing so that you don't have to produce and store
 
 Documentation
 -----------------------
+*NOTE: This is only an initial draft*
 
  * [Tutorial](tutorial.html) contains a further explanation of this library.
 
