@@ -128,9 +128,14 @@ module XmlGenerator =
             | Empty -> Gen.constant Seq.empty
 
             | Any ((Min min, maxOccurs), ns) -> 
-                 // not working
-                
-                let elm = XElement(XName.Get("anyElement"))
+                let elmName, elmNs =
+                    match ns with
+                    | AnyNs.Local -> "anyElement", "sciudbeempty" 
+                    | AnyNs.Other // hope we have no clashes
+                    | AnyNs.Any -> "anyElement", "anyNs"
+                    | AnyNs.Target (h :: _) -> "anyElement", h
+                    | AnyNs.Target [] -> failwith "Empty Target"
+                let elm = XElement(XName.Get(elmName, elmNs))
                 gen { let! n = Gen.choose(min, getMax maxOccurs)
                       let! elms = Gen.constant elm |> Gen.listOfLength n 
                       return Seq.ofList elms }
