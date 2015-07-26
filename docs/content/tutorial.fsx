@@ -33,13 +33,7 @@ XmlElementGenerator
     |> Seq.iter (printfn "%A")
 
 (**
-the above code may for example produce:
-    [lang=xml]
-    <e1>1</e1>
-    <e1>1</e1>
-    <e1>-4</e1>
-    <e1>0</e1>
-    <e1>2</e1>
+
 
 ### Property based testing
 
