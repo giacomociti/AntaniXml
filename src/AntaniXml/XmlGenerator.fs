@@ -130,7 +130,7 @@ module XmlGenerator =
             | Any ((Min min, maxOccurs), ns) -> 
                 let elmName, elmNs =
                     match ns with
-                    | AnyNs.Local -> "anyElement", "sciudbeempty" 
+                    | AnyNs.Local -> "anyElement", "" 
                     | AnyNs.Other // hope we have no clashes
                     | AnyNs.Any -> "anyElement", "anyNs"
                     | AnyNs.Target (h :: _) -> "anyElement", h
