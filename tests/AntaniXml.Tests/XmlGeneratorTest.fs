@@ -84,7 +84,8 @@ module XmlGeneratorTest =
   
     [<Test>]
     let ``valid samples are generated for gpx.xsd``()  =
-        @"http://www.topografix.com/GPX/1/1/gpx.xsd"
+        //@"http://www.topografix.com/GPX/1/1/gpx.xsd"
+        "gpx.xsd"
         |> xmlSchemaSetFromUri 
         |> checkSchema  
         |> Assert.True

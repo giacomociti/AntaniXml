@@ -186,3 +186,16 @@ module FacetBasedGenerators =
         |> List.choose id
         |> mix
         |> handleWhitespace wsh 
+
+    /// this version is to handle a corner case with token:
+    /// it seems that a token with only spaces is not collapsed
+    /// by the .NET validator resulting in validation error
+    let applyTextFacets' facets _ generator =
+        patternGen facets @
+        [ 
+          enumGen facets
+          Some generator ] 
+        |> List.choose id
+        |> mix
+        |> Gen.suchThat isCollapsed
+

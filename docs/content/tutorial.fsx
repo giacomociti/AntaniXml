@@ -51,6 +51,52 @@ Examples of how to use this with `FsCheck.NUnit` are in the [unit tests](https:/
 Notice that at the moment we lack proper shrinking so counter-examples 
 provided for failing tests may be bigger than necessary.
 
+### [Creating samples for the XML type provider](#XMLTypeProvider)
+
+Another possible usage scenario is creating samples for the XML type provider.
+
+*)
+
+(*** hide ***)
+#I @"..\..\..\FSharp.Data\bin"
+#I @"..\..\..\AntaniXml\bin\AntaniXml"
+
+(**
+[FSharp.Data](http://fsharp.github.io/FSharp.Data) is a popular F# library featuring many type providers, including one for XML.
+Strongly typed access to xml documents is achieved with inference on samples. AntaniXml may help to produce the needed samples:
+*)
+
+#r "AntaniXml.dll"
+#r "FSharp.Data.dll"
+#r "System.Xml.Linq"
+
+open AntaniXml
+open System.IO
+open FSharp.Data
+open System.Xml.Linq
+
+[<Literal>]
+let dir = @"C:\temp"
+[<Literal>]
+let xmlSamplesFile = "samples.xml"
+let xsdUri = Path.Combine(dir, "po.xsd")
+let samplesUri = Path.Combine(dir, xmlSamplesFile)
+
+let samples = 
+    XmlElementGenerator
+        .CreateFromSchemaUri(xsdUri, "purchaseOrder", "")
+        .Generate(5)
+XElement(XName.Get("root"), samples).Save(samplesUri)
+
+type po = XmlProvider<xmlSamplesFile, SampleIsList = true, ResolutionFolder = dir>
+
+
+(**
+
+Of course when a schema is available it would be a better option to infer types directly from it.
+Future versions of FSharp.Data may support xsd.
+
+
 ### Known Limitations
 
 [XML Schema](http://www.w3.org/XML/Schema) is rich and complex, it's inevitable to have some limitations.

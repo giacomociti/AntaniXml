@@ -72,6 +72,9 @@
     <None Include="XMLSchema-datatypes.xsd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="gpx.xsd">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
@@ -80,9 +83,11 @@
     </Reference>
     <Reference Include="nunit.core">
       <HintPath>..\..\packages\NUnit.Runners\tools\lib\nunit.core.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="nunit.core.interfaces">
       <HintPath>..\..\packages\NUnit.Runners\tools\lib\nunit.core.interfaces.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -180,12 +185,12 @@
   <ItemGroup>
     <Reference Include="NUnit.VisualStudio.TestAdapter">
       <HintPath>..\..\packages\NUnitTestAdapter\lib\NUnit.VisualStudio.TestAdapter.dll</HintPath>
-      <Private>True</Private>
+      <Private>False</Private>
       <Paket>True</Paket>
     </Reference>
     <Reference Include="nunit.util">
       <HintPath>..\..\packages\NUnitTestAdapter\lib\nunit.util.dll</HintPath>
-      <Private>True</Private>
+      <Private>False</Private>
       <Paket>True</Paket>
     </Reference>
   </ItemGroup>

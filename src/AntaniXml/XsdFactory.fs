@@ -342,9 +342,8 @@ module XsdFactory =
     
     let createSchemaSet (xmlReader: XmlReader) =
         let schemaSet = new XmlSchemaSet()
-        let h = new ValidationEventHandler(fun _ -> failwith "invalid schema") 
         use reader = xmlReader
-        XmlSchema.Read(reader, h) |> schemaSet.Add |> ignore
+        XmlSchema.Read(reader, null) |> schemaSet.Add |> ignore
         schemaSet.Compile()
         schemaSet
 
@@ -363,6 +362,7 @@ module XsdFactory =
     let validate xmlSchemaSet inputXml =
         let settings = XmlReaderSettings(ValidationType = ValidationType.Schema)
         settings.Schemas <- xmlSchemaSet
+        //settings.IgnoreWhitespace <- true
         use reader = XmlReader.Create(new StringReader(inputXml), settings)
         try
             while reader.Read() do ()

@@ -1,47 +1,47 @@
-// Learn more about F# at http://fsharp.org. See the 'F# Tutorial' project
-// for more guidance on F# programming.
+//#load "Scripts\load-references.fsx"
+//#load "Scripts\load-project.fsx"
 
-#load "Scripts\load-references.fsx"
-#load "Scripts\load-project.fsx"
+#I @"..\..\..\FSharp.Data\bin"
+#I @"..\..\..\AntaniXml\bin\AntaniXml"
+
+#r "FsCheck.dll"
+#r "AntaniXml.dll"
+#r "FSharp.Data.dll"
+#r "System.Xml.Linq"
+
 open AntaniXml
-open AntaniXml.XsdFactory
-open AntaniXml.XmlGenerator
-open FsCheck
+open System.IO
+open FSharp.Data
+open System.Xml.Linq
+open System.Xml
 
-let dir = @"C:\Users\372giaciti\Source\Repos\AntaniXml\tests\AntaniXml.Tests"
-let (++) x y = System.IO.Path.Combine(x, y)
-let xsdUri = System.IO.Path.Combine(dir, "po.xsd")
-let gen = XmlElementGenerator.CreateFromSchemaUri(xsdUri, "purchaseOrder", "")
-gen.Generate(10)
-|> Array.iteri (fun i e -> e.Save(dir ++ "out" ++ sprintf "po%i.xml" i))
+[<Literal>]
+let dir = @"C:\temp"
 
+[<Literal>]
+let xmlSamplesFile = "samples.xml"
 
-
-let isValid schemaSet (e: System.Xml.Linq.XElement) =
-    let valid = validate schemaSet
-    match e.ToString() |> valid  with
-    | true, _ -> true
-    | false, msg ->
-        printfn "%s %A" msg e
-        false    
-
-let xsd =
-    //dir ++ "bin" ++ "debug" ++ "wip.xsd"
-    "http://www.topografix.com/GPX/1/1/gpx.xsd"
-    |> xmlSchemaSetFromUri 
+let xsdUri = Path.Combine(dir, "po.xsd")
+let samplesUri = Path.Combine(dir, xmlSamplesFile)
 
 let samples = 
-    (xsdSchema xsd).Elements 
-    |> List.map genElement
-    |> List.collect (Gen.sample 5 10)
+    XmlElementGenerator
+        .CreateFromSchemaUri(xsdUri, "purchaseOrder", "")
+        .Generate(5)
+XElement(XName.Get("root"), samples).Save(samplesUri)
 
-let allValid =
-    samples
-    |> List.map (isValid xsd)
-    |> List.forall id
+type po = XmlProvider<xmlSamplesFile, SampleIsList = true, ResolutionFolder = dir>
 
-let outDir = @"c:\temp\xsdTest"
-samples
-|> List.iteri (fun i x -> x.Save(outDir ++ (sprintf "sample%i.xml" i)))
+open System.Xml
+let x = new System.DateTime(1992, 3, 29, 2, 0, 0)
+let local = XmlConvert.ToString(x, XmlDateTimeSerializationMode.Local)                  // "1992-03-29T02:00:00+01:00"
+let utc = XmlConvert.ToString(x, XmlDateTimeSerializationMode.Utc)                      // "1992-03-29T02:00:00Z"
+let unspecified = XmlConvert.ToString(x, XmlDateTimeSerializationMode.Unspecified)      // "1992-03-29T02:00:00"
+let roundtripKind = XmlConvert.ToString(x, XmlDateTimeSerializationMode.RoundtripKind)  // "1992-03-29T02:00:00"
+
+let d = XmlConvert.ToDateTime(local, XmlDateTimeSerializationMode.Local) // 3/29/1992 3:00:00 AM
+let d' = XmlConvert.ToDateTime(local, XmlDateTimeSerializationMode.Utc) // 3/29/1992 1:00:00 AM
+let d''' = XmlConvert.ToDateTime(local, XmlDateTimeSerializationMode.Unspecified) // 3/29/1992 3:00:00 AM
+let d'''' = XmlConvert.ToDateTime(roundtripKind, XmlDateTimeSerializationMode.RoundtripKind) // 3/29/1992 3:00:00 AM
 
 

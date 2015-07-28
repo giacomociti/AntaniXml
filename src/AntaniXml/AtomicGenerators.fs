@@ -22,7 +22,7 @@ module AtomicGenerators =
 
     let genToken facets =
         boundedStringGen facets 0 100
-        |> applyTextFacets facets Collapse
+        |> applyTextFacets' facets Collapse
 
 
     let genName facets =
