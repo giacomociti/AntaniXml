@@ -31,11 +31,11 @@ let project = "AntaniXml"
 
 // Short summary of the project
 // (used as description in AssemblyInfo and as a short summary for NuGet package)
-let summary = "xml random generator"
+let summary = "XML random generator"
 
 // Longer description of the project
 // (used as a description for NuGet package; line breaks are automatically cleaned up)
-let description = "xml random generator based on xsd schema"
+let description = "XML random generator based on XSD schema"
 
 // List of author names (for NuGet package)
 let authors = [ "Giacomo Citi" ]
