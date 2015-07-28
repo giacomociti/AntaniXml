@@ -86,6 +86,67 @@ Overloads accepting xsd as plain text are also provided: they're handy for exper
 Notice that at the moment we lack proper shrinking so counter-examples 
 provided for failing tests may be bigger than necessary.</p>
 
+<h3><a name="Creating-samples-for-the-XML-type-provider" class="anchor" href="#Creating-samples-for-the-XML-type-provider"><a href="#XMLTypeProvider">Creating samples for the XML type provider</a></a></h3>
+
+<p>Another possible usage scenario is creating samples for the XML type provider.</p>
+
+<p><a href="http://fsharp.github.io/FSharp.Data">FSharp.Data</a> is a popular F# library featuring many type providers, including one for XML.
+Strongly typed access to xml documents is achieved with inference on samples. AntaniXml may help to produce the needed samples:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">&quot;AntaniXml.dll&quot;</span>
+<span class="prep">#r</span> <span class="s">&quot;FSharp.Data.dll&quot;</span>
+<span class="prep">#r</span> <span class="s">&quot;System.Xml.Linq&quot;</span>
+
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 13)" onmouseover="showTip(event, 'fs1', 13)" class="i">AntaniXml</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs10', 14)" onmouseover="showTip(event, 'fs10', 14)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs11', 15)" onmouseover="showTip(event, 'fs11', 15)" class="i">IO</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs12', 16)" onmouseover="showTip(event, 'fs12', 16)" class="i">FSharp</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs13', 17)" onmouseover="showTip(event, 'fs13', 17)" class="i">Data</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs10', 18)" onmouseover="showTip(event, 'fs10', 18)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs14', 19)" onmouseover="showTip(event, 'fs14', 19)" class="i">Xml</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs15', 20)" onmouseover="showTip(event, 'fs15', 20)" class="i">Linq</span>
+
+[&lt;<span onmouseout="hideTip(event, 'fs16', 21)" onmouseover="showTip(event, 'fs16', 21)" class="t">Literal</span>&gt;]
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs17', 22)" onmouseover="showTip(event, 'fs17', 22)" class="i">dir</span> <span class="o">=</span> <span class="s">@&quot;C:\temp&quot;</span>
+[&lt;<span onmouseout="hideTip(event, 'fs16', 23)" onmouseover="showTip(event, 'fs16', 23)" class="t">Literal</span>&gt;]
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs18', 24)" onmouseover="showTip(event, 'fs18', 24)" class="i">xmlSamplesFile</span> <span class="o">=</span> <span class="s">&quot;samples.xml&quot;</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs19', 25)" onmouseover="showTip(event, 'fs19', 25)" class="i">xsdUri</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs20', 26)" onmouseover="showTip(event, 'fs20', 26)" class="t">Path</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs21', 27)" onmouseover="showTip(event, 'fs21', 27)" class="f">Combine</span>(<span onmouseout="hideTip(event, 'fs17', 28)" onmouseover="showTip(event, 'fs17', 28)" class="i">dir</span>, <span class="s">&quot;po.xsd&quot;</span>)
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs22', 29)" onmouseover="showTip(event, 'fs22', 29)" class="i">samplesUri</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs20', 30)" onmouseover="showTip(event, 'fs20', 30)" class="t">Path</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs21', 31)" onmouseover="showTip(event, 'fs21', 31)" class="f">Combine</span>(<span onmouseout="hideTip(event, 'fs17', 32)" onmouseover="showTip(event, 'fs17', 32)" class="i">dir</span>, <span onmouseout="hideTip(event, 'fs18', 33)" onmouseover="showTip(event, 'fs18', 33)" class="i">xmlSamplesFile</span>)
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs23', 34)" onmouseover="showTip(event, 'fs23', 34)" class="i">samples</span> <span class="o">=</span> 
+    <span onmouseout="hideTip(event, 'fs3', 35)" onmouseover="showTip(event, 'fs3', 35)" class="t">XmlElementGenerator</span>
+        <span class="o">.</span><span class="f">CreateFromSchemaUri</span>(<span onmouseout="hideTip(event, 'fs19', 36)" onmouseover="showTip(event, 'fs19', 36)" class="i">xsdUri</span>, <span class="s">&quot;purchaseOrder&quot;</span>, <span class="s">&quot;&quot;</span>)
+        <span class="o">.</span><span class="f">Generate</span>(<span class="n">5</span>)
+<span onmouseout="hideTip(event, 'fs24', 37)" onmouseover="showTip(event, 'fs24', 37)" class="t">XElement</span>(<span onmouseout="hideTip(event, 'fs25', 38)" onmouseover="showTip(event, 'fs25', 38)" class="t">XName</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs26', 39)" onmouseover="showTip(event, 'fs26', 39)" class="f">Get</span>(<span class="s">&quot;root&quot;</span>), <span onmouseout="hideTip(event, 'fs23', 40)" onmouseover="showTip(event, 'fs23', 40)" class="i">samples</span>)<span class="o">.</span><span class="f">Save</span>(<span onmouseout="hideTip(event, 'fs22', 41)" onmouseover="showTip(event, 'fs22', 41)" class="i">samplesUri</span>)
+
+<span class="k">type</span> <span onmouseout="hideTip(event, 'fs27', 42)" onmouseover="showTip(event, 'fs27', 42)" class="t">po</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs28', 43)" onmouseover="showTip(event, 'fs28', 43)" class="t">XmlProvider</span><span class="o">&lt;</span><span onmouseout="hideTip(event, 'fs18', 44)" onmouseover="showTip(event, 'fs18', 44)" class="i">xmlSamplesFile</span>, <span class="i">SampleIsList</span> <span class="o">=</span> <span class="k">true</span>, <span class="i">ResolutionFolder</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs17', 45)" onmouseover="showTip(event, 'fs17', 45)" class="i">dir</span><span class="o">&gt;</span>
+</code></pre></td>
+</tr>
+</table>
+
+<p>Of course when a schema is available it would be a better option to infer types directly from it.
+Future versions of FSharp.Data may support xsd.</p>
+
 <h3><a name="Known-Limitations" class="anchor" href="#Known-Limitations">Known Limitations</a></h3>
 
 <p><a href="http://www.w3.org/XML/Schema">XML Schema</a> is rich and complex, it's inevitable to have some limitations.
@@ -180,6 +241,25 @@ are mapped to random generators. Complex generators are composed using FsCheck c
 <div class="tip" id="fs7">val printfn : format:Printf.TextWriterFormat&lt;&#39;T&gt; -&gt; &#39;T<br /><br />Full name: Microsoft.FSharp.Core.ExtraTopLevelOperators.printfn</div>
 <div class="tip" id="fs8">val arb : FsCheck.Arbitrary&lt;System.Xml.Linq.XElement&gt;<br /><br />Full name: Tutorial.arb</div>
 <div class="tip" id="fs9">static member XmlElementGenerator.CreateArbFromSchemaUri : xsdUri:string * elmName:string * elmNs:string -&gt; FsCheck.Arbitrary&lt;System.Xml.Linq.XElement&gt;</div>
+<div class="tip" id="fs10">namespace System</div>
+<div class="tip" id="fs11">namespace System.IO</div>
+<div class="tip" id="fs12">namespace FSharp</div>
+<div class="tip" id="fs13">namespace FSharp.Data</div>
+<div class="tip" id="fs14">namespace System.Xml</div>
+<div class="tip" id="fs15">namespace System.Xml.Linq</div>
+<div class="tip" id="fs16">Multiple items<br />type LiteralAttribute =<br />&#160;&#160;inherit Attribute<br />&#160;&#160;new : unit -&gt; LiteralAttribute<br /><br />Full name: Microsoft.FSharp.Core.LiteralAttribute<br /><br />--------------------<br />new : unit -&gt; LiteralAttribute</div>
+<div class="tip" id="fs17">val dir : string<br /><br />Full name: Tutorial.dir</div>
+<div class="tip" id="fs18">val xmlSamplesFile : string<br /><br />Full name: Tutorial.xmlSamplesFile</div>
+<div class="tip" id="fs19">val xsdUri : string<br /><br />Full name: Tutorial.xsdUri</div>
+<div class="tip" id="fs20">type Path =<br />&#160;&#160;static val DirectorySeparatorChar : char<br />&#160;&#160;static val AltDirectorySeparatorChar : char<br />&#160;&#160;static val VolumeSeparatorChar : char<br />&#160;&#160;static val InvalidPathChars : char[]<br />&#160;&#160;static val PathSeparator : char<br />&#160;&#160;static member ChangeExtension : path:string * extension:string -&gt; string<br />&#160;&#160;static member Combine : params paths:string[] -&gt; string + 3 overloads<br />&#160;&#160;static member GetDirectoryName : path:string -&gt; string<br />&#160;&#160;static member GetExtension : path:string -&gt; string<br />&#160;&#160;static member GetFileName : path:string -&gt; string<br />&#160;&#160;...<br /><br />Full name: System.IO.Path</div>
+<div class="tip" id="fs21">Path.Combine(params paths: string []) : string<br />Path.Combine(path1: string, path2: string) : string<br />Path.Combine(path1: string, path2: string, path3: string) : string<br />Path.Combine(path1: string, path2: string, path3: string, path4: string) : string</div>
+<div class="tip" id="fs22">val samplesUri : string<br /><br />Full name: Tutorial.samplesUri</div>
+<div class="tip" id="fs23">val samples : XElement array<br /><br />Full name: Tutorial.samples</div>
+<div class="tip" id="fs24">Multiple items<br />type XElement =<br />&#160;&#160;inherit XContainer<br />&#160;&#160;new : name:XName -&gt; XElement + 4 overloads<br />&#160;&#160;member AncestorsAndSelf : unit -&gt; IEnumerable&lt;XElement&gt; + 1 overload<br />&#160;&#160;member Attribute : name:XName -&gt; XAttribute<br />&#160;&#160;member Attributes : unit -&gt; IEnumerable&lt;XAttribute&gt; + 1 overload<br />&#160;&#160;member DescendantNodesAndSelf : unit -&gt; IEnumerable&lt;XNode&gt;<br />&#160;&#160;member DescendantsAndSelf : unit -&gt; IEnumerable&lt;XElement&gt; + 1 overload<br />&#160;&#160;member FirstAttribute : XAttribute<br />&#160;&#160;member GetDefaultNamespace : unit -&gt; XNamespace<br />&#160;&#160;member GetNamespaceOfPrefix : prefix:string -&gt; XNamespace<br />&#160;&#160;member GetPrefixOfNamespace : ns:XNamespace -&gt; string<br />&#160;&#160;...<br /><br />Full name: System.Xml.Linq.XElement<br /><br />--------------------<br />XElement(name: XName) : unit<br />XElement(other: XElement) : unit<br />XElement(other: XStreamingElement) : unit<br />XElement(name: XName, content: obj) : unit<br />XElement(name: XName, params content: obj []) : unit</div>
+<div class="tip" id="fs25">type XName =<br />&#160;&#160;member Equals : obj:obj -&gt; bool<br />&#160;&#160;member GetHashCode : unit -&gt; int<br />&#160;&#160;member LocalName : string<br />&#160;&#160;member Namespace : XNamespace<br />&#160;&#160;member NamespaceName : string<br />&#160;&#160;member ToString : unit -&gt; string<br />&#160;&#160;static member Get : expandedName:string -&gt; XName + 1 overload<br /><br />Full name: System.Xml.Linq.XName</div>
+<div class="tip" id="fs26">XName.Get(expandedName: string) : XName<br />XName.Get(localName: string, namespaceName: string) : XName</div>
+<div class="tip" id="fs27">type po = XmlProvider&lt;...&gt;<br /><br />Full name: Tutorial.po</div>
+<div class="tip" id="fs28">type XmlProvider<br /><br />Full name: FSharp.Data.XmlProvider<br /><em><br /><br />&lt;summary&gt;Typed representation of a XML file.&lt;/summary&gt;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;Sample&#39;&gt;Location of a XML sample file or a string containing a sample XML document.&lt;/param&gt;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;SampleIsList&#39;&gt;If true, the children of the root in the sample document represent individual samples for the inference.&lt;/param&gt;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;Global&#39;&gt;If true, the inference unifies all XML elements with the same name.&lt;/param&gt;                     <br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;Culture&#39;&gt;The culture used for parsing numbers and dates. Defaults to the invariant culture.&lt;/param&gt;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;Encoding&#39;&gt;The encoding used to read the sample. You can specify either the character set name or the codepage number. Defaults to UTF8 for files, and to ISO-8859-1 the for HTTP requests, unless `charset` is specified in the `Content-Type` response header.&lt;/param&gt;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;ResolutionFolder&#39;&gt;A directory that is used when resolving relative file references (at design time and in hosted execution).&lt;/param&gt;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;EmbeddedResource&#39;&gt;When specified, the type provider first attempts to load the sample from the specified resource <br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;(e.g. &#39;MyCompany.MyAssembly, resource_name.xml&#39;). This is useful when exposing types generated by the type provider.&lt;/param&gt;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;InferTypesFromValues&#39;&gt;If true, turns on additional type inference from values. <br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;(e.g. type inference infers string values such as &quot;123&quot; as ints and values constrained to 0 and 1 as booleans. The XmlProvider also infers string values as JSON.)&lt;/param&gt;</em></div>
 
         </div>
         <div class="span3">
