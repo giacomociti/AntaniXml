@@ -229,9 +229,9 @@ module XsdFactory =
           FixedValue = if x.FixedValue = null then None else Some x.FixedValue }
 
     let rec xsdElement (elm: XmlSchemaElement) = 
-        if hasCycles elm 
-        then failwithf "Recursive schemas are not supported. \
-            Element '%A' has cycles." elm.QualifiedName
+//        if hasCycles elm 
+//        then failwithf "Recursive schemas are not supported. \
+//            Element '%A' has cycles." elm.QualifiedName
         { ElementName = xsdName elm.QualifiedName
           Type = xsdType elm.ElementSchemaType
           IsNillable = elm.IsNillable
@@ -255,7 +255,8 @@ module XsdFactory =
                         grp.Items
                         |> ofType<XmlSchemaParticle> 
                         |> Seq.map xsdParticle
-                        |> List.ofSeq
+                    // particles is not materialized to avoid  
+                    // loops in case of recursive schemas
                     match grp with
                     | :? XmlSchemaAll      -> All (occurs, particles)
                     | :? XmlSchemaChoice   -> Choice (occurs, particles)

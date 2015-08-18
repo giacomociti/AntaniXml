@@ -12,8 +12,8 @@ module XmlGenerator =
     open FacetBasedGenerators
 
     // naive, but neither thread safety nor memory footprint are a concern
-    let memoize f =
-        let cache = Dictionary<_, _>()
+    let memoize f = 
+        let cache = Dictionary()
         fun x ->
             let ok, res = cache.TryGetValue x
             if ok then res
@@ -21,7 +21,7 @@ module XmlGenerator =
                  cache.[x] <- res
                  res
 
-    let genAtom (xsdAtomicType, facets) =
+    let genAtom (xsdAtomicType, facets) = 
         match xsdAtomicType with
         // primitive types:
         | AnyAtomicType -> genString facets
@@ -68,7 +68,7 @@ module XmlGenerator =
         | PositiveInteger -> genPositiveInteger facets    
     
 
-    let rec genSimple = memoize (function
+    let rec genSimple = memoize (function 
         | XsdAtom (t, facets) -> genAtom (t, facets)
         | XsdList (t, facets) -> 
             // List facets:  length, minLength, maxLength, pattern, and enumeration
@@ -105,7 +105,7 @@ module XmlGenerator =
         
     let mapName (xsdName: XsdName) = XName.Get(xsdName.Name, xsdName.Namespace)
 
-    let genAttribute (xsdAttribute, xsdUse) =
+    let genAttribute (xsdAttribute, xsdUse) = 
         let name = mapName xsdAttribute.AttributeName
         let attrGen = 
             match xsdAttribute.FixedValue with
@@ -117,89 +117,56 @@ module XmlGenerator =
         | Optional -> Gen.oneof [ attrGen; Gen.constant None ]
         | _ -> Gen.constant None
 
+    let decreaseSize = float >> log >> ceil >> int
 
-    let rec genElement xsdElement =
-        let getMax = function
-        | Max n -> n
-        | Unbounded -> 5 // avoid huge numbers
+    let genElement xsdElement = 
 
-        let rec genParticle xsdParticle : Gen<seq<XElement>> =
-            match xsdParticle with
-            | Empty -> Gen.constant Seq.empty
+        let chooseOccurs (Min x, maxOccurs) size = 
+            match maxOccurs with
+            | Max y when y < size -> x, y
+            // choose upper based on size (but ensure min <= max)
+            | _ -> x, max x size 
+            |> Gen.choose
 
-            | Any ((Min min, maxOccurs), ns) -> 
-                let elmName, elmNs =
-                    match ns with
-                    | AnyNs.Local -> "anyElement", "" 
-                    | AnyNs.Other // hope we have no clashes
-                    | AnyNs.Any -> "anyElement", "anyNs"
-                    | AnyNs.Target (h :: _) -> "anyElement", h
-                    | AnyNs.Target [] -> failwith "Empty Target"
-                let elm = XElement(XName.Get(elmName, elmNs))
-                gen { let! n = Gen.choose(min, getMax maxOccurs)
-                      let! elms = Gen.constant elm |> Gen.listOfLength n 
-                      return Seq.ofList elms }
-                
-            | Element ((Min min, maxOccurs), e) -> 
-                gen { let! n = Gen.choose(min, getMax maxOccurs)
-                      let! elms = genElement e |> Gen.listOfLength n 
-                      return Seq.ofList elms }
-
-            | Choice ((Min min, maxOccurs), items) -> 
-                let choiceGen = items |> Seq.map genParticle |> Gen.oneof
-                gen { let! n = Gen.choose(min, getMax maxOccurs)
-                      let! elms = 
-                        [1..n] 
-                        |> List.map (fun _ -> choiceGen) 
-                        |> Gen.sequence
-                      return elms |> Seq.concat }
-
-            | Sequence ((Min min, maxOccurs), items) -> 
-                let seqGen = 
-                    items 
-                    |> List.ofSeq 
-                    |> List.map genParticle 
-                    |> Gen.sequence
-                gen { 
-                    let! n = Gen.choose(min, getMax maxOccurs)
-                    let! elms = 
-                        [1..n] 
-                        |> List.map (fun _ -> seqGen) 
-                        |> Gen.sequence
-                    return elms |> List.concat |> Seq.concat }
-
-            | All ((Min min, maxOccurs), items) -> 
-                
-//                let swap (a: _[]) x y =
-//                    let tmp = a.[x]
-//                    a.[x] <- a.[y]
-//                    a.[y] <- tmp
-
-                let allGen = 
-                    items 
-                    |> List.ofSeq  
-                    |> List.map genParticle 
-                    |> Gen.sequence
-                gen { 
-                    let! n = Gen.choose(min, getMax maxOccurs)
-                    let! elms = // todo scramble a bit
-                        [1..n] 
-                        |> List.map (fun _ -> allGen) 
-                        |> Gen.sequence
-                    return elms |> List.concat |> Seq.concat }
-
-        let genComplex complexType elmName =
+        let rec genElement' xsdElement size = 
             
-            let genNodes =
+            let genSimpleElement simpleType = 
+                let elementName = mapName xsdElement.ElementName
+                match xsdElement.FixedValue with
+                | Some fixedValue -> 
+                        let elm = XElement(elementName)
+                        elm.Value <- fixedValue
+                        Gen.constant elm
+                | None -> 
+                    let gen =
+                        genSimple simpleType
+                        |> Gen.map (fun x -> 
+                            let elm = XElement(elementName)
+                            elm.Value <- x
+                            elm)
+                    if xsdElement.IsNillable then
+                        let xsi = "http://www.w3.org/2001/XMLSchema-instance"
+                        let nilAttr = XAttribute(XName.Get("nil", xsi), true)
+                        let nil = XElement(elementName, nilAttr)
+                        Gen.frequency [8, gen; 2, Gen.constant nil]
+                    else gen
+
+            match xsdElement.Type with
+            | Simple simpleType -> genSimpleElement simpleType
+            | Complex complexType -> genComplex complexType xsdElement.ElementName size
+
+        and genComplex complexType elmName size = 
+            
+            let genNodes = 
                 match complexType.Contents, complexType.IsMixed with
                 | SimpleContent s, _ ->
                     assert(not complexType.IsMixed)
                     genSimple s |> Gen.map (fun x -> Seq.singleton(box x))
                 | ComplexContent par, false ->
-                    genParticle par |> Gen.map (Seq.map box)
+                    genParticle par size |> Gen.map (Seq.map box)
                 | ComplexContent par, true -> 
                     gen {
-                        let! elms = genParticle par |> Gen.map (Seq.map box)
+                        let! elms = genParticle par size |> Gen.map (Seq.map box)
                         let! text = // to intersperse with child elements
                             genString XsdFactory.emptyFacets 
                             |> Gen.map box 
@@ -209,8 +176,7 @@ module XmlGenerator =
                             for t, e in Seq.zip text elms do
                                 yield t
                                 yield e
-                            yield lastText }
-                    }
+                            yield lastText } }
 
             gen {   
                 let! nodes = genNodes
@@ -223,33 +189,69 @@ module XmlGenerator =
                 return XElement(mapName elmName, items) } 
 
 
+        and genParticle xsdParticle size : Gen<seq<XElement>> = 
+            let size' = decreaseSize size
+            match xsdParticle with
+            | Empty -> Gen.constant Seq.empty
 
-        match xsdElement.Type with
-
-        // http://www.w3.org/2001/XMLSchema-instance
-        | Simple simpleType ->  
-            match xsdElement.FixedValue with
-            | Some fixedValue -> 
-                 let elm = XElement(mapName xsdElement.ElementName)
-                 elm.Value <- fixedValue
-                 Gen.constant elm
-            | None -> 
-                let gen =
-                    genSimple simpleType
-                    |> Gen.map (fun x -> 
-                        let e = XElement(mapName xsdElement.ElementName)
-                        e.Value <- x
-                        e)
-                if xsdElement.IsNillable then
-                    let xsi = "http://www.w3.org/2001/XMLSchema-instance"
-                    let nilAttr = XAttribute(XName.Get("nil", xsi), true)
-                    let nil = XElement(mapName xsdElement.ElementName, nilAttr)
-                    Gen.frequency [8, gen; 2, Gen.constant nil ]
-                else gen
+            | Any (occurs, ns) -> 
+                let elmName, elmNs =
+                    match ns with
+                    | AnyNs.Local -> "anyElement", "" 
+                    | AnyNs.Other // hope we have no clashes
+                    | AnyNs.Any -> "anyElement", "anyNs"
+                    | AnyNs.Target (h :: _) -> "anyElement", h
+                    | AnyNs.Target [] -> failwith "Empty Target"
+                let elm = XElement(XName.Get(elmName, elmNs))
+                gen { 
+                    let! n = chooseOccurs occurs size'
+                    let! elms = Gen.constant elm |> Gen.listOfLength n 
+                    return Seq.ofList elms }
                 
-        | Complex complexType -> 
-            genComplex complexType xsdElement.ElementName 
-                 
+            | Element (occurs, e) -> 
+                gen { 
+                    let! n = chooseOccurs occurs size'
+                    // it's important to decrease the size in the 
+                    // recursive call especially for recursive schemas
+                    let! elms = genElement' e size' |> Gen.listOfLength n 
+                    return Seq.ofList elms }
+
+            | Choice (occurs, items) -> 
+                gen { 
+                    let! n = chooseOccurs occurs size'
+                    if n = 0 then return Seq.empty else 
+                    let! elms =
+                        items 
+                        |> Seq.map (fun x -> genParticle x size') 
+                        |> Gen.oneof
+                        |> Gen.listOfLength n
+                    return elms |> Seq.concat }
+
+            | Sequence (occurs, items) -> 
+                gen { 
+                    let! n = chooseOccurs occurs size'
+                    if n = 0 then return Seq.empty else
+                    let! elms = 
+                        items 
+                        |> Seq.map (fun x -> genParticle x size')
+                        |> Gen.sequence
+                        |> Gen.listOfLength n
+                    return elms |> Seq.concat |> Seq.concat }
+
+            | All (occurs, items) -> 
+                gen { 
+                    let! n = chooseOccurs occurs size'
+                    if n = 0 then return Seq.empty else
+                    let! elms =
+                        items 
+                        |> Seq.map (fun x -> genParticle x size')
+                        |> Gen.sequence
+                        |> Gen.listOfLength n
+                    //TODO scramble a bit?
+                    return elms |> Seq.concat |> Seq.concat }
+
+
+        Gen.sized (genElement' xsdElement)
                  
 
    

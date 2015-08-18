@@ -339,9 +339,8 @@ module XmlGeneratorTest =
         """
 
     [<Test>]
-    let ``cyclic elements are not supported``() = 
-        let xsd = makeSchema """
-	    <xs:complexType name="TextType" mixed="true">
+    let ``cyclic elements are supported``() = check """
+        <xs:complexType name="TextType" mixed="true">
 		    <xs:choice minOccurs="0" maxOccurs="unbounded">
 			    <xs:element ref="bold"/>
 			    <xs:element ref="italic"/>
@@ -352,14 +351,28 @@ module XmlGeneratorTest =
 	    <xs:element name="italic" type="TextType"/>
 	    <xs:element name="underline" type="TextType"/>
         """
-        try 
-            xsdSchema xsd |> ignore
-            Assert.True false 
-        with e -> Assert.True(e.Message = "Recursive schemas are not supported. Element 'bold' has cycles.")
+
+//    [<Test>]
+//    let ``cyclic elements are not supported``() = 
+//        let xsd = makeSchema """
+//	    <xs:complexType name="TextType" mixed="true">
+//		    <xs:choice minOccurs="0" maxOccurs="unbounded">
+//			    <xs:element ref="bold"/>
+//			    <xs:element ref="italic"/>
+//			    <xs:element ref="underline"/>
+//		    </xs:choice>
+//	    </xs:complexType>
+//	    <xs:element name="bold" type="TextType"/>
+//	    <xs:element name="italic" type="TextType"/>
+//	    <xs:element name="underline" type="TextType"/>
+//        """
+//        try 
+//            xsdSchema xsd |> ignore
+//            Assert.True false 
+//        with e -> Assert.True(e.Message = "Recursive schemas are not supported. Element 'bold' has cycles.")
 
     [<Test>]
-    let ``cyclic types are not supported``() = 
-        let xsd = makeSchema """
+    let ``cyclic types are supported``() = check """
 	    <xs:complexType name="SectionType">
           <xs:sequence>
             <xs:element name="Title" type="xs:string" />
@@ -367,10 +380,21 @@ module XmlGeneratorTest =
           </xs:sequence>
         </xs:complexType>
         """
-        try 
-            xsdSchema xsd |> ignore
-            Assert.True false 
-        with e -> Assert.True(e.Message = "Recursive schemas are not supported. Element 'Section' has cycles.")
+
+//    [<Test>]
+//    let ``cyclic types are not supported``() = 
+//        let xsd = makeSchema """
+//	    <xs:complexType name="SectionType">
+//          <xs:sequence>
+//            <xs:element name="Title" type="xs:string" />
+//            <xs:element name="Section" type="SectionType" minOccurs="0"/>
+//          </xs:sequence>
+//        </xs:complexType>
+//        """
+//        try 
+//            xsdSchema xsd |> ignore
+//            Assert.True false 
+//        with e -> Assert.True(e.Message = "Recursive schemas are not supported. Element 'Section' has cycles.")
 
        
 
