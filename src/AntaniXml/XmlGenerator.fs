@@ -130,7 +130,7 @@ module XmlGenerator =
             
             let genSimpleElement (simpleType: XsdSimpleType) = 
 
-                match simpleType.Name with
+                match simpleType.SimpleTypeName with
                 | Some x when customGenerators.ElementGenerators.ContainsKey x -> 
                     customGenerators.ElementGenerators.Item x
                 | _ ->
@@ -162,7 +162,7 @@ module XmlGenerator =
 
         and genComplex complexType elmName size = 
             
-            match complexType.Name with
+            match complexType.ComplexTypeName with
             | Some x when customGenerators.ElementGenerators.ContainsKey x -> 
                 customGenerators.ElementGenerators.Item x
             | _ ->

@@ -66,7 +66,7 @@ module XsdDomain =
         | Collapse 
     
 
-        type AnyNs =
+    type AnyNs =
         /// ##any Any well-formed XML from any namespace (default)
         | Any 
         /// ##local Any well-formed XML that is not qualified, 
@@ -103,7 +103,7 @@ module XsdDomain =
         | XsdUnion of XsdSimpleType list 
 
     and XsdSimpleType = 
-        { Name: XsdName option // None if anonymous
+        { SimpleTypeName: XsdName option // None if anonymous
           Facets: Facets
           Variety: XsdSimpleTypeVariety }
         
@@ -126,7 +126,7 @@ module XsdDomain =
         
 
     and XsdComplexType = 
-        { Name: XsdName option // None if anonymous
+        { ComplexTypeName: XsdName option // None if anonymous
           Attributes: (XsdAttribute * XsdAttributeUse) list
           Contents: XsdContent 
           IsMixed: bool }

@@ -9,7 +9,7 @@ module XsdFactoryTest =
 
     let unconstrained   = Min 0, Unbounded
     let singleMandatory = Min 1, Max 1
-    let anyAtomicType = { Name = None; Facets = emptyFacets; Variety = XsdAtom(AnyAtomicType) }
+    let anyAtomicType = { SimpleTypeName = None; Facets = emptyFacets; Variety = XsdAtom(AnyAtomicType) }
 
     let makeXsd innerXsd = 
         """<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
@@ -30,7 +30,7 @@ module XsdFactoryTest =
           Name = "anyType" }
     let anyType = 
         Complex { IsMixed = false
-                  Name = None
+                  ComplexTypeName = None
                   Attributes = []
                   Contents = ComplexContent(Sequence(singleMandatory, [ Any(unconstrained, AnyNs.Any) ])) }
     // always present, likely it's for unconstrained contents
@@ -91,7 +91,7 @@ module XsdFactoryTest =
             { Types = onlyAnyTypeDef
               Elements = 
                   [ { ElementName = foo
-                      Type = Simple { Name = None; Facets = emptyFacets; Variety = XsdAtom String }
+                      Type = Simple { SimpleTypeName = None; Facets = emptyFacets; Variety = XsdAtom String }
                       IsNillable = false
                       FixedValue = None } ]
               Attributes = [] }
@@ -115,7 +115,7 @@ module XsdFactoryTest =
                   [ { ElementName = foo
                       Type = 
                           Complex { IsMixed = false
-                                    Name = None
+                                    ComplexTypeName = None
                                     Attributes = 
                                         [ { AttributeName = bar
                                             Type = anyAtomicType
@@ -158,7 +158,7 @@ module XsdFactoryTest =
                     FixedValue = None
                     Type = Complex { 
                         IsMixed = false
-                        Name = None
+                        ComplexTypeName = None
                         Attributes = [bazAttr, Optional]
                         Contents = 
                             ComplexContent(Sequence(singleMandatory, [barElm])) } 
@@ -199,7 +199,7 @@ module XsdFactoryTest =
         //printfn "%A" xsd
         
         match xsd.Types.[name "x"] with
-        | Simple {Name = _; Facets = facets; Variety = XsdAtom(String)}  -> 
+        | Simple {SimpleTypeName = _; Facets = facets; Variety = XsdAtom(String)}  -> 
             Assert.AreEqual(Some 2, facets.MinLength)
             Assert.AreEqual(Some 5, facets.MaxLength)
             Assert.AreEqual(Some Replace, facets.WhiteSpace)
@@ -207,14 +207,14 @@ module XsdFactoryTest =
             Assert.True(["aaa";"bbb"] = facets.Enumeration)
         | _ -> Assert.False true
         match xsd.Types.[name "y"] with
-        | Simple {Name = _; Facets = facets; Variety = XsdAtom(Decimal)} -> 
+        | Simple {SimpleTypeName = _; Facets = facets; Variety = XsdAtom(Decimal)} -> 
             Assert.AreEqual(Some "2", facets.MinExclusive)
             Assert.AreEqual(Some "3", facets.MaxExclusive)
             Assert.AreEqual(Some 5, facets.TotalDigits)
             Assert.AreEqual(Some 4, facets.FractionDigits)
         | _ -> Assert.False true
         match xsd.Types.[name "z"] with
-        | Simple {Name = _; Facets = facets; Variety = XsdAtom(String)} -> 
+        | Simple {SimpleTypeName = _; Facets = facets; Variety = XsdAtom(String)} -> 
             Assert.AreEqual(Some 2, facets.Length)
             Assert.AreEqual(Some Collapse, facets.WhiteSpace)
         | _ -> Assert.False true

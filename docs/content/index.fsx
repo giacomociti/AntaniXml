@@ -43,7 +43,10 @@ let samples =
 
 The C# code is almost the same:
 
-[lang=csharp,file=../csharp/Program.cs,key=firstExample]
+    var samples = XmlElementGenerator
+        .CreateFromSchemaUri("po.xsd", elmName: "purchaseOrder", elmNs: "")
+        .Generate(10);
+
 
 Notice that in both languages to enhance readability we used named arguments for the element name and namespace.
 

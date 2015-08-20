@@ -1,11 +1,17 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
-#I "../../bin/AntaniXml"
+#I @"..\..\bin\AntaniXml"
+#I @"..\..\..\FSharp.Data\bin" // need FSharp.Data
+//#I @"..\..\..\AntaniXml\bin\AntaniXml"
 #r "FsCheck.dll"
 #r "System.Xml.Linq"
 #r "AntaniXml.dll"
+#r "FSharp.Data"
+
+
 open AntaniXml
+
 
 (**
 Tutorial
@@ -13,7 +19,7 @@ Tutorial
 
 The [public API](http://giacomociti.github.io/AntaniXml/reference/antanixml-xmlelementgenerator.html) 
 comprises factory methods to create xml generators.
-Usually schema definitions are given in xsd files so you need to specify their Uri.
+Usually schema definitions are given as xsd files, so you need to specify their Uri.
 Overloads accepting xsd as plain text are also provided: they're handy for experimenting with little xsd snippets.
 
 
@@ -32,13 +38,15 @@ XmlElementGenerator
     |> Seq.take 5
     |> Seq.iter (printfn "%A")
 
+
+
 (**
 
 
 ### Property based testing
 
 For property based testing there are factory methods providing instances of the
-`Arbitrary` type [defined within FsCheck](https://fscheck.github.io/FsCheck/TestData.html):
+`Arbitrary` type [defined by FsCheck](https://fscheck.github.io/FsCheck/TestData.html):
 
 *)
 
@@ -57,38 +65,26 @@ Another possible usage scenario is creating samples for the XML type provider.
 
 *)
 
-(*** hide ***)
-#I @"..\..\..\FSharp.Data\bin"
-#I @"..\..\..\AntaniXml\bin\AntaniXml"
 
 (**
 [FSharp.Data](http://fsharp.github.io/FSharp.Data) is a popular F# library featuring many type providers, including one for XML.
 Strongly typed access to xml documents is achieved with inference on samples. AntaniXml may help to produce the needed samples:
 *)
 
-#r "AntaniXml.dll"
-#r "FSharp.Data.dll"
-#r "System.Xml.Linq"
 
 open AntaniXml
 open System.IO
 open FSharp.Data
 open System.Xml.Linq
 
-[<Literal>]
-let dir = @"C:\temp"
-[<Literal>]
-let xmlSamplesFile = "samples.xml"
-let xsdUri = Path.Combine(dir, "po.xsd")
-let samplesUri = Path.Combine(dir, xmlSamplesFile)
 
 let samples = 
     XmlElementGenerator
-        .CreateFromSchemaUri(xsdUri, "purchaseOrder", "")
+        .CreateFromSchemaUri(@"C:\temp\po.xsd", "purchaseOrder", "")
         .Generate(5)
-XElement(XName.Get("root"), samples).Save(samplesUri)
+XElement(XName.Get("root"), samples).Save(@"C:\temp\samples.xml")
 
-type po = XmlProvider<xmlSamplesFile, SampleIsList = true, ResolutionFolder = dir>
+type po = XmlProvider< @"C:\temp\samples.xml", SampleIsList = true>
 
 
 (**
@@ -101,21 +97,21 @@ Future versions of FSharp.Data may support xsd.
 
 [XML Schema](http://www.w3.org/XML/Schema) is rich and complex, it's inevitable to have some limitations.
 A few ones are known and listed below. Some of them may hopefully be addressed in the future.
-But likely there are many more unknown limitations. If you find one please raise an [issue](https://github.com/fsprojects/AntaniXml/issues).
+But likely there are many more unknown limitations. If you find one please raise an [issue](https://github.com/giacomociti/AntaniXml/issues).
 Anyway don't be too scared of this disclaimer. I think AntaniXml can cope with many nuances and support many features 
-(like regex thanks to [Fare](https://github.com/moodmosaic/Fare)).
+(like regex patterns thanks to [Fare](https://github.com/moodmosaic/Fare)).
 The main limitations currently known are:
 
-#### recursive schemas
+#### built-in types
+A few built-in types are not supported: Notation, NmTokens, Id, Idref, Idrefs, Entity and Entities.
 
-at the moment, we simply throw an exception when an element definition refers to itself.
 
 #### identity and subset constraint
 
 XML Schema provides rough equivalents of primary and foreign keys in databases.
 Version 1.1 also introduced assertions to allow further constraints.
 Schemas are primarily grammar based, so they are a good fit for random generators.
-But these complementary features for specifying constraints are at odd with the *generative* approach.
+But these complementary features for specifying constraints are at odd with the generative approach.
 
 
 ### Core Modules
