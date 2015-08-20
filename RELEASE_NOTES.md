@@ -1,3 +1,8 @@
+#### 0.2.0 - August 20 2015
+* recursive schema support
+* performance improvements
+
+
 #### 0.1.0 - July 28 2015
 * fixed token validation issue
 * documentation prematurata
