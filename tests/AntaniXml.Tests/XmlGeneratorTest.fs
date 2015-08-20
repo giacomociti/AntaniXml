@@ -145,37 +145,60 @@ module XmlGeneratorTest =
     // built from the schema; use it in the property attribute to generate
     // random XElement inputs based on the given schema.
 
-    let xsdAnySimpleType = elm "xs:anySimpleType"
-    type GenAnySimpleType = static member Elm() = arb xsdAnySimpleType
-    [<Property(Verbose=false, Arbitrary = [| typeof<GenAnySimpleType> |]) >]
-    let genAnySimpleType x = x |> isValid xsdAnySimpleType
+    type GenInt = 
+        static member xsd = elm "xs:int"
+        static member private arbitrary = arb GenInt.xsd
+        static member Elm() = GenInt.arbitrary
 
-    let xsdDateTime = elm "xs:dateTime"
-    type GenDateTime = static member Elm() = arb xsdDateTime
-    [<Property(Verbose=false, Arbitrary = [| typeof<GenDateTime> |]) >]
-    let genDateTime x = x |> isValid xsdDateTime
-
-    let xsdInt = elm "xs:int"
-    type GenInt = static member Elm() = arb xsdInt
     [<Property(QuietOnSuccess=true, Verbose=false, Arbitrary = [| typeof<GenInt> |]) >]
-    let genInt x = x |> isValid xsdInt
+    let genInt x = x |> isValid GenInt.xsd
 
-    let sampleXsd = makeSchema """
-	    <xs:element name="e" type="xs:int">
-        </xs:element>"""
-    type GenSample = static member Elm() = arb sampleXsd
+    // some lazyness may imporove performance
+    type GenAnySimpleType = 
+        static member xsd = lazy elm "xs:anySimpleType"
+        static member private arbitrary = lazy arb GenAnySimpleType.xsd.Value
+        static member Elm() = GenAnySimpleType.arbitrary.Value
+
+    [<Property(Verbose=false, Arbitrary = [| typeof<GenAnySimpleType> |]) >]
+    let genAnySimpleType x = x |> isValid GenAnySimpleType.xsd.Value
+
+    
+    type GenDateTime = 
+        static member xsd = elm "xs:dateTime"
+        static member private arbitrary = arb GenDateTime.xsd
+        static member Elm() = GenDateTime.arbitrary
+
+    [<Property(Verbose=false, Arbitrary = [| typeof<GenDateTime> |]) >]
+    let genDateTime x = x |> isValid GenDateTime.xsd
+
+
+    type GenSample = 
+        static member xsd = makeSchema """
+	        <xs:element name="e" type="xs:int">
+            </xs:element>"""
+        static member private arbitrary = arb GenSample.xsd
+        static member Elm() = GenSample.arbitrary
+
     [<Property(QuietOnSuccess=true, Verbose=false, Arbitrary = [| typeof<GenSample> |]) >]
-    let genSample x = x |> isValid sampleXsd
+    let genSample x = x |> isValid GenSample.xsd
 
     // example schema provided by w3c
-    let purchaseOrder = xmlSchemaSetFromUri @"po.xsd"
-    type GenPurchaseOrder = static member Elm() = arb purchaseOrder
-    [<Property(QuietOnSuccess=true, Arbitrary = [| typeof<GenPurchaseOrder> |]) >]
-    let ``purchase order samples are valid`` x = x |> isValid purchaseOrder
+    type GenPurchaseOrder = 
+        static member xsd = lazy xmlSchemaSetFromUri @"po.xsd"
+        static member private arbitrary = lazy arb GenPurchaseOrder.xsd.Value
+        static member Elm() = GenPurchaseOrder.arbitrary.Value
+
+    [<Property(Arbitrary = [| typeof<GenPurchaseOrder> |]) >]
+    let ``purchase order samples are valid`` x = 
+        x 
+        |> isValid GenPurchaseOrder.xsd.Value
+        |> Prop.collect (sprintf "length about %i00" (x.ToString().Length / 100))
+        |> Prop.collect (sprintf "nodes %i" (x.DescendantNodes() |> Seq.length))
+
 
     [<Test>]
     let ``print purchase order sample``() =
-        (arb purchaseOrder).Generator 
+        GenPurchaseOrder.Elm().Generator
         |> Gen.sample 5 1
         |> List.iter (printfn "%A")
 

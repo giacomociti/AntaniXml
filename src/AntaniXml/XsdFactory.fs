@@ -1,5 +1,7 @@
 ﻿namespace AntaniXml
 
+#nowarn "40"
+
 module XsdFactory =
 
     open System.IO
@@ -7,6 +9,16 @@ module XsdFactory =
     open System.Xml.Schema
     open Microsoft.FSharp.Reflection
     open XsdDomain
+
+    // naive, but we are not concerned with thread safety nor memory footprint
+    let memoize f = 
+        let cache = System.Collections.Generic.Dictionary()
+        fun x ->
+            let ok, res = cache.TryGetValue x
+            if ok then res
+            else let res = f x
+                 cache.[x] <- res
+                 res
 
     let inline ofType<'a> sequence = System.Linq.Enumerable.OfType<'a> sequence
 
@@ -141,7 +153,9 @@ module XsdFactory =
         }
 
 
-    let rec xsdSimpleType (simpleType: XmlSchemaSimpleType) =
+    let rec xsdSimpleType  =
+        memoize <|
+        fun (simpleType: XmlSchemaSimpleType) ->
 
         // we may have zero, one or even multiple dervivations by restriction.
         // we collects facets introduced by such restrictions  until we reach
@@ -228,7 +242,9 @@ module XsdFactory =
           Type = attributeType
           FixedValue = if x.FixedValue = null then None else Some x.FixedValue }
 
-    let rec xsdElement (elm: XmlSchemaElement) = 
+    let rec xsdElement = 
+        memoize <| 
+        fun (elm: XmlSchemaElement) ->
 //        if hasCycles elm 
 //        then failwithf "Recursive schemas are not supported. \
 //            Element '%A' has cycles." elm.QualifiedName
@@ -237,13 +253,15 @@ module XsdFactory =
           IsNillable = elm.IsNillable
           FixedValue = if elm.FixedValue = null then None else Some elm.FixedValue }
 
-    and xsdType (xmlSchemaType: XmlSchemaType) =
-        
-        match xmlSchemaType with
+    and xsdType = 
+        memoize <| 
+        function
         | :? XmlSchemaSimpleType  as simple  -> simple |> xsdSimpleType |> Simple
         | :? XmlSchemaComplexType as complex -> 
 
-            let rec xsdParticle (par: XmlSchemaParticle) =
+            let rec xsdParticle =
+                memoize <|
+                fun (par: XmlSchemaParticle) ->
                 
                 let occurs = Min (int par.MinOccurs), 
                              if (par.MaxOccursString = "unbounded") 
@@ -265,7 +283,7 @@ module XsdFactory =
 
                 match par with
                 | :? XmlSchemaAny as any -> 
-                    let ns =
+                    let ns = 
                         match any.Namespace with
                         | null | "" | "##any" -> AnyNs.Any
                         | "##local" | "##targetNamespace" -> AnyNs.Local
@@ -319,7 +337,7 @@ module XsdFactory =
                 IsMixed = complex.IsMixed } 
 
 
-        | _ -> failwithf "unknown type: %A" xmlSchemaType
+        | xmlSchemaType -> failwithf "unknown type: %A" xmlSchemaType
 
     
 

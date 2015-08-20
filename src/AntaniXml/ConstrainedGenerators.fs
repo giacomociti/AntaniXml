@@ -30,6 +30,9 @@ module ConstrainedGenerators =
     let probeAndMix gens =
         match gens with
         | [] -> None, []
+        | [x] -> // only an optimization, but really worth it:
+           // with a single generator we do not bother with probing it
+           Some(x.gen) , []
         | _  ->
             let samplesNo, thresholdPercentage = 100, 60
             let probeResults = probe samplesNo gens
