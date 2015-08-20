@@ -2,6 +2,15 @@
 
 module XsdDomain =
 
+    // We define our own type for xml names although the BCL already
+    // defines 'System.Xml.Linq.XName' and 'System.Xml.XmlQualifiedName'.
+    // The main conceptual reason is to avoid any kind of dependency on 
+    // specific XML libraries. One technical reason is they don't support 
+    // the 'System.IComparable' interface required for use as a key in F# Map. 
+    // Both reasons are relatively weak (a dependency on a BCL library is not 
+    // a big issue and both XName and XmlQualifiedName have structural equality 
+    // hence may be used in hashtables) so in the future we may get rid of this type.
+    [<StructuralEquality; StructuralComparison>]
     type XsdName = { Namespace: string; Name: string } 
 
     type MinOccurs = Min of int
@@ -85,11 +94,18 @@ module XsdDomain =
         Patterns: string list list; 
         WhiteSpace: WhitespaceHandling option }
     
+    
+
     // list of union is allowed, list of list not
-    type XsdSimpleType = 
-        | XsdAtom  of XsdAtomicType * Facets 
-        | XsdList  of XsdSimpleType * Facets
-        | XsdUnion of XsdSimpleType list * Facets
+    type XsdSimpleTypeVariety = 
+        | XsdAtom  of XsdAtomicType  
+        | XsdList  of XsdSimpleType 
+        | XsdUnion of XsdSimpleType list 
+
+    and XsdSimpleType = 
+        { Name: XsdName option // None if anonymous
+          Facets: Facets
+          Variety: XsdSimpleTypeVariety }
         
     type XsdAttribute = 
         { AttributeName: XsdName
@@ -107,9 +123,11 @@ module XsdDomain =
     and XsdType = 
         | Simple  of XsdSimpleType
         | Complex of XsdComplexType
+        
 
     and XsdComplexType = 
-        { Attributes: (XsdAttribute * XsdAttributeUse) list
+        { Name: XsdName option // None if anonymous
+          Attributes: (XsdAttribute * XsdAttributeUse) list
           Contents: XsdContent 
           IsMixed: bool }
 

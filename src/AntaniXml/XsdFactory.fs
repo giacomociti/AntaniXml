@@ -194,7 +194,10 @@ module XsdFactory =
 
         match simpleType.Datatype.Variety with
         | XmlSchemaDatatypeVariety.Atomic ->
-            xsdAtomicType simpleType |> XsdAtom
+            let atomicType, facets = xsdAtomicType simpleType 
+            { Name = None // TODO
+              Facets = facets
+              Variety = XsdAtom atomicType }
         | XmlSchemaDatatypeVariety.List ->
             let simpleType, facets = combineFacets simpleType
             match simpleType.Content with
@@ -203,7 +206,9 @@ module XsdFactory =
                     match xsdList.ItemType, xsdList.BaseItemType with
                     | null, null -> failwith "cannot find list item type"
                     | null, x | x, _ -> x
-                XsdList (xsdSimpleType item, facets)
+                { Name = None // TODO
+                  Facets = facets
+                  Variety = XsdList (xsdSimpleType item) }
             | _ -> failwith "expected XmlSchemaSimpleTypeList"
         | XmlSchemaDatatypeVariety.Union ->
             let simpleType, facets = combineFacets simpleType
@@ -213,7 +218,10 @@ module XsdFactory =
                     xsdUnion.BaseMemberTypes
                     |> Array.map xsdSimpleType
                     |> List.ofArray
-                XsdUnion(baseTypes, facets)
+                { Name = None // TODO
+                  Facets = facets
+                  Variety = XsdUnion(baseTypes) }
+
             | _ -> failwith "expected XmlSchemaSimpleTypeUnion"
         | _ -> failwithf "unexpected variety %A" simpleType.Datatype.Variety
 
@@ -235,7 +243,10 @@ module XsdFactory =
             then // seems like it is null when Prohibited
                 assert ((xsdAttributeUse x.Use) = XsdAttributeUse.Prohibited)
                 // return a fake value that will be ignored
-                XsdAtom(XsdAtomicType.AnyAtomicType, emptyFacets)
+                {  Name = None
+                   Facets = emptyFacets
+                   Variety = XsdAtom XsdAtomicType.AnyAtomicType }
+                
             else xsdSimpleType x.AttributeSchemaType
 
         { AttributeName = xsdName x.QualifiedName 
@@ -307,10 +318,11 @@ module XsdFactory =
                 match complex.ContentModel.Content with
                 | :? XmlSchemaSimpleContentRestriction as r -> 
                     let f' = r.Facets |> ofType<XmlSchemaFacet> |> xsdFacets
-                    match simpleType with
-                    | XsdAtom  (t, f)  -> XsdAtom (t, combine f f')
-                    | XsdList  (t, f)  -> XsdList (t, combine f f')
-                    | XsdUnion (ts, f) -> XsdUnion (ts, combine f f')
+                    { simpleType with Facets = combine simpleType.Facets f' }
+//                    match simpleType.Variety with
+//                    | XsdAtom  (t)  -> XsdAtom (t, combine simpleType.Facets f')
+//                    | XsdList  (t, f)  -> XsdList (t, combine f f')
+//                    | XsdUnion (ts, f) -> XsdUnion (ts, combine f f')
                 // XmlSchemaSimpleContentExtension is ignored because its only
                 // use is for adding attributes, but we already get them via the
                 // AttributeUses collection
@@ -318,6 +330,8 @@ module XsdFactory =
 
 
             Complex { 
+                Name = if complex.QualifiedName.IsEmpty then None 
+                       else Some(xsdName complex.QualifiedName) 
                 Attributes = 
                     complex.AttributeUses.Values
                     |> ofType<XmlSchemaAttribute>

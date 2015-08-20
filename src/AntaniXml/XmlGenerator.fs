@@ -4,77 +4,67 @@
 
 module XmlGenerator =
     open System.Xml.Linq
-    open System.Collections.Generic
     open FsCheck
     open XsdDomain
     open AtomicGenerators
     open ConstrainedGenerators
     open FacetBasedGenerators
+    open XsdFactory
 
-    // naive, but neither thread safety nor memory footprint are a concern
-    let memoize f = 
-        let cache = Dictionary()
-        fun x ->
-            let ok, res = cache.TryGetValue x
-            if ok then res
-            else let res = f x
-                 cache.[x] <- res
-                 res
-
-    let genAtom (xsdAtomicType, facets) = 
-        match xsdAtomicType with
+    let genAtom = function 
         // primitive types:
-        | AnyAtomicType -> genString facets
-        | String -> genString facets
-        | Boolean -> genBool facets
-        | Decimal -> genDecimal facets
-        | Float -> genFloat facets
-        | Double -> genDouble facets
-        | Duration -> genDuration facets
-        | DateTime -> genDateTime facets
-        | Time -> genTime facets
-        | Date -> genDate facets
-        | GYearMonth -> genGYearMonth facets
-        | GYear -> genGYear facets
-        | GMonthDay -> genGMonthDay facets
-        | GDay -> genGDay facets
-        | GMonth -> genGMonth facets
-        | HexBinary -> genHexBinary facets
-        | Base64Binary -> genBase64Binary facets
-        | AnyUri -> genAnyURI facets
-        | QName -> genQName facets
+        | AnyAtomicType -> genString
+        | String -> genString
+        | Boolean -> genBool
+        | Decimal -> genDecimal
+        | Float -> genFloat
+        | Double -> genDouble
+        | Duration -> genDuration
+        | DateTime -> genDateTime
+        | Time -> genTime
+        | Date -> genDate
+        | GYearMonth -> genGYearMonth
+        | GYear -> genGYear
+        | GMonthDay -> genGMonthDay
+        | GDay -> genGDay
+        | GMonth -> genGMonth
+        | HexBinary -> genHexBinary
+        | Base64Binary -> genBase64Binary
+        | AnyUri -> genAnyURI
+        | QName -> genQName
         // derived types:
-        | NormalizedString -> genNormalizedString facets
-        | Token -> genToken facets
-        | Name -> genName facets
-        | NmToken -> genNmToken facets
-        | Language -> genLanguage facets
-        | NCName -> genNcName facets
+        | NormalizedString -> genNormalizedString
+        | Token -> genToken
+        | Name -> genName
+        | NmToken -> genNmToken
+        | Language -> genLanguage
+        | NCName -> genNcName
 //        | Id
 //        | Idref // what about Idrefs?
 //        | Entity // what about Entities?
-        | Integer -> genInteger facets
-        | NonPositiveInteger -> genNonPositiveInteger facets
-        | NegativeInteger -> genNegativeInteger facets     
-        | Long -> genLong facets 
-        | Int  -> genInt facets    
-        | Short -> genShort facets 
-        | Byte -> genByte facets
-        | NonNegativeInteger -> genNonNegativeInteger facets
-        | UnsignedLong -> genUnsignedLong facets 
-        | UnsignedInt -> genUnsignedInt facets  
-        | UnsignedShort -> genUnsignedShort facets
-        | UnsignedByte -> genUnsignedByte facets
-        | PositiveInteger -> genPositiveInteger facets    
+        | Integer -> genInteger
+        | NonPositiveInteger -> genNonPositiveInteger
+        | NegativeInteger -> genNegativeInteger     
+        | Long -> genLong 
+        | Int  -> genInt    
+        | Short -> genShort 
+        | Byte -> genByte
+        | NonNegativeInteger -> genNonNegativeInteger
+        | UnsignedLong -> genUnsignedLong 
+        | UnsignedInt -> genUnsignedInt  
+        | UnsignedShort -> genUnsignedShort
+        | UnsignedByte -> genUnsignedByte
+        | PositiveInteger -> genPositiveInteger    
     
-
-    let rec genSimple = memoize (function 
-        | XsdAtom (t, facets) -> genAtom (t, facets)
-        | XsdList (t, facets) -> 
+    let rec genSimple = 
+        memoize <| fun (simpleType: XsdSimpleType) ->
+        match simpleType.Variety with
+        | XsdAtom t -> (genAtom t) simpleType.Facets
+        | XsdList t -> 
             // List facets:  length, minLength, maxLength, pattern, and enumeration
-            let length = facets.Length
-            let minLen = facets.MinLength
-            let maxLen = facets.MaxLength 
+            let length = simpleType.Facets.Length
+            let minLen = simpleType.Facets.MinLength
+            let maxLen = simpleType.Facets.MaxLength 
             let min =
                 match length, minLen with
                 | Some x, _ | None, Some x -> x
@@ -95,13 +85,13 @@ module XmlGenerator =
                     minLen |> Option.forall (fun l -> actualLength >= l) &&
                     maxLen |> Option.forall (fun l -> actualLength <= l) &&
                     length |> Option.forall ((=) actualLength) 
-            } |> applyTextFacets facets WhitespaceHandling.Preserve
-        | XsdUnion (ts, facets) -> // Union facets: pattern and enumeration
+            } |> applyTextFacets simpleType.Facets WhitespaceHandling.Preserve
+        | XsdUnion ts -> // Union facets: pattern and enumeration
             {
                 gen = ts |> List.map genSimple |> Gen.oneof
                 description = "union"
-                prop = fun x -> true
-            } |> applyTextFacets facets WhitespaceHandling.Preserve )
+                prop = fun _ -> true
+            } |> applyTextFacets simpleType.Facets WhitespaceHandling.Preserve 
         
     let mapName (xsdName: XsdName) = XName.Get(xsdName.Name, xsdName.Namespace)
 
@@ -119,7 +109,15 @@ module XmlGenerator =
 
     let decreaseSize = float >> log >> ceil >> int
 
-    let genElement xsdElement = 
+    
+    type CustomGenerators = {
+        SimpleGenerators:  System.Collections.Generic.IDictionary<XsdName, Gen<string>>
+        ElementGenerators: System.Collections.Generic.IDictionary<XsdName, Gen<XElement>> }
+        with static member empty = { SimpleGenerators  = dict Seq.empty
+                                     ElementGenerators = dict Seq.empty }
+
+
+    let genElementCustom (customGenerators: CustomGenerators) xsdElement = 
 
         let chooseOccurs (Min x, maxOccurs) size = 
             match maxOccurs with
@@ -130,8 +128,15 @@ module XmlGenerator =
 
         let rec genElement' xsdElement size = 
             
-            let genSimpleElement simpleType = 
+            let genSimpleElement (simpleType: XsdSimpleType) = 
+
+                match simpleType.Name with
+                | Some x when customGenerators.ElementGenerators.ContainsKey x -> 
+                    customGenerators.ElementGenerators.Item x
+                | _ ->
+
                 let elementName = mapName xsdElement.ElementName
+
                 match xsdElement.FixedValue with
                 | Some fixedValue -> 
                         let elm = XElement(elementName)
@@ -157,6 +162,11 @@ module XmlGenerator =
 
         and genComplex complexType elmName size = 
             
+            match complexType.Name with
+            | Some x when customGenerators.ElementGenerators.ContainsKey x -> 
+                customGenerators.ElementGenerators.Item x
+            | _ ->
+          
             let genNodes = 
                 match complexType.Contents, complexType.IsMixed with
                 | SimpleContent s, _ ->
@@ -253,5 +263,8 @@ module XmlGenerator =
 
         Gen.sized (genElement' xsdElement)
                  
+    let genElement xsdElement = genElementCustom CustomGenerators.empty xsdElement
+        
 
+        
    

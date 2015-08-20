@@ -10,11 +10,14 @@ module XmlGeneratorTest =
     open XmlGenerator
     open Microsoft.FSharp.Reflection
 
+    let anyAtomicType = { Name = None; Facets = emptyFacets; Variety = XsdAtom(AnyAtomicType) }
+
+    let createType t = { Name = None; Facets = emptyFacets; Variety = t } 
 
     let generateSamples xsdSimpleType = 
         genSimple xsdSimpleType
         |> Gen.sample 10 5
-        //|> printfn "%A"
+        |> printfn "%A"
 
     [<Test>]
     let ``samples of atomic types are generated``() =
@@ -23,26 +26,32 @@ module XmlGeneratorTest =
         |> Seq.cast<XsdAtomicType>
         |> Seq.iter (fun x -> 
             printfn "%A" x
-            XsdAtom (x, emptyFacets) 
+            { Name = None; Facets = emptyFacets; Variety = XsdAtom x }
             |> generateSamples 
             |> printfn "%A")
 
     [<Test>]
     let ``samples of lists are generated``() =  
-        XsdList(XsdAtom (AnyAtomicType, emptyFacets), emptyFacets)
+        createType (XsdList anyAtomicType)
         |> generateSamples |> ignore
-        XsdList(XsdAtom (Boolean, emptyFacets), emptyFacets)
+
+        let items = createType (XsdAtom Boolean)
+        createType (XsdList items)
         |> generateSamples |> ignore 
-        XsdList(XsdAtom (Date, emptyFacets), emptyFacets)
+
+        let items = createType (XsdAtom Date)
+        createType (XsdList items)
         |> generateSamples |> ignore
 
 
     [<Test>]
     let ``samples of union types are generated``() =  
-        XsdUnion([XsdAtom (Date, emptyFacets)], emptyFacets)
+        let baseTypes = [createType (XsdAtom Date)]
+        createType (XsdUnion baseTypes)
         |> generateSamples |> ignore
-        XsdUnion([XsdAtom (Decimal, emptyFacets)
-                  XsdAtom (Date, emptyFacets)], emptyFacets)
+
+        let baseTypes = [createType (XsdAtom Decimal)]
+        createType (XsdUnion baseTypes)
         |> generateSamples |> ignore
 
 
@@ -201,6 +210,65 @@ module XmlGeneratorTest =
         GenPurchaseOrder.Elm().Generator
         |> Gen.sample 5 1
         |> List.iter (printfn "%A")
+
+    [<Test>]
+    let ``todo custom generator for global complex type``() =
+        // a bit cumbersome, to refactor when a decent API is devised for custom generators
+        let xsd = XsdFactoryTest.makeXsd """
+	    <xs:element name="e">
+		    <xs:complexType>
+			    <xs:complexContent>
+				    <xs:extension base="ct"/>
+			    </xs:complexContent>
+		    </xs:complexType>
+	    </xs:element>
+	    <xs:complexType name="ct">
+		    <xs:attribute name="a1" type="xs:int" use="required"/>
+	    </xs:complexType>
+        """
+        let ct = { Namespace= ""; Name="ct" }
+        let ctXName = System.Xml.Linq.XName.Get(ct.Name, ct.Namespace)
+        let a1Name = System.Xml.Linq.XName.Get("a1", "")
+        let a1 = new System.Xml.Linq.XAttribute(a1Name, "42")
+        let ctGen = System.Xml.Linq.XElement(ctXName, a1) |> Gen.constant
+
+     
+
+        let cust = Seq.singleton (ct, ctGen)
+        let cust' = { XmlGenerator.CustomGenerators.empty with ElementGenerators = dict cust }
+        let samples = 
+            (XsdFactory.FromText xsd).Elements.Head
+            |> XmlGenerator.genElementCustom cust'
+            |> Gen.sample 10 10
+        samples |> List.iter (printfn "%A")
+        samples |> List.iter (fun x -> Assert.AreEqual("42", x.Attribute(a1Name).Value))
+
+    [<Test>]
+    let ``custom generator for global complex type``() =
+        // a bit cumbersome, to refactor when a decent API is devised for custom generators
+        let xsd = XsdFactoryTest.makeXsd """
+	    <xs:complexType name="ct">
+		    <xs:attribute name="a1" type="xs:int"/>
+	    </xs:complexType>
+	    <xs:element name="e" type="ct"/>
+        """
+        let ct = { Namespace= ""; Name="ct" }
+        let ctXName = System.Xml.Linq.XName.Get(ct.Name, ct.Namespace)
+        let a1Name = System.Xml.Linq.XName.Get("a1", "")
+        let a1 = new System.Xml.Linq.XAttribute(a1Name, "42")
+        let ctGen = System.Xml.Linq.XElement(ctXName, a1) |> Gen.constant
+
+     
+
+        let cust = Seq.singleton (ct, ctGen)
+        let cust' = { XmlGenerator.CustomGenerators.empty with ElementGenerators = dict cust }
+        let samples = 
+            (XsdFactory.FromText xsd).Elements.Head
+            |> XmlGenerator.genElementCustom cust'
+            |> Gen.sample 10 10
+        samples |> List.iter (printfn "%A")
+        samples |> List.iter (fun x -> Assert.AreEqual("42", x.Attribute(a1Name).Value))
+        
 
     [<Test>]
     let ``mixed, fixed and nillable``() = check """
@@ -375,25 +443,6 @@ module XmlGeneratorTest =
 	    <xs:element name="underline" type="TextType"/>
         """
 
-//    [<Test>]
-//    let ``cyclic elements are not supported``() = 
-//        let xsd = makeSchema """
-//	    <xs:complexType name="TextType" mixed="true">
-//		    <xs:choice minOccurs="0" maxOccurs="unbounded">
-//			    <xs:element ref="bold"/>
-//			    <xs:element ref="italic"/>
-//			    <xs:element ref="underline"/>
-//		    </xs:choice>
-//	    </xs:complexType>
-//	    <xs:element name="bold" type="TextType"/>
-//	    <xs:element name="italic" type="TextType"/>
-//	    <xs:element name="underline" type="TextType"/>
-//        """
-//        try 
-//            xsdSchema xsd |> ignore
-//            Assert.True false 
-//        with e -> Assert.True(e.Message = "Recursive schemas are not supported. Element 'bold' has cycles.")
-
     [<Test>]
     let ``cyclic types are supported``() = check """
 	    <xs:complexType name="SectionType">
@@ -403,21 +452,6 @@ module XmlGeneratorTest =
           </xs:sequence>
         </xs:complexType>
         """
-
-//    [<Test>]
-//    let ``cyclic types are not supported``() = 
-//        let xsd = makeSchema """
-//	    <xs:complexType name="SectionType">
-//          <xs:sequence>
-//            <xs:element name="Title" type="xs:string" />
-//            <xs:element name="Section" type="SectionType" minOccurs="0"/>
-//          </xs:sequence>
-//        </xs:complexType>
-//        """
-//        try 
-//            xsdSchema xsd |> ignore
-//            Assert.True false 
-//        with e -> Assert.True(e.Message = "Recursive schemas are not supported. Element 'Section' has cycles.")
 
        
 
@@ -538,34 +572,6 @@ module TestLexicalMappings =
 
     [<Property>] 
     let LexULong x = lexicalMappings XsdULong (=) x
-    
 
-
-//module TestLoops =
-//    open NUnit.Framework
-//    open FsCheck
-//    open XsdTools
-//
-//    type node =
-//        | Leaf of int
-//        | Nodes of node*node
-//
-//
-//    let rec unsafeTree() = 
-//        [ Gen.constant (Leaf(2))
-//          gen {
-//            let! sub = unsafeTree() |> Gen.two
-//            return Nodes sub
-//          } ]
-//        |> Gen.oneof 
-//
-//    [<Test>]
-//    let loop1() =
-//        //let g = Arb.generate<node>
-//
-//        let g = unsafeTree()
-//        g 
-//        |> Gen.sample 3 5
-//        |> List.iter (printfn "%A")
 
         
