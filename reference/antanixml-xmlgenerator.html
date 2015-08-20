@@ -12,8 +12,8 @@
     <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
     <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
 
-    <link type="text/css" rel="stylesheet" href="/AntaniXml/content/style.css" />
-    <script type="text/javascript" src="/AntaniXml/content/tips.js"></script>
+    <link type="text/css" rel="stylesheet" href="./content/style.css" />
+    <script type="text/javascript" src="./content/tips.js"></script>
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -43,6 +43,23 @@
 </div>
 
 <!-- Render nested types and modules, if there are any -->
+  <h2>Nested types and modules</h2>
+  <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="antanixml-xmlgenerator-customgenerators.html">CustomGenerators</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
 
   <h3>Functions and values</h3>
   <table class="table table-bordered member-list">
@@ -61,7 +78,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XmlGenerator.fs#L120-120" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XmlGenerator.fs#L110-110" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -72,14 +89,14 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '86', 86)" onmouseover="showTip(event, '86', 86)">
-            genAtom (xsdAtomicType, facets)
+            genAtom _arg1
           </code>
           <div class="tip" id="86">
-            <strong>Signature:</strong> (xsdAtomicType:XsdAtomicType * facets:Facets) -&gt; Gen&lt;string&gt;<br />
+            <strong>Signature:</strong> _arg1:XsdAtomicType -&gt; Facets -&gt; Gen&lt;string&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XmlGenerator.fs#L24-24" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XmlGenerator.fs#L14-14" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -97,7 +114,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XmlGenerator.fs#L108-108" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XmlGenerator.fs#L98-98" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -115,7 +132,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XmlGenerator.fs#L122-122" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XmlGenerator.fs#L266-266" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -126,14 +143,14 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '89', 89)" onmouseover="showTip(event, '89', 89)">
-            genSimple 
+            genElementCustom (...)
           </code>
           <div class="tip" id="89">
-            <strong>Signature:</strong> XsdSimpleType -&gt; Gen&lt;string&gt;<br />
+            <strong>Signature:</strong> customGenerators:CustomGenerators -&gt; xsdElement:XsdElement -&gt; Gen&lt;XElement&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XmlGenerator.fs#L71-71" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XmlGenerator.fs#L120-120" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -144,14 +161,14 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '90', 90)" onmouseover="showTip(event, '90', 90)">
-            mapName xsdName
+            genSimple 
           </code>
           <div class="tip" id="90">
-            <strong>Signature:</strong> xsdName:XsdName -&gt; XName<br />
+            <strong>Signature:</strong> XsdSimpleType -&gt; Gen&lt;string&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XmlGenerator.fs#L106-106" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XmlGenerator.fs#L59-59" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -162,14 +179,14 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '91', 91)" onmouseover="showTip(event, '91', 91)">
-            memoize f
+            mapName xsdName
           </code>
           <div class="tip" id="91">
-            <strong>Signature:</strong> f:(&#39;?7068 -&gt; &#39;?7069) -&gt; &#39;?7068 -&gt; &#39;?7069<br />
-                          <strong>Type parameters:</strong> '?7068, '?7069          </div>
+            <strong>Signature:</strong> xsdName:XsdName -&gt; XName<br />
+                      </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XmlGenerator.fs#L15-15" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XmlGenerator.fs#L96-96" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -181,7 +198,7 @@
 
         </div>
         <div class="span3">
-          <img src="/AntaniXml/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />  
+          <img src="./img/logo.png" alt="F# Project" style="width:150px;margin:10px" />  
           <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
             <li class="nav-header">AntaniXml</li>
             <li><a href="/AntaniXml/index.html">Home page</a></li>
