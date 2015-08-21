@@ -1,3 +1,7 @@
+#### 0.2.1 - August 21 2015
+* fixed dependenciy version issue
+
+
 #### 0.2.0 - August 20 2015
 * recursive schema support
 * performance improvements
