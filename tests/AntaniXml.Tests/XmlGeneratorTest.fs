@@ -1,6 +1,6 @@
 ﻿namespace AntaniXml.Tests
 
-module XmlGeneratorTest =
+module XmlGeneratorTest = 
     open NUnit.Framework
     open FsCheck
     open FsCheck.NUnit
@@ -55,13 +55,17 @@ module XmlGeneratorTest =
 
 
 
-    let isValid schemaSet (e: System.Xml.Linq.XElement) =
-        let valid = validate schemaSet
-        match e.ToString() |> valid  with
-        | true, _ -> true
-        | false, msg ->
-            printfn "%s %A" msg e
-            false
+    let isValid schemaSet (elm: System.Xml.Linq.XElement) =
+        match elm.ToString() |> validate schemaSet  with
+        | Success -> true
+        | Failure ex -> printfn "%s %A" ex.Message elm; false
+
+//        let valid = validate schemaSet
+//        match e.ToString() |> valid  with
+//        | true, _ -> true
+//        | false, msg ->
+//            printfn "%s %A" msg e
+//            false
 
     let checkSchema xsd =
         let samples = 
@@ -234,7 +238,7 @@ module XmlGeneratorTest =
         let cust = Seq.singleton (ct, ctGen)
         let cust' = { XmlGenerator.CustomGenerators.empty with ElementGenerators = dict cust }
         let samples = 
-            (XsdFactory.FromText xsd).Elements.Head
+            (XsdFactory.fromText xsd).Elements.Head
             |> XmlGenerator.genElementCustom cust'
             |> Gen.sample 10 10
         samples |> List.iter (printfn "%A")
@@ -266,7 +270,7 @@ module XmlGeneratorTest =
         let cust = Seq.singleton (ct, ctGen)
         let cust' = { XmlGenerator.CustomGenerators.empty with ElementGenerators = dict cust }
         let samples = 
-            (XsdFactory.FromText xsd).Elements.Head
+            (XsdFactory.fromText xsd).Elements.Head
             |> XmlGenerator.genElementCustom cust'
             |> Gen.sample 10 10
         samples |> List.iter (printfn "%A")
@@ -455,8 +459,17 @@ module XmlGeneratorTest =
           </xs:sequence>
         </xs:complexType>
         """
+    [<Test>]
+    let ``pattern issue``() = check """
+        <xs:element name="DateTime" type="DateTimeType" />
+	    <xs:simpleType name="DateTimeType">
+		    <xs:restriction base="xs:dateTime">
+			    <xs:pattern value="\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d(Z|(\+|-)\d\d:\d\d)"/>
+		    </xs:restriction>
+	    </xs:simpleType>
+        """
 
-       
+           
 
 module CombinedConstraintsTest =  
     open NUnit.Framework

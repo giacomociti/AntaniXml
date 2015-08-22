@@ -28,110 +28,74 @@ module XsdFactoryTest =
     let anyTypeName = 
         { Namespace = "http://www.w3.org/2001/XMLSchema"
           Name = "anyType" }
-    let anyType = 
-        Complex { IsMixed = false
-                  ComplexTypeName = None
-                  Attributes = []
-                  Contents = ComplexContent(Sequence(singleMandatory, [ Any(unconstrained, AnyNs.Any) ])) }
-    // always present, likely it's for unconstrained contents
-    let anyTypeDef = anyTypeName, anyType
-
-    // default global types in a schema
-    let onlyAnyTypeDef = Map.ofList [ anyTypeDef ] 
-
 
     [<Test>]
     let ``empty schema contains only anyType``() =
-        let xsd = FromText <| makeXsd ""
-        //printfn "%A" xsd
-        let expected = 
-            { Types = onlyAnyTypeDef
-              Elements   = []
-              Attributes = [] }
-        Assert.IsNotNull(expected)
-        //Assert.AreEqual(expected, xsd)
+        let xsd = fromText <| makeXsd ""
+        Assert.AreEqual([], xsd.Elements)
+        Assert.AreEqual([], xsd.Attributes)
+        Assert.IsTrue(xsd.Types.ContainsKey anyTypeName)
         
     [<Test>]
-    let ``unconstrained element has anyType``() =
-        let xsd = FromText <| makeXsd """<xs:element name="foo"/>"""
-        //printfn "%A" xsd
-        let expected = 
-            { Types = onlyAnyTypeDef
-              Elements = 
-                  [ { ElementName = foo
-                      Type = anyType
-                      IsNillable = false
-                      FixedValue = None } ]
-              Attributes = [] }
-        Assert.IsNotNull(expected)
-        //Assert.AreEqual(expected, xsd)
-      
+    let ``unconstrained element is parsed``() =
+        let xsd = fromText <| makeXsd """<xs:element name="foo"/>"""
+        match xsd.Elements with
+            | [e] -> 
+                Assert.AreEqual(foo, e.ElementName)
+                Assert.IsFalse e.IsNillable
+                Assert.AreEqual(None, e.FixedValue)
+            | _ -> failwith "unexpected"
+        
 
     [<Test>]
     let ``unconstrained attribute has anyAtomicType``() =
-        let xsd = FromText <| makeXsd """<xs:attribute name="foo"/>"""
-        //printfn "%A" xsd
-        let expected = 
-            { Types = onlyAnyTypeDef
-              Elements = []
-              Attributes = 
-                  [ { AttributeName = foo
-                      Type = anyAtomicType
-                      FixedValue = None } ] }
-        Assert.IsNotNull(expected)
-        //Assert.AreEqual(expected, xsd)
-        
+        let xsd = fromText <| makeXsd """<xs:attribute name="foo"/>"""
+        match xsd.Attributes with
+        | [a] -> Assert.AreEqual({ AttributeName = foo
+                                   Type = anyAtomicType
+                                   FixedValue = None }, a)
+        | _ -> failwith "unexpected"
 
     [<Test>]
     let ``string type is correctly assigned to element``() =
-        let xsd = FromText <| makeXsd """
+        let xsd = fromText <| makeXsd """
             <xs:element name="foo" type="xs:string" />"""
-        //printfn "%A" xsd
-        let expected = 
-            { Types = onlyAnyTypeDef
-              Elements = 
-                  [ { ElementName = foo
-                      Type = Simple { SimpleTypeName = None; Facets = emptyFacets; Variety = XsdAtom String }
-                      IsNillable = false
-                      FixedValue = None } ]
-              Attributes = [] }
-        Assert.IsNotNull(expected)
-        //Assert.AreEqual(expected, xsd)
+        match xsd.Elements with
+        | [e] -> 
+            Assert.AreEqual(foo, e.ElementName)
+            Assert.AreEqual(Simple { SimpleTypeName = None // should be xsd: string!!
+                                     Facets = emptyFacets
+                                     Variety = XsdAtom String }, e.Type)
+            Assert.IsFalse e.IsNillable
+            Assert.AreEqual(None, e.FixedValue)
+        | _ -> failwith "unexpected"
         
-
     [<Test>]
-    let ``elements may have attributes``() =
-        let xsd = FromText <| makeXsd """
+    let ``elements may have attributes``() = 
+
+        let xsd = fromText <| makeXsd """
 	        <xs:element name="foo">
 		        <xs:complexType>
 			        <xs:attribute name="bar"/>
 		        </xs:complexType>
-	        </xs:element>
-        """ 
-        //printfn "%A" xsd
-        let expected = 
-            { Types = onlyAnyTypeDef
-              Elements = 
-                  [ { ElementName = foo
-                      Type = 
-                          Complex { IsMixed = false
-                                    ComplexTypeName = None
-                                    Attributes = 
-                                        [ { AttributeName = bar
-                                            Type = anyAtomicType
-                                            FixedValue = None }, Optional ]
-                                    Contents = ComplexContent(Empty) }
-                      IsNillable = false
-                      FixedValue = None } ]
-              Attributes = [] }
-        Assert.IsNotNull(expected)
-        //Assert.AreEqual(expected, xsd)
-
-
+	        </xs:element>""" 
+        match xsd.Elements with 
+        | [e] -> 
+            Assert.AreEqual(foo, e.ElementName)
+            match e.Type with
+            | Complex(t) -> 
+                match t.Attributes with
+                | [a, u] -> 
+                    Assert.AreEqual(bar, a.AttributeName)
+                    Assert.AreEqual(anyAtomicType, a.Type)
+                    Assert.AreEqual(Optional, u)
+                | _ -> failwith "unexpected"
+            | _ -> failwith "unexpexted"
+        | _ -> failwith "unexpected"
 
     [<Test>]
-    let ``elements may have attributes and child elements``() =
-        let xsd = FromText <| makeXsd """
+    let ``elements may have attributes and child elements``() = 
+        let xsd = fromText <| makeXsd """
     	    <xs:element name="foo">
 		        <xs:complexType>
 			        <xs:sequence>
@@ -141,35 +105,35 @@ module XsdFactoryTest =
 		        </xs:complexType>
 	        </xs:element>
         """ 
-        //printfn "%A" xsd
-        let bazAttr = 
-            { AttributeName = baz 
-              Type = anyAtomicType
-              FixedValue = None }
-        let barElm = Element (singleMandatory, { ElementName = bar
-                                                 Type = anyType
-                                                 IsNillable = false
-                                                 FixedValue = None })
-        let expected = 
-            { Types = onlyAnyTypeDef
-              Elements = 
-                [ { ElementName = foo
-                    IsNillable = false
-                    FixedValue = None
-                    Type = Complex { 
-                        IsMixed = false
-                        ComplexTypeName = None
-                        Attributes = [bazAttr, Optional]
-                        Contents = 
-                            ComplexContent(Sequence(singleMandatory, [barElm])) } 
-                   } ]
-              Attributes = [ ] }
-        Assert.IsNotNull(expected)
-        //Assert.AreEqual(expected, xsd)
+        match xsd.Elements with 
+        | [e] -> 
+            Assert.AreEqual(foo, e.ElementName)
+            match e.Type with
+            | Complex(t) -> 
+                match t.Attributes with
+                | [a, u] -> 
+                    Assert.AreEqual(baz, a.AttributeName)
+                    Assert.AreEqual(anyAtomicType, a.Type)
+                    Assert.AreEqual(Optional, u)
+                | _ -> failwith "unexpected"
+                match t.Contents with
+                | ComplexContent(par) -> 
+                    match par with
+                    | Sequence ((Min 1, Max 1), items) ->
+                        match items |> Seq.exactlyOne with
+                        | Element ((Min 1, Max 1), elm) ->
+                            Assert.AreEqual(bar, elm.ElementName)
+                        | _ -> failwith "unexpexted"
+                    | _ -> failwith "unexpexted"
+                | _ -> failwith "unexpexted"
+            | _ -> failwith "unexpexted"
+        | _ -> failwith "unexpected"
+
+        
 
     [<Test>]
     let ``facets are parsed``() =
-        let xsd = FromText <| makeXsd """
+        let xsd = fromText <| makeXsd """
 	        <xs:simpleType name="x">
 		        <xs:restriction base="xs:string">
 			        <xs:minLength value="2"/>
@@ -223,12 +187,13 @@ module XsdFactoryTest =
     let ``Entity is not supported``() =
         try
             """<xs:element name="e" type="xs:ENTITY"/>""" 
-            |> makeXsd |> FromText |> ignore
+            |> makeXsd |> fromText |> ignore
             Assert.False true
         with e -> Assert.True("unsupported type Entity" = e.Message)
 
     [<Test>]
     let ``token is collapsed``() =
+
         let xsd = """
             <xs:element name="e">
 		        <xs:simpleType>
@@ -238,7 +203,7 @@ module XsdFactoryTest =
 		        </xs:simpleType>
 	        </xs:element>
             """  |> makeXsd |> xmlSchemaSet 
-        let isValid = validate xsd
+        let isValid x = (validate xsd x).Valid
         isValid  "<e>aaa</e>"    |> Assert.True
         isValid  "<e>aaaa</e>"   |> Assert.False
         isValid  "<e>a  a</e>"   |> Assert.True // becomes 'a a'

@@ -1,5 +1,7 @@
 ﻿namespace AntaniXml
 
+/// This module provides support for simple types featuring multiple facets.
+/// For example when a simple type has both a Length facet and a pattern.
 module ConstrainedGenerators =
     open FsCheck
     open LexicalMappings

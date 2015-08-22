@@ -2,6 +2,8 @@
 
 #nowarn "40"
 
+/// This is where elements and types (simple and complex) defined in a schema 
+/// are mapped to random generators. Complex generators are composed using FsCheck combinators.
 module XmlGenerator =
     open System.Xml.Linq
     open FsCheck
@@ -207,11 +209,11 @@ module XmlGenerator =
             | Any (occurs, ns) -> 
                 let elmName, elmNs =
                     match ns with
-                    | AnyNs.Local -> "anyElement", "" 
-                    | AnyNs.Other // hope we have no clashes
-                    | AnyNs.Any -> "anyElement", "anyNs"
-                    | AnyNs.Target (h :: _) -> "anyElement", h
-                    | AnyNs.Target [] -> failwith "Empty Target"
+                    | Wildcard.Local -> "anyElement", "" 
+                    | Wildcard.Other // hope we have no clashes
+                    | Wildcard.Any -> "anyElement", "anyNs"
+                    | Wildcard.Target (h :: _) -> "anyElement", h
+                    | Wildcard.Target [] -> failwith "Empty Target"
                 let elm = XElement(XName.Get(elmName, elmNs))
                 gen { 
                     let! n = chooseOccurs occurs size'

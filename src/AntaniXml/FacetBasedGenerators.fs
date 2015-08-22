@@ -1,5 +1,15 @@
 ﻿namespace AntaniXml
 
+///This module provides generators supporting the facets defined in XML schema.
+
+//For example the `pattern` facet is supported using a [regex based generator](https://github.com/moodmosaic/Fare).
+//Much easier is the one for `enum` facets, yielding a generator for a fixed set of values.
+//For text based data types we have generators of bounded length values according 
+//to `Length`, `MinLength` and `MaxLength` facets.
+//And for data types that can be sorted there is a generator of values restricted to a
+//certain interval dictated by facets like `MinInclusive`, `MaxExclusive`...
+
+
 module FacetBasedGenerators =
     open System
     open System.Xml

@@ -1,5 +1,12 @@
 ﻿namespace AntaniXml
 
+/// This module contains whitespace handling and also parse and format functions for simple datatypes.
+/// In W3C terms, parse is a map from the lexical space to the value space of a given datatype.
+/// Usually we implement it relying on `System.XmlConvert`.
+/// The format function instead maps values to lexical representations. 
+/// It returns a string list because the same value may have multiple representations 
+/// (e.g. a plus sign may optionally prefix a number).
+/// Note: this module is not complete yet, furthermore its design may change in future versions.
 module LexicalMappings =
     open System.Xml
     open System.Text.RegularExpressions

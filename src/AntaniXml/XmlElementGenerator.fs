@@ -1,5 +1,7 @@
 ﻿namespace AntaniXml
 
+// Note: the API provided by the following types may change in future releases.
+
 open XsdDomain
 open XsdFactory
 open XmlGenerator

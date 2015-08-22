@@ -2,6 +2,10 @@
 
 #nowarn "40"
 
+/// This module is in charge of parsing xsd and creating models according to XsdDomain data types.
+/// Parsing xsd is a complex task, and for this we rely on the .NET BCL library (namespace `System.Xml.Schema`).
+/// Converting the Schema Object Model (SOM) provided by the BCL library into our own 
+/// simpler model allows decoupling of parsing xsd and building generators.
 module XsdFactory =
 
     open System.IO
@@ -10,7 +14,7 @@ module XsdFactory =
     open Microsoft.FSharp.Reflection
     open XsdDomain
 
-    // naive, but we are not concerned with thread safety nor memory footprint
+    /// naive, but we are not concerned with thread safety nor memory footprint
     let memoize f = 
         let cache = System.Collections.Generic.Dictionary()
         fun x ->
@@ -20,9 +24,10 @@ module XsdFactory =
                  cache.[x] <- res
                  res
 
+    /// just an alias for `System.Linq.Enumerable.OfType`
     let inline ofType<'a> sequence = System.Linq.Enumerable.OfType<'a> sequence
 
-    let getFacet<'a when 'a :> XmlSchemaFacet> (facets: seq<XmlSchemaFacet>) = 
+    let private getFacet<'a when 'a :> XmlSchemaFacet> (facets: seq<XmlSchemaFacet>) = 
         facets 
         |> Seq.tryFind(fun x -> x :? 'a) 
         |> Option.map (fun x -> x.Value)   
@@ -41,8 +46,7 @@ module XsdFactory =
         Patterns       = []
         WhiteSpace     = None }          
 
-
-    let hasCycles x = 
+    let private hasCycles x = 
         let items = System.Collections.Generic.HashSet<XmlSchemaObject>()
         let rec closure (obj: XmlSchemaObject) =
             let nav innerObj =
@@ -63,10 +67,10 @@ module XsdFactory =
         items.Contains x
         
 
-    let xsdName (x: XmlQualifiedName) = 
+    let private xsdName (x: XmlQualifiedName) = 
         { Namespace = x.Namespace; Name = x.Name }
 
-    let rec getSchema (obj : XmlSchemaObject) = 
+    let rec private getSchema (obj : XmlSchemaObject) = 
         match obj with
         | :? XmlSchema as res -> res
         | _ -> getSchema obj.Parent
@@ -74,7 +78,7 @@ module XsdFactory =
 
     // base type (either global or anonymous) for a restriction.
     // None when the base type is primitive
-    let getBaseType (restr: XmlSchemaSimpleTypeRestriction) =
+    let private getBaseType (restr: XmlSchemaSimpleTypeRestriction) =
         if restr.BaseType <> null then Some restr.BaseType
         elif restr.BaseTypeName.Namespace = "http://www.w3.org/2001/XMLSchema"
         then None // restriction on a primitive type
@@ -83,7 +87,7 @@ module XsdFactory =
             Some (item :?> XmlSchemaSimpleType)
         
     
-    let xsdFacets facets = {
+    let private xsdFacets facets = {
         Length         = facets |> getFacet<XmlSchemaLengthFacet>    |> Option.map int
         MinLength      = facets |> getFacet<XmlSchemaMinLengthFacet> |> Option.map int
         MaxLength      = facets |> getFacet<XmlSchemaMaxLengthFacet> |> Option.map int
@@ -115,7 +119,7 @@ module XsdFactory =
     // is more constrained than its base type. For example minLength
     // can only be increased. See also 
     // http://www.xfront.com/XML-Schema-library/papers/Algorithm-for-Merging-a-simpleType-Dependency-Chain.pdf
-    let combine baseFacets derivedFacets =
+    let private combine baseFacets derivedFacets =
         let firstWithValue = List.tryPick id
         let len = firstWithValue [derivedFacets.Length; baseFacets.Length]
 
@@ -153,7 +157,7 @@ module XsdFactory =
         }
 
 
-    let rec xsdSimpleType  =
+    let rec private xsdSimpleType  =
         memoize <|
         fun (simpleType: XmlSchemaSimpleType) ->
 
@@ -225,33 +229,28 @@ module XsdFactory =
             | _ -> failwith "expected XmlSchemaSimpleTypeUnion"
         | _ -> failwithf "unexpected variety %A" simpleType.Datatype.Variety
 
-
-
-    let xsdAttributeUse (attrUse: XmlSchemaUse) = 
-        match attrUse with
+    let private xsdAttributeUse = 
+        function
         | XmlSchemaUse.None
         | XmlSchemaUse.Optional -> Optional
         | XmlSchemaUse.Prohibited -> Prohibited
         | XmlSchemaUse.Required -> Required
-        | _ -> failwithf "unknown use: %A" attrUse
+        | x -> failwithf "unknown use: %A" x
 
-           
-
-    let xsdAttribute (x: XmlSchemaAttribute) =
-        let attributeType =
-            if x.AttributeSchemaType = null 
-            then // seems like it is null when Prohibited
-                assert (xsdAttributeUse x.Use = XsdAttributeUse.Prohibited)
-                // return a fake value that will be ignored
-                {  SimpleTypeName = None
-                   Facets = emptyFacets
-                   Variety = XsdAtom XsdAtomicType.AnyAtomicType }
-            else xsdSimpleType x.AttributeSchemaType
+    let private xsdAttribute (x: XmlSchemaAttribute) =
         { AttributeName = xsdName x.QualifiedName 
-          Type = attributeType
+          Type = 
+              if x.AttributeSchemaType = null 
+              then // seems like it is null when Prohibited
+                  assert (xsdAttributeUse x.Use = XsdAttributeUse.Prohibited)
+                  // return a fake value that will be ignored
+                  {  SimpleTypeName = None
+                     Facets = emptyFacets
+                     Variety = XsdAtom XsdAtomicType.AnyAtomicType }
+              else xsdSimpleType x.AttributeSchemaType
           FixedValue = if x.FixedValue = null then None else Some x.FixedValue }
 
-    let rec xsdElement = 
+    let rec private xsdElement = 
         memoize <| 
         fun (elm: XmlSchemaElement) ->
 //        if hasCycles elm 
@@ -262,13 +261,13 @@ module XsdFactory =
           IsNillable = elm.IsNillable
           FixedValue = if elm.FixedValue = null then None else Some elm.FixedValue }
 
-    and xsdType = 
+    and private xsdType = 
         memoize <| 
         function
         | :? XmlSchemaSimpleType  as simple  -> simple |> xsdSimpleType |> Simple
         | :? XmlSchemaComplexType as complex -> 
 
-            let rec xsdParticle =
+            let rec xsdParticle = 
                 memoize <|
                 fun (par: XmlSchemaParticle) ->
                 
@@ -294,18 +293,18 @@ module XsdFactory =
                 | :? XmlSchemaAny as any -> 
                     let ns = 
                         match any.Namespace with
-                        | null | "" | "##any" -> AnyNs.Any
-                        | "##local" | "##targetNamespace" -> AnyNs.Local
-                        | "##other" -> AnyNs.Other
-                        | x -> x.Split [|' '|] |> List.ofArray |> AnyNs.Target
+                        | null | "" | "##any" -> Wildcard.Any
+                        | "##other" -> Wildcard.Other
+                        | "##local" -> Wildcard.Local
+                        | "##targetNamespace" -> Wildcard.Local // TODO check this
+                        | x -> x.Split [|' '|] |> List.ofArray |> Wildcard.Target
                     Any (occurs, ns)
                 | :? XmlSchemaGroupBase as grp -> xsdParticles grp
                 | :? XmlSchemaGroupRef as grpRef -> xsdParticle grpRef.Particle
                 | :? XmlSchemaElement as elm -> Element (occurs, xsdElement elm)
                 | _ -> Empty // XmlSchemaParticle.EmptyParticle
 
-            
-            let simpleContent (complexType: XmlSchemaComplexType) =
+            let simpleContent (complexType: XmlSchemaComplexType) = 
                 let rec getSimpleType (xmlSchemaType : XmlSchemaType) = 
                     match xmlSchemaType.BaseXmlSchemaType with
                     | :? XmlSchemaSimpleType as result -> result
@@ -321,7 +320,6 @@ module XsdFactory =
                 // use is for adding attributes, but we already get them via the
                 // AttributeUses collection
                 | _ -> simpleType
-
 
             Complex { 
                 ComplexTypeName = 
@@ -344,11 +342,7 @@ module XsdFactory =
                         |> ComplexContent
                     | _ -> failwith "unexpected content type: %A." complex.ContentType
                 IsMixed = complex.IsMixed } 
-
-
         | xmlSchemaType -> failwithf "unknown type: %A" xmlSchemaType
-
-    
 
     let xsdSchema (xsd : XmlSchemaSet) = 
         { Types = 
@@ -385,7 +379,12 @@ module XsdFactory =
         XmlReader.Create(inputUri = schemaUri, settings = settings)
         |> createSchemaSet
 
-    let FromText = xmlSchemaSet >> xsdSchema
+    let fromText = xmlSchemaSet >> xsdSchema
+
+    type ValidationResult =
+        Success | Failure of XmlSchemaException
+        with member x.Valid = match x with Success -> true | _ -> false
+
 
     let validate xmlSchemaSet inputXml =
         let settings = XmlReaderSettings(ValidationType = ValidationType.Schema)
@@ -394,9 +393,11 @@ module XsdFactory =
         use reader = XmlReader.Create(new StringReader(inputXml), settings)
         try
             while reader.Read() do ()
-            true, ""
+            //true, ""
+            ValidationResult.Success
         with :? XmlSchemaException as e -> 
-            false, e.Message
+            //false, e.Message
+            ValidationResult.Failure e
             
 
 

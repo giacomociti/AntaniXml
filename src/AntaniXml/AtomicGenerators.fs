@@ -1,5 +1,10 @@
 ﻿namespace AntaniXml
 
+/// This module provides generators for simple (atomic) data types.
+/// Generation of random values is mainly based on FsCheck generators.
+/// Each simple datatype is mapped to a suitable CLR type (e.g. `xs:int` 
+/// to `System.Int32`, `xs:integer` to `System.Numerics.BigInteger`...) 
+/// for which an FsCheck generator already exists or can be easily built.
 module AtomicGenerators =
     open System
     open System.Globalization
