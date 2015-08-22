@@ -140,6 +140,10 @@ The main limitations currently known are:</p>
 
 <p>A few built-in types are not supported: Notation, NmTokens, Id, Idref, Idrefs, Entity and Entities.</p>
 
+<h4><a name="abstract-types-and-elements" class="anchor" href="#abstract-types-and-elements">abstract types and elements</a></h4>
+
+<p>See this [issue] (<a href="https://github.com/giacomociti/AntaniXml/issues/5).">https://github.com/giacomociti/AntaniXml/issues/5).</a></p>
+
 <h4><a name="identity-and-subset-constraint" class="anchor" href="#identity-and-subset-constraint">identity and subset constraint</a></h4>
 
 <p>XML Schema provides rough equivalents of primary and foreign keys in databases.
@@ -147,70 +151,14 @@ Version 1.1 also introduced assertions to allow further constraints.
 Schemas are primarily grammar based, so they are a good fit for random generators.
 But these complementary features for specifying constraints are at odd with the generative approach.</p>
 
-<h3><a name="Core-Modules" class="anchor" href="#Core-Modules">Core Modules</a></h3>
+<h3><a name="Public-API" class="anchor" href="#Public-API">Public API</a></h3>
 
-<p>While the type <code>XmlElementGenerator</code> is an OO (C# friendly) entry point,
+<p>The type <code>XmlElementGenerator</code> is an OO (C# friendly) entry point,
 the rest of the library is organized in modules.
 At the moment they are not designed to be directly used by client code (in the future this may change
 in order to provide some <em>hook</em> to tweak generators).
-Anyway here's an overview for those interested in implementation details (contributions are welcome).</p>
-
-<h4><a name="Xsd-Domain" class="anchor" href="#Xsd-Domain">Xsd Domain</a></h4>
-
-<p>This module provides types to represent a schema.
-F# data types like discriminated unions allow for very clear definitions.
-The XML schema specification is rich and complex, so this module provides a simplified view.
-Nevertheless, we cover a few specific (and sometimes tricky) concepts, like nillable values, fixed values,
-union and lists for simple types, whitespace handling etc.</p>
-
-<h4><a name="Xsd-Factory" class="anchor" href="#Xsd-Factory">Xsd Factory</a></h4>
-
-<p>This module is in charge of parsing xsd files and creating models according to XsdDomain data types.
-Parsing xsd is a complex task, and for this we rely on the .NET BCL library (namespace <code>System.Xml.Schema</code>).
-Converting the Schema Object Model (SOM) provided by the BCL library into our own 
-simpler model allows decoupling of parsing xsd and building generators.</p>
-
-<h4><a name="Lexical-Mappings" class="anchor" href="#Lexical-Mappings">Lexical Mappings</a></h4>
-
-<p>This modules contains whitespace handling and also parse and format functions for simple datatypes.
-In W3C terms, parse is a map from the lexical space to the value space of a given datatype.
-Usually we implement it relying on <code>System.XmlConvert</code>.
-The format function instead maps values to lexical representations. 
-It returns a string list because the same value may have multiple representations (e.g. a plus sign may optionally prefix a number).</p>
-
-<p>NOTE: features in this module may be implemented differently in future releases.</p>
-
-<h4><a name="Constrained-Generators" class="anchor" href="#Constrained-Generators">Constrained Generators</a></h4>
-
-<p>This module provides support for simple types featuring multiple facets.
-For example when a simple type has both a Length facet and a pattern.</p>
-
-<p><em>TODO: Elaborate</em></p>
-
-<h4><a name="Facet-based-generators" class="anchor" href="#Facet-based-generators">Facet based generators</a></h4>
-
-<p>This module provides generators supporting the facets defined in XML schema.</p>
-
-<p>For example the <code>pattern</code> facet is supported using a <a href="https://github.com/moodmosaic/Fare">regex based generator</a>.
-Much easier is the one for <code>enum</code> facets, yielding a generator for a fixed set of values.
-For text based data types we have generators of bounded length values according 
-to <code>Length</code>, <code>MinLength</code> and <code>MaxLength</code> facets.
-And for data types that can be sorted there is a generator of values restricted to a
-certain interval dictated by facets like <code>MinInclusive</code>, <code>MaxExclusive</code>...</p>
-
-<h4><a name="Atomic-generators" class="anchor" href="#Atomic-generators">Atomic generators</a></h4>
-
-<p>This module provides generators for simple (atomic) data types.
-Generation of random values is mainly based on FsCheck generators.
-Each simple datatype is mapped to a suitable CLR type (e.g. <code>xs:int</code> 
-to <code>System.Int32</code>, <code>xs:integer</code> to <code>System.Numerics.BigInteger</code>...) 
-for which an <a href="https://github.com/fscheck/FsCheck">FsCheck</a> generator already exists 
-or can be easily built.</p>
-
-<h4><a name="Xml-Generator" class="anchor" href="#Xml-Generator">Xml Generator</a></h4>
-
-<p>This is where elements and types (simple and complex) defined in a schema 
-are mapped to random generators. Complex generators are composed using FsCheck combinators.</p>
+Also the design of the OO public API may change, 
+see this [issue] (<a href="https://github.com/giacomociti/AntaniXml/issues/4).">https://github.com/giacomociti/AntaniXml/issues/4).</a></p>
 
 <div class="tip" id="fs1">namespace AntaniXml</div>
 <div class="tip" id="fs2">val xsdText : string<br /><br />Full name: Tutorial.xsdText</div>

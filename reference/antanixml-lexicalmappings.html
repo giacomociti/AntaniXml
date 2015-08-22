@@ -40,6 +40,15 @@
   <span>Namespace: AntaniXml</span><br />
 </p>
 <div class="xmldoc">
+<p>This module contains whitespace handling and also parse and format functions for simple datatypes.
+In W3C terms, parse is a map from the lexical space to the value space of a given datatype.
+Usually we implement it relying on <code>System.XmlConvert</code>.
+The format function instead maps values to lexical representations. 
+It returns a string list because the same value may have multiple representations 
+(e.g. a plus sign may optionally prefix a number).
+Note: this module is not complete yet, furthermore its design may change in future versions.</p>
+
+
 </div>
 
 <!-- Render nested types and modules, if there are any -->
@@ -81,7 +90,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L10-10" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L17-17" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -99,7 +108,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L15-15" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L22-22" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -117,7 +126,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L14-14" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L21-21" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -135,7 +144,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L7-7" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L14-14" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -153,7 +162,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L26-26" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L33-33" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -171,7 +180,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L80-80" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L87-87" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -189,7 +198,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L63-63" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L70-70" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -207,7 +216,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L32-32" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L39-39" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -225,7 +234,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L49-49" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L56-56" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -243,7 +252,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L56-56" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L63-63" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -261,7 +270,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L42-42" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L49-49" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -279,7 +288,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L112-112" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L119-119" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -297,7 +306,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L120-120" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L127-127" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -315,7 +324,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L104-104" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L111-111" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -333,7 +342,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L96-96" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L103-103" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -351,7 +360,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L88-88" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L95-95" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -369,7 +378,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L129-129" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L136-136" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -387,7 +396,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L134-134" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L141-141" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -405,7 +414,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L148-148" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L155-155" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -423,7 +432,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L24-24" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L31-31" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -441,7 +450,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L72-72" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L79-79" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -459,7 +468,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L141-141" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L148-148" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -477,7 +486,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L155-155" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/LexicalMappings.fs#L162-162" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>

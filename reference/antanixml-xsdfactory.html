@@ -40,9 +40,32 @@
   <span>Namespace: AntaniXml</span><br />
 </p>
 <div class="xmldoc">
+<p>This module is in charge of parsing xsd and creating models according to XsdDomain data types.
+Parsing xsd is a complex task, and for this we rely on the .NET BCL library (namespace <code>System.Xml.Schema</code>).
+Converting the Schema Object Model (SOM) provided by the BCL library into our own 
+simpler model allows decoupling of parsing xsd and building generators.</p>
+
+
 </div>
 
 <!-- Render nested types and modules, if there are any -->
+  <h2>Nested types and modules</h2>
+  <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="antanixml-xsdfactory-validationresult.html">ValidationResult</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
 
   <h3>Functions and values</h3>
   <table class="table table-bordered member-list">
@@ -54,14 +77,14 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '92', 92)" onmouseover="showTip(event, '92', 92)">
-            combine baseFacets derivedFacets
+            createSchemaSet xmlReader
           </code>
           <div class="tip" id="92">
-            <strong>Signature:</strong> baseFacets:Facets -&gt; derivedFacets:Facets -&gt; Facets<br />
+            <strong>Signature:</strong> xmlReader:XmlReader -&gt; XmlSchemaSet<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XsdFactory.fs#L118-118" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XsdFactory.fs#L365-365" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -72,14 +95,14 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '93', 93)" onmouseover="showTip(event, '93', 93)">
-            createSchemaSet xmlReader
+            emptyFacets 
           </code>
           <div class="tip" id="93">
-            <strong>Signature:</strong> xmlReader:XmlReader -&gt; XmlSchemaSet<br />
+            <strong>Signature:</strong> Facets<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XsdFactory.fs#L371-371" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XsdFactory.fs#L35-35" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -90,190 +113,10 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '94', 94)" onmouseover="showTip(event, '94', 94)">
-            emptyFacets 
+            fromText 
           </code>
           <div class="tip" id="94">
-            <strong>Signature:</strong> Facets<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XsdFactory.fs#L30-30" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '95', 95)" onmouseover="showTip(event, '95', 95)">
-            FromText 
-          </code>
-          <div class="tip" id="95">
             <strong>Signature:</strong> string -&gt; XsdSchema<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XsdFactory.fs#L388-388" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '96', 96)" onmouseover="showTip(event, '96', 96)">
-            getBaseType restr
-          </code>
-          <div class="tip" id="96">
-            <strong>Signature:</strong> restr:XmlSchemaSimpleTypeRestriction -&gt; XmlSchemaSimpleType option<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XsdFactory.fs#L77-77" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '97', 97)" onmouseover="showTip(event, '97', 97)">
-            getFacet facets
-          </code>
-          <div class="tip" id="97">
-            <strong>Signature:</strong> facets:seq&lt;XmlSchemaFacet&gt; -&gt; string option<br />
-                          <strong>Type parameters:</strong> 'a          </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XsdFactory.fs#L25-25" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '98', 98)" onmouseover="showTip(event, '98', 98)">
-            getSchema obj
-          </code>
-          <div class="tip" id="98">
-            <strong>Signature:</strong> obj:XmlSchemaObject -&gt; XmlSchema<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XsdFactory.fs#L69-69" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '99', 99)" onmouseover="showTip(event, '99', 99)">
-            hasCycles x
-          </code>
-          <div class="tip" id="99">
-            <strong>Signature:</strong> x:XmlSchemaObject -&gt; bool<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XsdFactory.fs#L45-45" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '100', 100)" onmouseover="showTip(event, '100', 100)">
-            memoize f
-          </code>
-          <div class="tip" id="100">
-            <strong>Signature:</strong> f:(&#39;?6891 -&gt; &#39;?6892) -&gt; &#39;?6891 -&gt; &#39;?6892<br />
-                          <strong>Type parameters:</strong> '?6891, '?6892          </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XsdFactory.fs#L14-14" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '101', 101)" onmouseover="showTip(event, '101', 101)">
-            ofType sequence
-          </code>
-          <div class="tip" id="101">
-            <strong>Signature:</strong> sequence:IEnumerable -&gt; IEnumerable&lt;&#39;a&gt;<br />
-                          <strong>Type parameters:</strong> 'a          </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XsdFactory.fs#L23-23" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '102', 102)" onmouseover="showTip(event, '102', 102)">
-            validate xmlSchemaSet inputXml
-          </code>
-          <div class="tip" id="102">
-            <strong>Signature:</strong> xmlSchemaSet:XmlSchemaSet -&gt; inputXml:string -&gt; bool * string<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XsdFactory.fs#L390-390" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '103', 103)" onmouseover="showTip(event, '103', 103)">
-            xmlSchemaSet xsdText
-          </code>
-          <div class="tip" id="103">
-            <strong>Signature:</strong> xsdText:string -&gt; XmlSchemaSet<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XsdFactory.fs#L378-378" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '104', 104)" onmouseover="showTip(event, '104', 104)">
-            xmlSchemaSetFromUri schemaUri
-          </code>
-          <div class="tip" id="104">
-            <strong>Signature:</strong> schemaUri:string -&gt; XmlSchemaSet<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -287,15 +130,57 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '105', 105)" onmouseover="showTip(event, '105', 105)">
-            xsdAttribute x
+          <code onmouseout="hideTip(event, '95', 95)" onmouseover="showTip(event, '95', 95)">
+            memoize f
           </code>
-          <div class="tip" id="105">
-            <strong>Signature:</strong> x:XmlSchemaAttribute -&gt; XsdAttribute<br />
+          <div class="tip" id="95">
+            <strong>Signature:</strong> f:(&#39;?6891 -&gt; &#39;?6892) -&gt; &#39;?6891 -&gt; &#39;?6892<br />
+                          <strong>Type parameters:</strong> '?6891, '?6892          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XsdFactory.fs#L18-18" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>naive, but we are not concerned with thread safety nor memory footprint</p>
+
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '96', 96)" onmouseover="showTip(event, '96', 96)">
+            ofType sequence
+          </code>
+          <div class="tip" id="96">
+            <strong>Signature:</strong> sequence:IEnumerable -&gt; IEnumerable&lt;&#39;a&gt;<br />
+                          <strong>Type parameters:</strong> 'a          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XsdFactory.fs#L28-28" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>just an alias for <code>System.Linq.Enumerable.OfType</code></p>
+
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '97', 97)" onmouseover="showTip(event, '97', 97)">
+            validate xmlSchemaSet inputXml
+          </code>
+          <div class="tip" id="97">
+            <strong>Signature:</strong> xmlSchemaSet:XmlSchemaSet -&gt; inputXml:string -&gt; ValidationResult<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XsdFactory.fs#L240-240" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XsdFactory.fs#L389-389" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -305,15 +190,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '106', 106)" onmouseover="showTip(event, '106', 106)">
-            xsdAttributeUse attrUse
+          <code onmouseout="hideTip(event, '98', 98)" onmouseover="showTip(event, '98', 98)">
+            xmlSchemaSet xsdText
           </code>
-          <div class="tip" id="106">
-            <strong>Signature:</strong> attrUse:XmlSchemaUse -&gt; XsdAttributeUse<br />
+          <div class="tip" id="98">
+            <strong>Signature:</strong> xsdText:string -&gt; XmlSchemaSet<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XsdFactory.fs#L230-230" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XsdFactory.fs#L372-372" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -323,15 +208,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '107', 107)" onmouseover="showTip(event, '107', 107)">
-            xsdElement 
+          <code onmouseout="hideTip(event, '99', 99)" onmouseover="showTip(event, '99', 99)">
+            xmlSchemaSetFromUri schemaUri
           </code>
-          <div class="tip" id="107">
-            <strong>Signature:</strong> XmlSchemaElement -&gt; XsdElement<br />
+          <div class="tip" id="99">
+            <strong>Signature:</strong> schemaUri:string -&gt; XmlSchemaSet<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XsdFactory.fs#L254-254" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XsdFactory.fs#L376-376" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -341,87 +226,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '108', 108)" onmouseover="showTip(event, '108', 108)">
-            xsdFacets facets
-          </code>
-          <div class="tip" id="108">
-            <strong>Signature:</strong> facets:seq&lt;XmlSchemaFacet&gt; -&gt; Facets<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XsdFactory.fs#L86-86" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '109', 109)" onmouseover="showTip(event, '109', 109)">
-            xsdName x
-          </code>
-          <div class="tip" id="109">
-            <strong>Signature:</strong> x:XmlQualifiedName -&gt; XsdName<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XsdFactory.fs#L66-66" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '110', 110)" onmouseover="showTip(event, '110', 110)">
+          <code onmouseout="hideTip(event, '100', 100)" onmouseover="showTip(event, '100', 100)">
             xsdSchema xsd
           </code>
-          <div class="tip" id="110">
+          <div class="tip" id="100">
             <strong>Signature:</strong> xsd:XmlSchemaSet -&gt; XsdSchema<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XsdFactory.fs#L353-353" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '111', 111)" onmouseover="showTip(event, '111', 111)">
-            xsdSimpleType 
-          </code>
-          <div class="tip" id="111">
-            <strong>Signature:</strong> XmlSchemaSimpleType -&gt; XsdSimpleType<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XsdFactory.fs#L156-156" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '112', 112)" onmouseover="showTip(event, '112', 112)">
-            xsdType 
-          </code>
-          <div class="tip" id="112">
-            <strong>Signature:</strong> XmlSchemaType -&gt; XsdType<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XsdFactory.fs#L265-265" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XsdFactory.fs#L347-347" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>

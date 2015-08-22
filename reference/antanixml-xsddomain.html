@@ -40,6 +40,14 @@
   <span>Namespace: AntaniXml</span><br />
 </p>
 <div class="xmldoc">
+<p>This module provides types to represent a schema.
+F# data types like discriminated unions allow for very clear definitions.
+The W3C XML Schema specification <a href="http://www.w3.org/XML/Schema">http://www.w3.org/XML/Schema</a> is rich and complex, 
+so this module provides a simplified view.
+Nevertheless, we cover a few specific (and sometimes tricky) concepts, like nillable values, 
+fixed values, union and list for simple types, whitespace handling etc.</p>
+
+
 </div>
 
 <!-- Render nested types and modules, if there are any -->
@@ -52,15 +60,12 @@
     <tbody>
         <tr>
           <td class="type-name">
-            <a href="antanixml-xsddomain-anyns.html">AnyNs</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
             <a href="antanixml-xsddomain-facets.html">Facets</a>
           </td>
-          <td class="xmldoc"></td>
+          <td class="xmldoc"><p>Facets are constraints on values of simple types</p>
+
+
+</td>
         </tr>
         <tr>
           <td class="type-name">
@@ -84,7 +89,18 @@
           <td class="type-name">
             <a href="antanixml-xsddomain-whitespacehandling.html">WhitespaceHandling</a>
           </td>
-          <td class="xmldoc"><p>see <a href="http://www.w3.org/TR/xmlschema-2/#rf-whiteSpace">http://www.w3.org/TR/xmlschema-2/#rf-whiteSpace</a></p>
+          <td class="xmldoc"><p>Whitespace handling options provide some formatting flexibility.
+see <a href="http://www.w3.org/TR/xmlschema11-2/#rf-whiteSpace">http://www.w3.org/TR/xmlschema11-2/#rf-whiteSpace</a></p>
+
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="antanixml-xsddomain-wildcard.html">Wildcard</a>
+          </td>
+          <td class="xmldoc"><p>Wildcards provide extensibility.
+see <a href="http://www.w3.org/TR/xmlschema11-1/#Wildcards">http://www.w3.org/TR/xmlschema11-1/#Wildcards</a></p>
 
 
 </td>
@@ -93,7 +109,12 @@
           <td class="type-name">
             <a href="antanixml-xsddomain-xsdatomictype.html">XsdAtomicType</a>
           </td>
-          <td class="xmldoc"></td>
+          <td class="xmldoc"><p>Enumeration of the built-in types defined by W3C XML Schema.
+A few ones are not supported: 
+Notation, NmTokens, Id, Idref, Idrefs, Entity and Entities.</p>
+
+
+</td>
         </tr>
         <tr>
           <td class="type-name">
@@ -129,7 +150,10 @@
           <td class="type-name">
             <a href="antanixml-xsddomain-xsdname.html">XsdName</a>
           </td>
-          <td class="xmldoc"></td>
+          <td class="xmldoc"><p>Qualified name for XML elements and types.</p>
+
+
+</td>
         </tr>
         <tr>
           <td class="type-name">
@@ -153,7 +177,11 @@
           <td class="type-name">
             <a href="antanixml-xsddomain-xsdsimpletypevariety.html">XsdSimpleTypeVariety</a>
           </td>
-          <td class="xmldoc"></td>
+          <td class="xmldoc"><p>Most simple types are atomic, but there are also list and union types.
+To represent their nested structure we need recursive types.</p>
+
+
+</td>
         </tr>
         <tr>
           <td class="type-name">

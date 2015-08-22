@@ -40,6 +40,10 @@
   <span>Namespace: AntaniXml</span><br />
 </p>
 <div class="xmldoc">
+<p>This module provides support for simple types featuring multiple facets.
+For example when a simple type has both a Length facet and a pattern.</p>
+
+
 </div>
 
 <!-- Render nested types and modules, if there are any -->
@@ -77,11 +81,11 @@
             all gens x
           </code>
           <div class="tip" id="38">
-            <strong>Signature:</strong> gens:ConstrGen&lt;&#39;?7146&gt; list -&gt; x:&#39;?7146 -&gt; bool<br />
-                          <strong>Type parameters:</strong> '?7146          </div>
+            <strong>Signature:</strong> gens:ConstrGen&lt;&#39;?7154&gt; list -&gt; x:&#39;?7154 -&gt; bool<br />
+                          <strong>Type parameters:</strong> '?7154          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L11-11" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L13-13" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -98,11 +102,11 @@
             canParse parse x
           </code>
           <div class="tip" id="39">
-            <strong>Signature:</strong> parse:(&#39;?7157 -&gt; &#39;?7158) -&gt; x:&#39;?7157 -&gt; bool<br />
-                          <strong>Type parameters:</strong> '?7157, '?7158          </div>
+            <strong>Signature:</strong> parse:(&#39;?7165 -&gt; &#39;?7166) -&gt; x:&#39;?7165 -&gt; bool<br />
+                          <strong>Type parameters:</strong> '?7165, '?7166          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L58-58" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L60-60" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -116,11 +120,11 @@
             lexMap m g
           </code>
           <div class="tip" id="40">
-            <strong>Signature:</strong> m:LexMap&lt;&#39;?7160&gt; -&gt; g:ConstrGen&lt;&#39;?7160&gt; -&gt; ConstrGen&lt;string&gt;<br />
-                          <strong>Type parameters:</strong> '?7160          </div>
+            <strong>Signature:</strong> m:LexMap&lt;&#39;?7168&gt; -&gt; g:ConstrGen&lt;&#39;?7168&gt; -&gt; ConstrGen&lt;string&gt;<br />
+                          <strong>Type parameters:</strong> '?7168          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L61-61" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L63-63" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -134,11 +138,11 @@
             map f g
           </code>
           <div class="tip" id="41">
-            <strong>Signature:</strong> f:(&#39;?7162 -&gt; &#39;?7162) -&gt; g:ConstrGen&lt;&#39;?7162&gt; -&gt; ConstrGen&lt;&#39;?7162&gt;<br />
-                          <strong>Type parameters:</strong> '?7162          </div>
+            <strong>Signature:</strong> f:(&#39;?7170 -&gt; &#39;?7170) -&gt; g:ConstrGen&lt;&#39;?7170&gt; -&gt; ConstrGen&lt;&#39;?7170&gt;<br />
+                          <strong>Type parameters:</strong> '?7170          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L72-72" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L74-74" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -152,11 +156,11 @@
             mix gens
           </code>
           <div class="tip" id="42">
-            <strong>Signature:</strong> gens:ConstrGen&lt;&#39;?7152&gt; list -&gt; Gen&lt;&#39;?7152&gt;<br />
-                          <strong>Type parameters:</strong> '?7152          </div>
+            <strong>Signature:</strong> gens:ConstrGen&lt;&#39;?7160&gt; list -&gt; Gen&lt;&#39;?7160&gt;<br />
+                          <strong>Type parameters:</strong> '?7160          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L48-48" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L50-50" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -170,11 +174,11 @@
             probe samplesNo gens
           </code>
           <div class="tip" id="43">
-            <strong>Signature:</strong> samplesNo:int -&gt; gens:ConstrGen&lt;&#39;?7148&gt; list -&gt; (ConstrGen&lt;&#39;?7148&gt; * (&#39;?7148 list * &#39;?7148 list)) list<br />
-                          <strong>Type parameters:</strong> '?7148          </div>
+            <strong>Signature:</strong> samplesNo:int -&gt; gens:ConstrGen&lt;&#39;?7156&gt; list -&gt; (ConstrGen&lt;&#39;?7156&gt; * (&#39;?7156 list * &#39;?7156 list)) list<br />
+                          <strong>Type parameters:</strong> '?7156          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L16-16" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L18-18" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -193,11 +197,11 @@ the other list with the remaining samples</p>
             probeAndMix gens
           </code>
           <div class="tip" id="44">
-            <strong>Signature:</strong> gens:ConstrGen&lt;&#39;?7150&gt; list -&gt; Gen&lt;&#39;?7150&gt; option * (ConstrGen&lt;&#39;?7150&gt; * (&#39;?7150 list * &#39;?7150 list)) list<br />
-                          <strong>Type parameters:</strong> '?7150          </div>
+            <strong>Signature:</strong> gens:ConstrGen&lt;&#39;?7158&gt; list -&gt; Gen&lt;&#39;?7158&gt; option * (ConstrGen&lt;&#39;?7158&gt; * (&#39;?7158 list * &#39;?7158 list)) list<br />
+                          <strong>Type parameters:</strong> '?7158          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L30-30" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L32-32" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -215,11 +219,11 @@ and enforcing on it also the properties of the other ones</p>
             tryParse parse x
           </code>
           <div class="tip" id="45">
-            <strong>Signature:</strong> parse:(&#39;?7154 -&gt; &#39;?7155) -&gt; x:&#39;?7154 -&gt; &#39;?7155 option<br />
-                          <strong>Type parameters:</strong> '?7154, '?7155          </div>
+            <strong>Signature:</strong> parse:(&#39;?7162 -&gt; &#39;?7163) -&gt; x:&#39;?7162 -&gt; &#39;?7163 option<br />
+                          <strong>Type parameters:</strong> '?7162, '?7163          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L54-54" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L56-56" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>

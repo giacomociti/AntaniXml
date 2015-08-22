@@ -72,43 +72,84 @@
           <td class="module-name">
             <a href="antanixml-atomicgenerators.html">AtomicGenerators</a>
           </td>
-          <td class="xmldoc"></td>
+          <td class="xmldoc"><p>This module provides generators for simple (atomic) data types.
+Generation of random values is mainly based on FsCheck generators.
+Each simple datatype is mapped to a suitable CLR type (e.g. <code>xs:int</code> 
+to <code>System.Int32</code>, <code>xs:integer</code> to <code>System.Numerics.BigInteger</code>...) 
+for which an FsCheck generator already exists or can be easily built.</p>
+
+
+</td>
         </tr>
         <tr>
           <td class="module-name">
             <a href="antanixml-constrainedgenerators.html">ConstrainedGenerators</a>
           </td>
-          <td class="xmldoc"></td>
+          <td class="xmldoc"><p>This module provides support for simple types featuring multiple facets.
+For example when a simple type has both a Length facet and a pattern.</p>
+
+
+</td>
         </tr>
         <tr>
           <td class="module-name">
             <a href="antanixml-facetbasedgenerators.html">FacetBasedGenerators</a>
           </td>
-          <td class="xmldoc"></td>
+          <td class="xmldoc"><p>This module provides generators supporting the facets defined in XML schema.</p>
+
+
+</td>
         </tr>
         <tr>
           <td class="module-name">
             <a href="antanixml-lexicalmappings.html">LexicalMappings</a>
           </td>
-          <td class="xmldoc"></td>
+          <td class="xmldoc"><p>This module contains whitespace handling and also parse and format functions for simple datatypes.
+In W3C terms, parse is a map from the lexical space to the value space of a given datatype.
+Usually we implement it relying on <code>System.XmlConvert</code>.
+The format function instead maps values to lexical representations. 
+It returns a string list because the same value may have multiple representations 
+(e.g. a plus sign may optionally prefix a number).
+Note: this module is not complete yet, furthermore its design may change in future versions.</p>
+
+
+</td>
         </tr>
         <tr>
           <td class="module-name">
             <a href="antanixml-xmlgenerator.html">XmlGenerator</a>
           </td>
-          <td class="xmldoc"></td>
+          <td class="xmldoc"><p>This is where elements and types (simple and complex) defined in a schema 
+are mapped to random generators. Complex generators are composed using FsCheck combinators.</p>
+
+
+</td>
         </tr>
         <tr>
           <td class="module-name">
             <a href="antanixml-xsddomain.html">XsdDomain</a>
           </td>
-          <td class="xmldoc"></td>
+          <td class="xmldoc"><p>This module provides types to represent a schema.
+F# data types like discriminated unions allow for very clear definitions.
+The W3C XML Schema specification <a href="http://www.w3.org/XML/Schema">http://www.w3.org/XML/Schema</a> is rich and complex, 
+so this module provides a simplified view.
+Nevertheless, we cover a few specific (and sometimes tricky) concepts, like nillable values, 
+fixed values, union and list for simple types, whitespace handling etc.</p>
+
+
+</td>
         </tr>
         <tr>
           <td class="module-name">
             <a href="antanixml-xsdfactory.html">XsdFactory</a>
           </td>
-          <td class="xmldoc"></td>
+          <td class="xmldoc"><p>This module is in charge of parsing xsd and creating models according to XsdDomain data types.
+Parsing xsd is a complex task, and for this we rely on the .NET BCL library (namespace <code>System.Xml.Schema</code>).
+Converting the Schema Object Model (SOM) provided by the BCL library into our own 
+simpler model allows decoupling of parsing xsd and building generators.</p>
+
+
+</td>
         </tr>
     </tbody>
   </table>
