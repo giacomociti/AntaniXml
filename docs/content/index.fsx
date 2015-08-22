@@ -9,18 +9,23 @@
 
 AntaniXml is a .NET library for generating random xml based on a schema.
 
+This is useful mainly for testing, especially to produce stress test data, 
+but also for unit and property based testing.
+Of course generating samples may also help in figuring out concretely what 
+kind of xml is defined by a certain schema.
+
 <div class="row">
   <div class="span1"></div>
   <div class="span6">
     <div class="well well-small" id="nuget">
-      It can be <a href="https://nuget.org/packages/AntaniXml">installed from NuGet</a>:
+      The library can be <a href="https://nuget.org/packages/AntaniXml">installed from NuGet</a>:
       <pre>PM> Install-Package AntaniXml</pre>
     </div>
   </div>
   <div class="span1"></div>
 </div>
 
-The library is developed in [F#](http://fsharp.org) but the public API should be usable also from C#.
+AntaniXml is developed in [F#](http://fsharp.org) but the public API should be usable also from C#.
 In fact many examples are given in both languages.
 
 Example

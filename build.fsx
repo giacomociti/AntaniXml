@@ -41,7 +41,7 @@ let description = "XML random generator based on XSD schema"
 let authors = [ "Giacomo Citi" ]
 
 // Tags for your project (for NuGet package)
-let tags = "random xml xsd schema fsharp"
+let tags = "random xml xsd fscheck fsharp"
 
 // File system information 
 let solutionFile  = "AntaniXml.sln"
@@ -227,7 +227,8 @@ Target "GenerateHelpDebug" (fun _ ->
 
 Target "KeepRunning" (fun _ ->    
     use watcher = !! "docs/content/**/*.*" |> WatchChanges (fun changes ->
-         generateHelp false
+         //generateHelp false
+         generateHelp' true true
     )
 
     traceImportant "Waiting for help edits. Press any key to stop."
@@ -345,7 +346,7 @@ Target "All" DoNothing
 "CleanDocs"
   ==> "GenerateHelpDebug"
 
-"GenerateHelp"
+"GenerateHelpDebug"
   ==> "KeepRunning"
     
 "ReleaseDocs"

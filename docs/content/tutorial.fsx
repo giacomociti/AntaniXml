@@ -77,7 +77,6 @@ open System.IO
 open FSharp.Data
 open System.Xml.Linq
 
-
 let samples = 
     XmlElementGenerator
         .CreateFromSchemaUri(@"C:\temp\po.xsd", "purchaseOrder", "")
@@ -106,7 +105,7 @@ The main limitations currently known are:
 A few built-in types are not supported: Notation, NmTokens, Id, Idref, Idrefs, Entity and Entities.
 
 #### abstract types and elements
-See this [issue] (https://github.com/giacomociti/AntaniXml/issues/5).
+See this [issue](https://github.com/giacomociti/AntaniXml/issues/5).
 
 #### identity and subset constraint
 
@@ -122,7 +121,7 @@ the rest of the library is organized in modules.
 At the moment they are not designed to be directly used by client code (in the future this may change
 in order to provide some *hook* to tweak generators).
 Also the design of the OO public API may change, 
-see this [issue] (https://github.com/giacomociti/AntaniXml/issues/4).
+see this [issue](https://github.com/giacomociti/AntaniXml/issues/4).
 
 
 *)
