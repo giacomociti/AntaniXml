@@ -66,6 +66,8 @@ Documentation
 
  * [Tutorial](tutorial.html) contains a further explanation of this library.
 
+ * [Customizations](customizations.html) hints at ways to tweak generators.
+
  * [API Reference](reference/index.html) contains automatically generated documentation for all types, modules
    and functions in the library.
  

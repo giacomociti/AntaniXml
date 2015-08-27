@@ -8,4 +8,5 @@
       @"..\FacetBasedGenerators.fs"
       @"..\AtomicGenerators.fs"
       @"..\XmlGenerator.fs"
+      @"..\Antani.fs"
       @"..\XmlElementGenerator.fs"
