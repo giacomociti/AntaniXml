@@ -67,7 +67,7 @@ module XsdFactory =
         items.Contains x
         
 
-    let private xsdName (x: XmlQualifiedName) = 
+    let xsdName (x: XmlQualifiedName) = 
         { Namespace = x.Namespace; Name = x.Name }
 
     let rec private getSchema (obj : XmlSchemaObject) = 
