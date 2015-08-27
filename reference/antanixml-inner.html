@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>XmlGenerator - AntaniXml</title>
+    <title>inner - AntaniXml</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Giacomo Citi"/>
@@ -35,54 +35,30 @@
 
 
 
-<h1>XmlGenerator</h1>
+<h1>inner</h1>
 <p>
   <span>Namespace: AntaniXml</span><br />
 </p>
 <div class="xmldoc">
-<p>This is where elements and types (simple and complex) defined in a schema 
-are mapped to random generators. Complex generators are composed using FsCheck combinators.</p>
-
-
 </div>
-
-<!-- Render nested types and modules, if there are any -->
-  <h2>Nested types and modules</h2>
-  <div>
-      <table class="table table-bordered type-list">
-    <thead>
-      <tr><td>Type</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td class="type-name">
-            <a href="antanixml-xmlgenerator-customgenerators.html">CustomGenerators</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-    </tbody>
-  </table>
-
-  </div>
-
-  <h3>Functions and values</h3>
+  <h3>Record Fields</h3>
   <table class="table table-bordered member-list">
     <thead>
-      <tr><td>Function or value</td><td>Description</td></tr>
+      <tr><td>Record Field</td><td>Description</td></tr>
     </thead>
     <tbody>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '85', 85)" onmouseover="showTip(event, '85', 85)">
-            decreaseSize 
+          <code onmouseout="hideTip(event, '231', 231)" onmouseover="showTip(event, '231', 231)">
+            basicTypes
           </code>
-          <div class="tip" id="85">
-            <strong>Signature:</strong> int -&gt; int<br />
+          <div class="tip" id="231">
+            <strong>Signature:</strong> Dictionary&lt;XsdAtomicType,Arbitrary&lt;string&gt;&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XmlGenerator.fs#L112-112" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/Antani.fs#L13-13" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -92,15 +68,15 @@ are mapped to random generators. Complex generators are composed using FsCheck c
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '86', 86)" onmouseover="showTip(event, '86', 86)">
-            genAtom _arg1
+          <code onmouseout="hideTip(event, '232', 232)" onmouseover="showTip(event, '232', 232)">
+            complexTypes
           </code>
-          <div class="tip" id="86">
-            <strong>Signature:</strong> _arg1:XsdAtomicType -&gt; Facets -&gt; Gen&lt;string&gt;<br />
+          <div class="tip" id="232">
+            <strong>Signature:</strong> Dictionary&lt;XmlSchemaComplexType,Arbitrary&lt;XElement&gt;&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XmlGenerator.fs#L16-16" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/Antani.fs#L19-19" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -110,15 +86,15 @@ are mapped to random generators. Complex generators are composed using FsCheck c
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '87', 87)" onmouseover="showTip(event, '87', 87)">
-            genAttribute (xsdAttribute, xsdUse)
+          <code onmouseout="hideTip(event, '233', 233)" onmouseover="showTip(event, '233', 233)">
+            elements
           </code>
-          <div class="tip" id="87">
-            <strong>Signature:</strong> (xsdAttribute:XsdAttribute * xsdUse:XsdAttributeUse) -&gt; Gen&lt;XAttribute option&gt;<br />
+          <div class="tip" id="233">
+            <strong>Signature:</strong> Dictionary&lt;XmlSchemaElement,Arbitrary&lt;XElement&gt;&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XmlGenerator.fs#L100-100" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/Antani.fs#L20-20" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -128,15 +104,15 @@ are mapped to random generators. Complex generators are composed using FsCheck c
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '88', 88)" onmouseover="showTip(event, '88', 88)">
-            genElement xsdElement
+          <code onmouseout="hideTip(event, '234', 234)" onmouseover="showTip(event, '234', 234)">
+            globalComplexTypes
           </code>
-          <div class="tip" id="88">
-            <strong>Signature:</strong> xsdElement:XsdElement -&gt; Gen&lt;XElement&gt;<br />
+          <div class="tip" id="234">
+            <strong>Signature:</strong> Dictionary&lt;XsdName,Arbitrary&lt;XElement&gt;&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XmlGenerator.fs#L268-268" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/Antani.fs#L15-15" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -146,15 +122,15 @@ are mapped to random generators. Complex generators are composed using FsCheck c
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '89', 89)" onmouseover="showTip(event, '89', 89)">
-            genElementCustom (...)
+          <code onmouseout="hideTip(event, '235', 235)" onmouseover="showTip(event, '235', 235)">
+            globalElements
           </code>
-          <div class="tip" id="89">
-            <strong>Signature:</strong> customGenerators:CustomGenerators -&gt; xsdElement:XsdElement -&gt; Gen&lt;XElement&gt;<br />
+          <div class="tip" id="235">
+            <strong>Signature:</strong> Dictionary&lt;XsdName,Arbitrary&lt;XElement&gt;&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XmlGenerator.fs#L122-122" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/Antani.fs#L16-16" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -164,15 +140,15 @@ are mapped to random generators. Complex generators are composed using FsCheck c
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '90', 90)" onmouseover="showTip(event, '90', 90)">
-            genSimple 
+          <code onmouseout="hideTip(event, '236', 236)" onmouseover="showTip(event, '236', 236)">
+            globalSimpleTypes
           </code>
-          <div class="tip" id="90">
-            <strong>Signature:</strong> XsdSimpleType -&gt; Gen&lt;string&gt;<br />
+          <div class="tip" id="236">
+            <strong>Signature:</strong> Dictionary&lt;XsdName,Arbitrary&lt;string&gt;&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XmlGenerator.fs#L61-61" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/Antani.fs#L14-14" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -182,15 +158,41 @@ are mapped to random generators. Complex generators are composed using FsCheck c
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '91', 91)" onmouseover="showTip(event, '91', 91)">
-            mapName xsdName
+          <code onmouseout="hideTip(event, '237', 237)" onmouseover="showTip(event, '237', 237)">
+            simpleTypes
           </code>
-          <div class="tip" id="91">
-            <strong>Signature:</strong> xsdName:XsdName -&gt; XName<br />
+          <div class="tip" id="237">
+            <strong>Signature:</strong> Dictionary&lt;XmlSchemaSimpleType,Arbitrary&lt;string&gt;&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/XmlGenerator.fs#L98-98" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/Antani.fs#L18-18" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Static members</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Static member</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '238', 238)" onmouseover="showTip(event, '238', 238)">
+            empty
+          </code>
+          <div class="tip" id="238">
+            <strong>Signature:</strong> inner<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/Antani.fs#L21-21" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>

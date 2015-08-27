@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>FacetBasedGenerators - AntaniXml</title>
+    <title>Antani - AntaniXml</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Giacomo Citi"/>
@@ -35,36 +35,56 @@
 
 
 
-<h1>FacetBasedGenerators</h1>
+<h1>Antani</h1>
 <p>
   <span>Namespace: AntaniXml</span><br />
 </p>
 <div class="xmldoc">
-<p>This module provides generators supporting the facets defined in XML schema.</p>
-
-
 </div>
-
-<!-- Render nested types and modules, if there are any -->
-
-  <h3>Functions and values</h3>
+  <h3>Constructors</h3>
   <table class="table table-bordered member-list">
     <thead>
-      <tr><td>Function or value</td><td>Description</td></tr>
+      <tr><td>Constructor</td><td>Description</td></tr>
     </thead>
     <tbody>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '46', 46)" onmouseover="showTip(event, '46', 46)">
-            allXmlChars 
+          <code onmouseout="hideTip(event, '208', 208)" onmouseover="showTip(event, '208', 208)">
+            new(xsd)
           </code>
-          <div class="tip" id="46">
-            <strong>Signature:</strong> Gen&lt;char&gt;<br />
+          <div class="tip" id="208">
+            <strong>Signature:</strong> xsd:XmlSchemaSet -&gt; Antani<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/FacetBasedGenerators.fs#L76-76" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/Antani.fs#L32-32" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Instance members</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Instance member</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '209', 209)" onmouseover="showTip(event, '209', 209)">
+            ArbitraryBasicValue(_atomicType)
+          </code>
+          <div class="tip" id="209">
+            <strong>Signature:</strong> _atomicType:XsdAtomicType -&gt; Arbitrary&lt;string&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/Antani.fs#L53-53" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -74,106 +94,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '47', 47)" onmouseover="showTip(event, '47', 47)">
-            applyTextFacets (...)
+          <code onmouseout="hideTip(event, '210', 210)" onmouseover="showTip(event, '210', 210)">
+            ArbitraryComplexValue(_name)
           </code>
-          <div class="tip" id="47">
-            <strong>Signature:</strong> facets:Facets -&gt; whitespaceHandling:WhitespaceHandling -&gt; generator:ConstrGen&lt;string&gt; -&gt; Gen&lt;string&gt;<br />
+          <div class="tip" id="210">
+            <strong>Signature:</strong> _name:XmlQualifiedName -&gt; Arbitrary&lt;XElement&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/FacetBasedGenerators.fs#L190-190" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Combines the given generator with other ones based on pattern
-and enum facets (if present). Also apply the whitespace handling
-specified in the facets (if present) or the default one provided</p>
-
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '48', 48)" onmouseover="showTip(event, '48', 48)">
-            applyTextFacets&#39; facets arg2 generator
-          </code>
-          <div class="tip" id="48">
-            <strong>Signature:</strong> facets:Facets -&gt; &#39;?7179 -&gt; generator:ConstrGen&lt;string&gt; -&gt; Gen&lt;string&gt;<br />
-                          <strong>Type parameters:</strong> '?7179          </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/FacetBasedGenerators.fs#L203-203" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>this version is to handle a corner case with token:
-it seems that a token with only spaces is not collapsed
-by the .NET validator resulting in validation error</p>
-
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '49', 49)" onmouseover="showTip(event, '49', 49)">
-            boundedGen (...)
-          </code>
-          <div class="tip" id="49">
-            <strong>Signature:</strong> baseGen:Gen&lt;^?7172&gt; -&gt; lex:LexMap&lt;^?7172&gt; -&gt; facets:Facets -&gt; defaultMin:^?7172 -&gt; defaultMax:^?7172 -&gt; epsilon:^a -&gt; ConstrGen&lt;string&gt;<br />
-                          <strong>Type parameters:</strong> ^?7172, ^a          </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/FacetBasedGenerators.fs#L105-105" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Creates a generator of values constrained to an interval determined by facets
-or by the default min and max provided. Epsilon allows adjusting bounds for
-MinExclusive and MaxExclusive facets. A lexical mapping is also needed to
-parse facets values and to format the generated values</p>
-
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '50', 50)" onmouseover="showTip(event, '50', 50)">
-            boundedStringGen (...)
-          </code>
-          <div class="tip" id="50">
-            <strong>Signature:</strong> facets:Facets -&gt; defaultMin:int -&gt; defaultMax:int -&gt; ConstrGen&lt;String&gt;<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/FacetBasedGenerators.fs#L85-85" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Creates a generator of string values of bounded length</p>
-
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '51', 51)" onmouseover="showTip(event, '51', 51)">
-            commonChars 
-          </code>
-          <div class="tip" id="51">
-            <strong>Signature:</strong> Gen&lt;char&gt;<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/FacetBasedGenerators.fs#L72-72" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/Antani.fs#L59-59" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -183,15 +112,15 @@ parse facets values and to format the generated values</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '52', 52)" onmouseover="showTip(event, '52', 52)">
-            denormalize stringGenerator
+          <code onmouseout="hideTip(event, '211', 211)" onmouseover="showTip(event, '211', 211)">
+            ArbitraryElement(_name)
           </code>
-          <div class="tip" id="52">
-            <strong>Signature:</strong> stringGenerator:Gen&lt;string&gt; -&gt; Gen&lt;String&gt;<br />
+          <div class="tip" id="211">
+            <strong>Signature:</strong> _name:XmlQualifiedName -&gt; Arbitrary&lt;XElement&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/FacetBasedGenerators.fs#L131-131" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/Antani.fs#L50-50" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -201,15 +130,15 @@ parse facets values and to format the generated values</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '53', 53)" onmouseover="showTip(event, '53', 53)">
-            enumGen facets
+          <code onmouseout="hideTip(event, '212', 212)" onmouseover="showTip(event, '212', 212)">
+            ArbitrarySimpleValue(_name)
           </code>
-          <div class="tip" id="53">
-            <strong>Signature:</strong> facets:Facets -&gt; ConstrGen&lt;string&gt; option<br />
+          <div class="tip" id="212">
+            <strong>Signature:</strong> _name:XmlQualifiedName -&gt; Arbitrary&lt;string&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/FacetBasedGenerators.fs#L51-51" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/Antani.fs#L56-56" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -219,15 +148,15 @@ parse facets values and to format the generated values</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '54', 54)" onmouseover="showTip(event, '54', 54)">
-            expand stringGenerator
+          <code onmouseout="hideTip(event, '213', 213)" onmouseover="showTip(event, '213', 213)">
+            CustomizeBasicType(_atomicType, _map)
           </code>
-          <div class="tip" id="54">
-            <strong>Signature:</strong> stringGenerator:Gen&lt;string&gt; -&gt; Gen&lt;string&gt;<br />
+          <div class="tip" id="213">
+            <strong>Signature:</strong> (_atomicType:XsdAtomicType * _map:map&lt;Arbitrary&lt;string&gt;&gt;) -&gt; Antani<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/FacetBasedGenerators.fs#L152-152" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/Antani.fs#L74-74" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -237,15 +166,15 @@ parse facets values and to format the generated values</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '55', 55)" onmouseover="showTip(event, '55', 55)">
-            genPattern patterns
+          <code onmouseout="hideTip(event, '214', 214)" onmouseover="showTip(event, '214', 214)">
+            CustomizeBasicType(_atomicType, _arb)
           </code>
-          <div class="tip" id="55">
-            <strong>Signature:</strong> patterns:string list -&gt; Gen&lt;string&gt;<br />
+          <div class="tip" id="214">
+            <strong>Signature:</strong> (_atomicType:XsdAtomicType * _arb:Arbitrary&lt;string&gt;) -&gt; Antani<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/FacetBasedGenerators.fs#L27-27" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/Antani.fs#L71-71" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -255,15 +184,15 @@ parse facets values and to format the generated values</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '56', 56)" onmouseover="showTip(event, '56', 56)">
-            genXmlChar 
+          <code onmouseout="hideTip(event, '215', 215)" onmouseover="showTip(event, '215', 215)">
+            CustomizeComplexType(_name, _map)
           </code>
-          <div class="tip" id="56">
-            <strong>Signature:</strong> Gen&lt;char&gt;<br />
+          <div class="tip" id="215">
+            <strong>Signature:</strong> (_name:XmlQualifiedName * _map:map&lt;Arbitrary&lt;XElement&gt;&gt;) -&gt; Antani<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/FacetBasedGenerators.fs#L82-82" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/Antani.fs#L86-86" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -273,15 +202,15 @@ parse facets values and to format the generated values</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '57', 57)" onmouseover="showTip(event, '57', 57)">
-            handleWhitespace _arg1
+          <code onmouseout="hideTip(event, '216', 216)" onmouseover="showTip(event, '216', 216)">
+            CustomizeComplexType(_name, _arb)
           </code>
-          <div class="tip" id="57">
-            <strong>Signature:</strong> _arg1:WhitespaceHandling -&gt; Gen&lt;string&gt; -&gt; Gen&lt;string&gt;<br />
+          <div class="tip" id="216">
+            <strong>Signature:</strong> (_name:XmlQualifiedName * _arb:Arbitrary&lt;XElement&gt;) -&gt; Antani<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/FacetBasedGenerators.fs#L182-182" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/Antani.fs#L83-83" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -291,15 +220,15 @@ parse facets values and to format the generated values</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '58', 58)" onmouseover="showTip(event, '58', 58)">
-            hasPattern patterns inp
+          <code onmouseout="hideTip(event, '217', 217)" onmouseover="showTip(event, '217', 217)">
+            CustomizeElement(_name, _map)
           </code>
-          <div class="tip" id="58">
-            <strong>Signature:</strong> patterns:string list -&gt; inp:string -&gt; bool<br />
+          <div class="tip" id="217">
+            <strong>Signature:</strong> (_name:XmlQualifiedName * _map:map&lt;Arbitrary&lt;XElement&gt;&gt;) -&gt; Antani<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/FacetBasedGenerators.fs#L40-40" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/Antani.fs#L66-66" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -309,15 +238,15 @@ parse facets values and to format the generated values</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '59', 59)" onmouseover="showTip(event, '59', 59)">
-            isMatch (inp, pat)
+          <code onmouseout="hideTip(event, '218', 218)" onmouseover="showTip(event, '218', 218)">
+            CustomizeElement(name, arb)
           </code>
-          <div class="tip" id="59">
-            <strong>Signature:</strong> (inp:string * pat:string) -&gt; bool<br />
+          <div class="tip" id="218">
+            <strong>Signature:</strong> (name:XmlQualifiedName * arb:Arbitrary&lt;XElement&gt;) -&gt; Antani<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/FacetBasedGenerators.fs#L35-35" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/Antani.fs#L62-62" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -327,15 +256,15 @@ parse facets values and to format the generated values</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '60', 60)" onmouseover="showTip(event, '60', 60)">
-            lengthBounds (...)
+          <code onmouseout="hideTip(event, '219', 219)" onmouseover="showTip(event, '219', 219)">
+            CustomizeSimpleType(_name, _map)
           </code>
-          <div class="tip" id="60">
-            <strong>Signature:</strong> facets:Facets -&gt; defaultMin:int -&gt; defaultMax:int -&gt; int * int<br />
+          <div class="tip" id="219">
+            <strong>Signature:</strong> (_name:XmlQualifiedName * _map:map&lt;Arbitrary&lt;string&gt;&gt;) -&gt; Antani<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/FacetBasedGenerators.fs#L61-61" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/Antani.fs#L80-80" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -345,15 +274,95 @@ parse facets values and to format the generated values</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '61', 61)" onmouseover="showTip(event, '61', 61)">
-            patternGen facets
+          <code onmouseout="hideTip(event, '220', 220)" onmouseover="showTip(event, '220', 220)">
+            CustomizeSimpleType(_name, _arb)
           </code>
-          <div class="tip" id="61">
-            <strong>Signature:</strong> facets:Facets -&gt; ConstrGen&lt;string&gt; option list<br />
+          <div class="tip" id="220">
+            <strong>Signature:</strong> (_name:XmlQualifiedName * _arb:Arbitrary&lt;string&gt;) -&gt; Antani<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/FacetBasedGenerators.fs#L44-44" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/Antani.fs#L77-77" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '221', 221)" onmouseover="showTip(event, '221', 221)">
+            GlobalElements
+          </code>
+          <div class="tip" id="221">
+            <strong>Signature:</strong> seq&lt;XmlQualifiedName&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/Antani.fs#L45-45" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '222', 222)" onmouseover="showTip(event, '222', 222)">
+            Validate(xml)
+          </code>
+          <div class="tip" id="222">
+            <strong>Signature:</strong> xml:XElement -&gt; ValidationResult<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/Antani.fs#L42-42" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Static members</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Static member</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '223', 223)" onmouseover="showTip(event, '223', 223)">
+            CreateFromText(xsdText)
+          </code>
+          <div class="tip" id="223">
+            <strong>Signature:</strong> xsdText:string -&gt; Antani<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/Antani.fs#L36-36" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '224', 224)" onmouseover="showTip(event, '224', 224)">
+            CreateFromUri(xsdUri)
+          </code>
+          <div class="tip" id="224">
+            <strong>Signature:</strong> xsdUri:string -&gt; Antani<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/Antani.fs#L39-39" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
