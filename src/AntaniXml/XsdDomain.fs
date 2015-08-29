@@ -127,7 +127,7 @@ module XsdDomain =
         | XsdUnion of XsdSimpleType list 
 
     and XsdSimpleType = 
-        { SimpleTypeName: XsdName option // None if anonymous
+        { //SimpleTypeName: XsdName option // None if anonymous
           Facets: Facets
           Variety: XsdSimpleTypeVariety }
     

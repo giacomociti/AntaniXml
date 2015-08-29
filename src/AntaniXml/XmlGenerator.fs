@@ -111,12 +111,19 @@ module XmlGenerator =
 
     let decreaseSize = float >> log >> ceil >> int
 
-    
+    type CustomDict<'a> = System.Collections.Generic.IDictionary<XsdName, 'a>
     type CustomGenerators = {
-        SimpleGenerators:  System.Collections.Generic.IDictionary<XsdName, Gen<string>>
-        ElementGenerators: System.Collections.Generic.IDictionary<XsdName, Gen<XElement>> }
-        with static member empty = { SimpleGenerators  = dict Seq.empty
-                                     ElementGenerators = dict Seq.empty }
+        //SimpleGenerators:  CustomDict<Gen<string>>
+        ElementGenerators: CustomDict<Gen<XElement>>
+        //GlobalElementGenerators: CustomDict<Gen<XElement>>
+        ElementGeneratorMaps: CustomDict<XElement -> XElement>
+        ComplexGenerators: CustomDict<Gen<XElement>> 
+        ComplexGeneratorMaps: CustomDict<XElement -> XElement> }
+        with static member empty = { //SimpleGenerators  = dict Seq.empty
+                                     ElementGenerators = dict Seq.empty
+                                     ElementGeneratorMaps = dict Seq.empty
+                                     ComplexGeneratorMaps = dict Seq.empty
+                                     ComplexGenerators = dict Seq.empty }
 
 
     let genElementCustom (customGenerators: CustomGenerators) xsdElement = 
@@ -131,13 +138,14 @@ module XmlGenerator =
         let rec genElement' xsdElement size = 
             
             let genSimpleElement (simpleType: XsdSimpleType) = 
-
-                match simpleType.SimpleTypeName with
-                | Some x when customGenerators.ElementGenerators.ContainsKey x -> 
-                    customGenerators.ElementGenerators.Item x
-                | _ ->
-
+                
                 let elementName = mapName xsdElement.ElementName
+
+//                match simpleType.SimpleTypeName with
+//                | Some x when customGenerators.SimpleGenerators.ContainsKey x -> 
+//                    customGenerators.SimpleGenerators.Item x
+//                    |> Gen.map(fun x -> XElement(elementName, x))
+//                | _ ->
 
                 match xsdElement.FixedValue with
                 | Some fixedValue -> 
@@ -158,15 +166,27 @@ module XmlGenerator =
                         Gen.frequency [8, gen; 2, Gen.constant nil]
                     else gen
 
-            match xsdElement.Type with
-            | Simple simpleType -> genSimpleElement simpleType
-            | Complex complexType -> genComplex complexType xsdElement.ElementName size
+            let gen() = 
+                match xsdElement.Type with
+                | Simple simpleType -> genSimpleElement simpleType
+                | Complex complexType -> genComplex complexType xsdElement.ElementName size
+
+            match customGenerators.ElementGenerators.TryGetValue xsdElement.ElementName with
+            | true, g -> g
+            | false, _ -> gen()
+            |> Gen.map (match customGenerators.ElementGeneratorMaps.TryGetValue xsdElement.ElementName with
+                        | true, f -> f
+                        | false, _ -> id )
+
+
+            
 
         and genComplex complexType elmName size = 
             
             match complexType.ComplexTypeName with
-            | Some x when customGenerators.ElementGenerators.ContainsKey x -> 
-                customGenerators.ElementGenerators.Item x
+            | Some x when customGenerators.ComplexGenerators.ContainsKey x -> 
+                customGenerators.ComplexGenerators.Item x
+                |> Gen.map( fun x -> x.Name <- mapName elmName; x)
             | _ ->
           
             let genNodes = 
@@ -189,17 +209,21 @@ module XmlGenerator =
                                 yield t
                                 yield e
                             yield lastText } }
+            let gen = 
+                gen {   
+                    let! nodes = genNodes
+                    let! attrs = 
+                        complexType.Attributes
+                        |> List.map genAttribute
+                        |> Gen.sequence
+                    let boxedAttrs = attrs |> List.choose id |> List.map box
+                    let items = Seq.append boxedAttrs nodes
+                    return XElement(mapName elmName, items) } 
 
-            gen {   
-                let! nodes = genNodes
-                let! attrs = 
-                    complexType.Attributes
-                    |> List.map genAttribute
-                    |> Gen.sequence
-                let boxedAttrs = attrs |> List.choose id |> List.map box
-                let items = Seq.append boxedAttrs nodes
-                return XElement(mapName elmName, items) } 
-
+            match complexType.ComplexTypeName with
+            | Some x when customGenerators.ComplexGeneratorMaps.ContainsKey x -> 
+                gen |> Gen.map(customGenerators.ComplexGeneratorMaps.Item x)
+            | _ -> gen
 
         and genParticle xsdParticle size : Gen<seq<XElement>> = 
             let size' = decreaseSize size
@@ -261,7 +285,6 @@ module XmlGenerator =
                         |> Gen.listOfLength n
                     //TODO scramble a bit?
                     return elms |> Seq.concat |> Seq.concat }
-
 
         Gen.sized (genElement' xsdElement)
                  

@@ -9,7 +9,7 @@ module XsdFactoryTest =
 
     let unconstrained   = Min 0, Unbounded
     let singleMandatory = Min 1, Max 1
-    let anyAtomicType = { SimpleTypeName = None; Facets = emptyFacets; Variety = XsdAtom(AnyAtomicType) }
+    let anyAtomicType = { Facets = emptyFacets; Variety = XsdAtom(AnyAtomicType) }
 
     let makeXsd innerXsd = 
         """<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
@@ -63,7 +63,7 @@ module XsdFactoryTest =
         match xsd.Elements with
         | [e] -> 
             Assert.AreEqual(foo, e.ElementName)
-            Assert.AreEqual(Simple { SimpleTypeName = None // should be xsd: string!!
+            Assert.AreEqual(Simple { //SimpleTypeName = None // should be xsd: string!!
                                      Facets = emptyFacets
                                      Variety = XsdAtom String }, e.Type)
             Assert.IsFalse e.IsNillable
@@ -163,7 +163,7 @@ module XsdFactoryTest =
         //printfn "%A" xsd
         
         match xsd.Types.[name "x"] with
-        | Simple {SimpleTypeName = _; Facets = facets; Variety = XsdAtom(String)}  -> 
+        | Simple { Facets = facets; Variety = XsdAtom(String)}  -> 
             Assert.AreEqual(Some 2, facets.MinLength)
             Assert.AreEqual(Some 5, facets.MaxLength)
             Assert.AreEqual(Some Replace, facets.WhiteSpace)
@@ -171,14 +171,14 @@ module XsdFactoryTest =
             Assert.True(["aaa";"bbb"] = facets.Enumeration)
         | _ -> Assert.False true
         match xsd.Types.[name "y"] with
-        | Simple {SimpleTypeName = _; Facets = facets; Variety = XsdAtom(Decimal)} -> 
+        | Simple { Facets = facets; Variety = XsdAtom(Decimal)} -> 
             Assert.AreEqual(Some "2", facets.MinExclusive)
             Assert.AreEqual(Some "3", facets.MaxExclusive)
             Assert.AreEqual(Some 5, facets.TotalDigits)
             Assert.AreEqual(Some 4, facets.FractionDigits)
         | _ -> Assert.False true
         match xsd.Types.[name "z"] with
-        | Simple {SimpleTypeName = _; Facets = facets; Variety = XsdAtom(String)} -> 
+        | Simple { Facets = facets; Variety = XsdAtom(String)} -> 
             Assert.AreEqual(Some 2, facets.Length)
             Assert.AreEqual(Some Collapse, facets.WhiteSpace)
         | _ -> Assert.False true

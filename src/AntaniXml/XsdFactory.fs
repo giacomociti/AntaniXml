@@ -199,7 +199,7 @@ module XsdFactory =
         match simpleType.Datatype.Variety with
         | XmlSchemaDatatypeVariety.Atomic ->
             let atomicType, facets = xsdAtomicType simpleType 
-            { SimpleTypeName = None // TODO
+            { //SimpleTypeName = None // TODO
               Facets = facets
               Variety = XsdAtom atomicType }
         | XmlSchemaDatatypeVariety.List ->
@@ -210,7 +210,7 @@ module XsdFactory =
                     match xsdList.ItemType, xsdList.BaseItemType with
                     | null, null -> failwith "cannot find list item type"
                     | null, x | x, _ -> x
-                { SimpleTypeName = None // TODO
+                { //SimpleTypeName = None // TODO
                   Facets = facets
                   Variety = XsdList (xsdSimpleType item) }
             | _ -> failwith "expected XmlSchemaSimpleTypeList"
@@ -222,7 +222,7 @@ module XsdFactory =
                     xsdUnion.BaseMemberTypes
                     |> Array.map xsdSimpleType
                     |> List.ofArray
-                { SimpleTypeName = None // TODO
+                { //SimpleTypeName = None // TODO
                   Facets = facets
                   Variety = XsdUnion(baseTypes) }
 
@@ -244,7 +244,7 @@ module XsdFactory =
               then // seems like it is null when Prohibited
                   assert (xsdAttributeUse x.Use = XsdAttributeUse.Prohibited)
                   // return a fake value that will be ignored
-                  {  SimpleTypeName = None
+                  {  //SimpleTypeName = None
                      Facets = emptyFacets
                      Variety = XsdAtom XsdAtomicType.AnyAtomicType }
               else xsdSimpleType x.AttributeSchemaType
