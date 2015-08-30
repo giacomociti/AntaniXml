@@ -5,7 +5,9 @@
 open XsdDomain
 open XsdFactory
 open XmlGenerator
+open System.Xml
 open System.Xml.Linq
+open System.Xml.Schema
 
 // an OO API suitable also for c# client code
 /// Random generator of xml elements based on a schema definition
@@ -14,7 +16,82 @@ type IXmlElementGenerator =
     abstract GenerateInfinite : unit -> seq<XElement>
 
 
+/// This is the public API of AntaniXml.
+/// It provides random generators for global elements defined in the given Xml Schema.
+type Schema(xmlSchemaSet: XmlSchemaSet) =
+    
+    /// Factory method to load a schema from its Uri.
+    static member CreateFromUri schemaUri = Schema(xmlSchemaSetFromUri schemaUri)
+    /// Factory method to parse a schema from plain text.
+    static member CreateFromText schemaText = Schema(xmlSchemaSet schemaText)
+
+    /// Helper method providing validation.
+    member x.Validate element = validate xmlSchemaSet element
+    /// Helper method providing validation.
+    member x.Validate element = validateElement xmlSchemaSet element
+
+    /// Global elements defined in the given schema.
+    member x.GlobalElements = 
+        xmlSchemaSet.GlobalElements.Names
+        |> ofType<XmlQualifiedName>
+
+    /// The object created embeds a random generator of xml elements and it is
+    /// suitable for property based testing with FsCheck.
+    /// 
+    /// ## Parameters
+    ///
+    /// - `elementName` - Qualified name of the element for which to 
+    /// create an istance of `Arbitrary`. A corresponding global  
+    /// element definition is expected in the schema.
+    /// - `customizations` - Custom generators to override the default behavior.
+    member x.Arbitrary (elementName, (customizations: CustomGenerators)) =
+        xmlSchemaSet.GlobalElements.Values
+        |> ofType<System.Xml.Schema.XmlSchemaElement>
+        |> Seq.tryFind (fun e -> e.QualifiedName = elementName)
+        |> function 
+        | None -> failwithf "element %A not found" elementName
+        | Some e -> e
+        |> xsdElement
+        |> genElementCustom (customizations.ToMaps())
+        |> FsCheck.Arb.fromGen
+
+    /// The object created embeds a random generator of xml elements and it is
+    /// suitable for property based testing with FsCheck.
+    /// 
+    /// ## Parameters
+    ///
+    /// - `elementName` - Qualified name of the element for which to 
+    /// create an istance of `Arbitrary`. A corresponding global  
+    /// element definition is expected in the schema.
+    member x.Arbitrary elementName =
+        x.Arbitrary (elementName, CustomGenerators())
+
+
+    /// Creates a random generator of xml elements with the given qualified name.
+    /// A corresponding global element definition is expected in the schema.
+    /// 
+    /// ## Parameters
+    ///
+    /// - `elementName` - Qualified name of the element for which to 
+    /// create an instance of `IXmlElementGenerator`.
+    member x.Generator elementName =
+        let generator = x.Arbitrary(elementName).Generator
+        let size = 5 // todo variable size
+        { new IXmlElementGenerator with
+              
+              member x.Generate n = 
+                  generator
+                  |> FsCheck.Gen.sample size n
+                  |> Array.ofList
+              
+              member x.GenerateInfinite() = 
+                  seq { while true do yield! x.Generate 100 } }
+        
+    
+        
+
 /// Factory for random generators of xml elements
+[<System.ObsoleteAttribute>]
 type XmlElementGenerator = 
     
     static member private createGen (xmlSchema, elmName, elmNs) = 

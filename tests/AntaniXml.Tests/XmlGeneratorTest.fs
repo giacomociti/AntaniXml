@@ -401,13 +401,13 @@ module XmlGeneratorTest =
       
       
 module CustomizationTest =     
-    // a bit cumbersome, to refactor when a decent API is devised for custom generators
     open System.Xml.Linq
     open NUnit.Framework
     open FsCheck
-    open AntaniXml.XsdDomain
-    open AntaniXml.XmlGenerator
-    open AntaniXml.XsdFactory
+    open AntaniXml
+    open XsdDomain
+    open XmlGenerator
+    open XsdFactory
 
     [<Test>]
     let ``the generator for a complex type can be customized``() = 
@@ -418,12 +418,12 @@ module CustomizationTest =
 	        </xs:complexType>
 	        <xs:element name="e" type="ct"/>
             """
-        let ct = { Namespace= ""; Name="ct" }
+        let e = System.Xml.XmlQualifiedName("e")
+        let ct = System.Xml.XmlQualifiedName("ct")
         let a1 = XAttribute(XName.Get("a1"), "42")
         let ctGen = XElement(XName.Get("ct"), a1) |> Gen.constant
-        let cust = { CustomGenerators.empty with ComplexGenerators = dict [ct, ctGen] }
-        (xsdSchema xsd).Elements.Head
-        |> genElementCustom cust
+        let cust = CustomGenerators().ForComplexType(ct, ctGen)
+        Schema(xsd).Arbitrary(e, cust).Generator
         |> Gen.sample 10 10
         |> Seq.map(fun xml -> printfn "%A" xml; xml)
         |> Seq.forall(fun xml -> xml.Attribute(a1.Name).Value = "42")
@@ -431,12 +431,7 @@ module CustomizationTest =
 
     [<Test>]
     let ``the generator for a complex type can be customized with a function``() = 
-        let barType = {Namespace = ""; Name = "barType"}
-        let customization (xml: XElement) = 
-            let bar = xml.Element(XName.Get("bar"))
-            bar.Value <- bar.Value.ToUpper()
-            xml
-        let cust = { CustomGenerators.empty with ComplexGeneratorMaps = dict [barType, customization] }
+
         let xsd = XmlGeneratorTest.makeSchema  """
             <xs:complexType name="barType">
 			    <xs:sequence>
@@ -446,8 +441,14 @@ module CustomizationTest =
 		    </xs:complexType>
             <xs:element name="foo" type="barType" />
 	        """
-        (xsdSchema xsd).Elements.Head
-        |> genElementCustom cust
+        let foo = System.Xml.XmlQualifiedName("foo")
+        let barType = System.Xml.XmlQualifiedName("barType")
+        let customization (xml: XElement) = 
+            let bar = xml.Element(XName.Get("bar"))
+            bar.Value <- bar.Value.ToUpper()
+            xml
+        let cust = CustomGenerators().ForComplexType(barType, customization)
+        Schema(xsd).Arbitrary(foo, cust).Generator
         |> Gen.sample 5 5
         |> Seq.map (fun xml -> printfn "%A" xml; xml.Element(XName.Get("bar")).Value)
         |> Seq.forall(fun x -> x = x.ToUpper())
@@ -455,36 +456,32 @@ module CustomizationTest =
 
     [<Test>]
     let ``the generator for a global element can be customized``() = 
-        let foo = {Namespace = ""; Name = "foo"}
+        let foo = System.Xml.XmlQualifiedName("foo")
         let customization = XElement(XName.Get("foo"), "hello") |> Gen.constant
-        let cust = { CustomGenerators.empty with ElementGenerators = dict [foo, customization] }
+        let cust = CustomGenerators().ForElement(foo, customization)
         let xsd = XmlGeneratorTest.makeSchema  """<xs:element name="foo" type="xs:string" />"""
-        (xsdSchema xsd).Elements .Head
-        |> genElementCustom cust
+        Schema(xsd).Arbitrary(foo, cust).Generator
         |> Gen.sample 5 5
         |> Seq.forall (fun xml -> printfn "%A" xml; xml.Value = "hello")
         |> Assert.IsTrue
 
     [<Test>]
     let ``the generator for a global element can be customized with a function``() = 
-        let foo = {Namespace = ""; Name = "foo"}
+        let foo = System.Xml.XmlQualifiedName("foo")
         let fooCustomization (xml: XElement) = 
             xml.Value <- xml.Value.ToUpper()
             xml
-        let cust = { CustomGenerators.empty with ElementGeneratorMaps = dict [foo, fooCustomization] }
+        let cust = CustomGenerators().ForElement(foo, fooCustomization)
         let xsd = XmlGeneratorTest.makeSchema """<xs:element name="foo" type="xs:string" />"""
-        (xsdSchema xsd).Elements.Head
-        |> genElementCustom cust
+        Schema(xsd).Arbitrary(foo, cust).Generator
         |> Gen.sample 5 5
         |> Seq.map (fun xml -> printfn "%A" xml; xml.Value)
         |> Seq.forall(fun x -> x = x.ToUpper())
         |> Assert.IsTrue
 
     [<Test>]
-    let ``the generator for an element can be customized``() = 
-        let bar = {Namespace = ""; Name = "bar"}
-        let customization = XElement(XName.Get("bar"), "hello") |> Gen.constant
-        let cust = { CustomGenerators.empty with ElementGenerators = dict [bar, customization] }
+    let ``the generator for an element can be customized``() =
+
         let xsd = XmlGeneratorTest.makeSchema  """
             <xs:element name="foo">
                 <xs:complexType>
@@ -495,8 +492,11 @@ module CustomizationTest =
                 </xs:complexType>
             </xs:element>
         """
-        (xsdSchema xsd).Elements.Head
-        |> genElementCustom cust
+        let foo = System.Xml.XmlQualifiedName("foo") 
+        let bar = System.Xml.XmlQualifiedName("bar")
+        let customization = XElement(XName.Get("bar"), "hello") |> Gen.constant
+        let cust = CustomGenerators().ForElement(bar, customization)
+        Schema(xsd).Arbitrary(foo, cust).Generator
         |> Gen.sample 5 5
         |> Seq.map (fun xml -> printfn "%A" xml; xml)
         |> Seq.forall(fun xml -> xml.Element(XName.Get("bar")).Value = "hello")
@@ -505,28 +505,28 @@ module CustomizationTest =
 
     [<Test>]
     let ``the generator for an element can be customized with a function``() = 
-        let bar = {Namespace = ""; Name = "bar"}
-        let barCustomization (xml: XElement) = 
-            xml.Value <- xml.Value.ToUpper()
-            xml
-        let cust = { CustomGenerators.empty with ElementGeneratorMaps = dict [bar, barCustomization] }
-        let xsd = XmlGeneratorTest.makeSchema  """
+        let xsd = 
+            XmlGeneratorTest.makeSchema """
             <xs:element name="foo">
                 <xs:complexType>
-                  <xs:sequence>
+                    <xs:sequence>
                     <xs:element name="bar" type="xs:string" />
                     <xs:element name="baz" type="xs:int" />
-                  </xs:sequence>
+                    </xs:sequence>
                 </xs:complexType>
             </xs:element>
-        """
-        (xsdSchema xsd).Elements.Head
-        |> genElementCustom cust
+            """
+        let toUpper (xml: XElement) = 
+            xml.Value <- xml.Value.ToUpper()
+            xml
+        let foo = System.Xml.XmlQualifiedName("foo")
+        let bar = System.Xml.XmlQualifiedName("bar")
+        let cus = CustomGenerators().ForElement(bar, toUpper)
+        Schema(xsd).Arbitrary(foo, cus).Generator 
         |> Gen.sample 5 5
         |> Seq.map (fun xml -> printfn "%A" xml; xml.Element(XName.Get("bar")).Value)
         |> Seq.forall(fun xml -> xml = xml.ToUpper())
         |> Assert.IsTrue
-
 
     [<Test>]
     let ``custom generators don't work with derived types``() =
@@ -536,7 +536,7 @@ module CustomizationTest =
         // to one where 'e' is defined of type 'ct'. This kind of nuances may cause some surprise
         // so the documentation should clearly state that custom generators associated with a given
         // type are picked up ONLY when an element is directly defined to be of that type
-        let xsd = XsdFactoryTest.makeXsd """
+        let xsd = XmlGeneratorTest.makeSchema """
 	    <xs:element name="e">
 		    <xs:complexType>
 			    <xs:complexContent>
@@ -548,12 +548,12 @@ module CustomizationTest =
 		    <xs:attribute name="a1" type="xs:int" use="required"/>
 	    </xs:complexType>
         """
-        let ct = { Namespace= ""; Name="ct" }
+        let e = System.Xml.XmlQualifiedName("e")
+        let ct = System.Xml.XmlQualifiedName("ct")
         let a1Name = XName.Get("a1")
         let ctGen = XElement(XName.Get("ct"), XAttribute(a1Name, "42")) |> Gen.constant
-        let cust = { CustomGenerators.empty with ComplexGenerators = dict [ct, ctGen] }
-        (fromText xsd).Elements.Head
-        |> genElementCustom cust
+        let cust = CustomGenerators().ForComplexType(ct, ctGen)
+        Schema(xsd).Arbitrary(e, cust).Generator
         |> Gen.sample 10 10
         |> List.map(fun xml -> printfn "%A" xml; xml)
         |> List.exists(fun xml -> xml.Attribute(a1Name).Value <> "42")

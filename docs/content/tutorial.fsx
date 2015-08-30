@@ -1,16 +1,15 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
-#I @"..\..\bin\AntaniXml"
-#I @"..\..\..\FSharp.Data\bin" // need FSharp.Data
-//#I @"..\..\..\AntaniXml\bin\AntaniXml"
-#r "FsCheck.dll"
-#r "System.Xml.Linq"
-#r "AntaniXml.dll"
-#r "FSharp.Data"
+    #I @"..\..\bin\AntaniXml"
+    #I @"..\..\..\FSharp.Data\bin" // need FSharp.Data
+    #r "FsCheck.dll"
+    #r "System.Xml.Linq"
+    #r "AntaniXml.dll"
+    #r "FSharp.Data"
 
 
-open AntaniXml
+    open AntaniXml
 
 
 (**
@@ -25,22 +24,30 @@ Overloads accepting xsd as plain text are also provided: they're handy for exper
 
 *)
 
-let xsdText = """
-    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
-        elementFormDefault="qualified" attributeFormDefault="unqualified">
-        <xs:element name="e1" type="xs:int" />
-        <xs:element name="e2" type="xs:string" />
-    </xs:schema>""" 
+    let xsdText = """
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+            elementFormDefault="qualified" attributeFormDefault="unqualified">
+            <xs:element name="e1" type="xs:int" />
+            <xs:element name="e2" type="xs:string" />
+        </xs:schema>""" 
 
-XmlElementGenerator
-    .CreateFromSchemaText(xsdText, "e1", "")
-    .GenerateInfinite()
-    |> Seq.take 5
-    |> Seq.iter (printfn "%A")
-
-
+    XmlElementGenerator
+        .CreateFromSchemaText(xsdText, "e1", "")
+        .GenerateInfinite()
+        |> Seq.take 5
+        |> Seq.iter (printfn "%A")
 
 (**
+
+
+This may generate something like this:
+
+    [lang=xml]
+    <e1>0</e1>
+    <e1>	-3</e1>
+    <e1>0</e1>
+    <e1>4</e1>
+    <e1>-1</e1>
 
 
 ### Property based testing
@@ -50,7 +57,7 @@ For property based testing there are factory methods providing instances of the
 
 *)
 
-let arb = XmlElementGenerator.CreateArbFromSchemaUri("po.xsd", "purchaseOrder", "")
+    let arb = XmlElementGenerator.CreateArbFromSchemaUri("po.xsd", "purchaseOrder", "")
 
 (**
 
@@ -72,18 +79,18 @@ Strongly typed access to xml documents is achieved with inference on samples. An
 *)
 
 
-open AntaniXml
-open System.IO
-open FSharp.Data
-open System.Xml.Linq
+    open AntaniXml
+    open System.IO
+    open FSharp.Data
+    open System.Xml.Linq
 
-let samples = 
-    XmlElementGenerator
-        .CreateFromSchemaUri(@"C:\temp\po.xsd", "purchaseOrder", "")
-        .Generate(5)
-XElement(XName.Get("root"), samples).Save(@"C:\temp\samples.xml")
+    let samples = 
+        XmlElementGenerator
+            .CreateFromSchemaUri(@"C:\temp\po.xsd", "purchaseOrder", "")
+            .Generate(5)
+    XElement(XName.Get("root"), samples).Save(@"C:\temp\samples.xml")
 
-type po = XmlProvider< @"C:\temp\samples.xml", SampleIsList = true>
+    type po = XmlProvider< @"C:\temp\samples.xml", SampleIsList = true>
 
 
 (**

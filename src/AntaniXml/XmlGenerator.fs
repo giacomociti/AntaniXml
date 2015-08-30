@@ -111,22 +111,11 @@ module XmlGenerator =
 
     let decreaseSize = float >> log >> ceil >> int
 
-    type CustomDict<'a> = System.Collections.Generic.IDictionary<XsdName, 'a>
-    type CustomGenerators = {
-        //SimpleGenerators:  CustomDict<Gen<string>>
-        ElementGenerators: CustomDict<Gen<XElement>>
-        //GlobalElementGenerators: CustomDict<Gen<XElement>>
-        ElementGeneratorMaps: CustomDict<XElement -> XElement>
-        ComplexGenerators: CustomDict<Gen<XElement>> 
-        ComplexGeneratorMaps: CustomDict<XElement -> XElement> }
-        with static member empty = { //SimpleGenerators  = dict Seq.empty
-                                     ElementGenerators = dict Seq.empty
-                                     ElementGeneratorMaps = dict Seq.empty
-                                     ComplexGeneratorMaps = dict Seq.empty
-                                     ComplexGenerators = dict Seq.empty }
+
+  
 
 
-    let genElementCustom (customGenerators: CustomGenerators) xsdElement = 
+    let genElementCustom (customGenerators: Customization.Maps) xsdElement = 
 
         let chooseOccurs (Min x, maxOccurs) size = 
             match maxOccurs with
@@ -140,12 +129,6 @@ module XmlGenerator =
             let genSimpleElement (simpleType: XsdSimpleType) = 
                 
                 let elementName = mapName xsdElement.ElementName
-
-//                match simpleType.SimpleTypeName with
-//                | Some x when customGenerators.SimpleGenerators.ContainsKey x -> 
-//                    customGenerators.SimpleGenerators.Item x
-//                    |> Gen.map(fun x -> XElement(elementName, x))
-//                | _ ->
 
                 match xsdElement.FixedValue with
                 | Some fixedValue -> 
@@ -171,22 +154,20 @@ module XmlGenerator =
                 | Simple simpleType -> genSimpleElement simpleType
                 | Complex complexType -> genComplex complexType xsdElement.ElementName size
 
-            match customGenerators.ElementGenerators.TryGetValue xsdElement.ElementName with
-            | true, g -> g
-            | false, _ -> gen()
-            |> Gen.map (match customGenerators.ElementGeneratorMaps.TryGetValue xsdElement.ElementName with
-                        | true, f -> f
-                        | false, _ -> id )
+            match customGenerators.elementGens.TryFind xsdElement.ElementName with
+            | Some g -> g
+            | None -> 
+                match customGenerators.elementMaps.TryFind xsdElement.ElementName with
+                | Some mapping -> gen() |> Gen.map mapping 
+                | None -> gen()
 
-
-            
 
         and genComplex complexType elmName size = 
             
             match complexType.ComplexTypeName with
-            | Some x when customGenerators.ComplexGenerators.ContainsKey x -> 
-                customGenerators.ComplexGenerators.Item x
-                |> Gen.map( fun x -> x.Name <- mapName elmName; x)
+            | Some x when customGenerators.complexGens.ContainsKey x -> 
+                customGenerators.complexGens.Item x
+                |> Gen.map (fun x -> x.Name <- mapName elmName; x)
             | _ ->
           
             let genNodes = 
@@ -221,8 +202,8 @@ module XmlGenerator =
                     return XElement(mapName elmName, items) } 
 
             match complexType.ComplexTypeName with
-            | Some x when customGenerators.ComplexGeneratorMaps.ContainsKey x -> 
-                gen |> Gen.map(customGenerators.ComplexGeneratorMaps.Item x)
+            | Some x when customGenerators.complexMaps.ContainsKey x -> 
+                gen |> Gen.map(customGenerators.complexMaps.Item x)
             | _ -> gen
 
         and genParticle xsdParticle size : Gen<seq<XElement>> = 
@@ -288,7 +269,7 @@ module XmlGenerator =
 
         Gen.sized (genElement' xsdElement)
                  
-    let genElement xsdElement = genElementCustom CustomGenerators.empty xsdElement
+    let genElement xsdElement = genElementCustom Customization.Maps.empty xsdElement
         
 
         

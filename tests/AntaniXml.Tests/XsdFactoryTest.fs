@@ -203,7 +203,7 @@ module XsdFactoryTest =
 		        </xs:simpleType>
 	        </xs:element>
             """  |> makeXsd |> xmlSchemaSet 
-        let isValid x = (validate xsd x).Valid
+        let isValid x = (validate xsd x) |> function Success -> true | _ -> false
         isValid  "<e>aaa</e>"    |> Assert.True
         isValid  "<e>aaaa</e>"   |> Assert.False
         isValid  "<e>a  a</e>"   |> Assert.True // becomes 'a a'

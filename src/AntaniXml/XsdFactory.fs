@@ -250,7 +250,7 @@ module XsdFactory =
               else xsdSimpleType x.AttributeSchemaType
           FixedValue = if x.FixedValue = null then None else Some x.FixedValue }
 
-    let rec private xsdElement = 
+    let rec xsdElement = 
         memoize <| 
         fun (elm: XmlSchemaElement) ->
 //        if hasCycles elm 
@@ -383,9 +383,10 @@ module XsdFactory =
 
     type ValidationResult =
         Success | Failure of XmlSchemaException
-        with member x.Valid = match x with Success -> true | _ -> false
-
-
+        with member x.Errors = match x with 
+                               | Failure e -> Seq.singleton e 
+                               | _ -> Seq.empty
+            
     let validate xmlSchemaSet inputXml =
         let settings = XmlReaderSettings(ValidationType = ValidationType.Schema)
         settings.Schemas <- xmlSchemaSet
@@ -393,13 +394,12 @@ module XsdFactory =
         use reader = XmlReader.Create(new StringReader(inputXml), settings)
         try
             while reader.Read() do ()
-            //true, ""
             ValidationResult.Success
         with :? XmlSchemaException as e -> 
-            //false, e.Message
             ValidationResult.Failure e
             
-
+    let validateElement xmlSchemaSet (element: System.Xml.Linq.XElement) =
+        element.ToString() |> validate xmlSchemaSet 
 
 
 

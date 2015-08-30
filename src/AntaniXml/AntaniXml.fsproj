@@ -53,8 +53,8 @@
     <Compile Include="ConstrainedGenerators.fs" />
     <Compile Include="FacetBasedGenerators.fs" />
     <Compile Include="AtomicGenerators.fs" />
+    <Compile Include="CustomGenerators.fs" />
     <Compile Include="XmlGenerator.fs" />
-    <Compile Include="Antani.fs" />
     <Compile Include="XmlElementGenerator.fs" />
     <None Include="paket.references" />
     <None Include="paket.template" />

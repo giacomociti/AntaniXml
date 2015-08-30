@@ -7,6 +7,6 @@
       @"..\ConstrainedGenerators.fs"
       @"..\FacetBasedGenerators.fs"
       @"..\AtomicGenerators.fs"
+      @"..\CustomGenerators.fs"
       @"..\XmlGenerator.fs"
-      @"..\Antani.fs"
       @"..\XmlElementGenerator.fs"
