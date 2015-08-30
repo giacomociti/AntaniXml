@@ -55,9 +55,9 @@ In fact many examples are given in both languages.</p>
 
 <h2><a name="Example" class="anchor" href="#Example">Example</a></h2>
 
-<p>The first example is straightforward, just obtain a generator from a factory method, 
-specifying the xsd file and the element definition within the schema to use as a template.
-Then call the <code>Generate</code> method to get the desired number of samples:</p>
+<p>The first example is straightforward, given a schema file you have to choose an element 
+definition to use as a template. Then you call the <code>Generate</code> method to get the 
+desired number of samples:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
@@ -66,14 +66,16 @@ Then call the <code>Generate</code> method to get the desired number of samples:
 <span class="l">5: </span>
 <span class="l">6: </span>
 <span class="l">7: </span>
+<span class="l">8: </span>
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">&quot;AntaniXml.dll&quot;</span>
 <span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="i">AntaniXml</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="i">Xml</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="i">samples</span> <span class="o">=</span> 
-    <span class="t">XmlElementGenerator</span>
-        <span class="o">.</span><span class="f">CreateFromSchemaUri</span>(<span class="s">&quot;po.xsd&quot;</span>, <span class="i">elmName</span> <span class="o">=</span> <span class="s">&quot;purchaseOrder&quot;</span>, <span class="i">elmNs</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>)
-        <span class="o">.</span><span class="f">Generate</span>(<span class="n">10</span>)
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="i">samples</span> <span class="o">=</span> 
+    <span onmouseout="hideTip(event, 'fs5', 5)" onmouseover="showTip(event, 'fs5', 5)" class="t">Schema</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs6', 6)" onmouseover="showTip(event, 'fs6', 6)" class="f">CreateFromUri</span>(<span class="s">&quot;po.xsd&quot;</span>)
+          <span class="o">.</span><span class="f">Generator</span>(<span onmouseout="hideTip(event, 'fs7', 7)" onmouseover="showTip(event, 'fs7', 7)" class="t">XmlQualifiedName</span>(<span class="s">&quot;purchaseOrder&quot;</span>))
+          <span class="o">.</span><span class="f">Generate</span>(<span class="n">10</span>)
 </code></pre></td>
 </tr>
 </table>
@@ -84,17 +86,25 @@ Then call the <code>Generate</code> method to get the desired number of samples:
 <span class="l">2: </span>
 <span class="l">3: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">var</span> <span class="i">samples</span> <span class="o">=</span> <span class="i">XmlElementGenerator</span>
-    <span class="o">.</span><span class="i">CreateFromSchemaUri</span>(<span class="s">&quot;po.xsd&quot;</span>, <span class="i">elmName</span><span class="o">:</span> <span class="s">&quot;purchaseOrder&quot;</span>, <span class="i">elmNs</span><span class="o">:</span> <span class="s">&quot;&quot;</span>)
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">var</span> <span class="i">samples</span> <span class="o">=</span> <span class="i">Schema</span><span class="o">.</span><span class="i">CreateFromUri</span>(<span class="s">&quot;po.xsd&quot;</span>)
+    <span class="o">.</span><span class="i">Generator</span>(<span class="k">new</span> <span class="i">XmlQualifiedName</span>(<span class="s">&quot;purchaseOrder&quot;</span>))
     <span class="o">.</span><span class="i">Generate</span>(<span class="n">10</span>);
 </code></pre></td>
 </tr>
 </table>
 
-<p>Notice that in both languages to enhance readability we used named arguments for the element name and namespace.</p>
-
 <p>There is also a <code>GenerateInfinite</code> method allowing never ending sequences of random xml to be created on demand.
 This may be handy for stress testing so that you don't have to produce and store up-front huge amounts of data.</p>
+
+<p>AntaniXml is built on top of the awesome <a href="https://github.com/fscheck/FsCheck">FsCheck</a> library, 
+and you can use it for property based testing with FsCheck.
+Property based testing is an interesting and effective technique. 
+FsCheck is well documented to get you started. This library provides <code>Arbitrary</code> instances 
+so that you can feed tests with random (but valid) xml.</p>
+
+<p>While the first example shows the easiest way to use the library, there is another public API 
+allowing more control on random generators. FsCheck types are exposed so that you can directly
+use their advanced features. Examples are available in the rest of the documentation.</p>
 
 <h2><a name="Documentation" class="anchor" href="#Documentation">Documentation</a></h2>
 
@@ -115,7 +125,12 @@ redistribution for both commercial and non-commercial purposes. For more informa
 <a href="https://github.com/giacomociti/AntaniXml/blob/master/LICENSE.txt">License file</a> in the GitHub repository.</p>
 
 <div class="tip" id="fs1">namespace AntaniXml</div>
-<div class="tip" id="fs2">val samples : System.Xml.Linq.XElement array<br /><br />Full name: Index.samples</div>
+<div class="tip" id="fs2">namespace System</div>
+<div class="tip" id="fs3">namespace System.Xml</div>
+<div class="tip" id="fs4">val samples : Linq.XElement array<br /><br />Full name: Index.samples</div>
+<div class="tip" id="fs5">Multiple items<br />namespace System.Xml.Schema<br /><br />--------------------<br />type Schema =<br />&#160;&#160;new : xmlSchemaSet:XmlSchemaSet -&gt; Schema<br />&#160;&#160;member Arbitrary : elementName:XmlQualifiedName -&gt; Arbitrary&lt;XElement&gt;<br />&#160;&#160;member Arbitrary : elementName:XmlQualifiedName * customizations:CustomGenerators -&gt; Arbitrary&lt;XElement&gt;<br />&#160;&#160;member Generator : elementName:XmlQualifiedName -&gt; IXmlElementGenerator<br />&#160;&#160;member Validate : element:XElement -&gt; ValidationResult<br />&#160;&#160;member Validate : element:string -&gt; ValidationResult<br />&#160;&#160;member GlobalElements : IEnumerable&lt;XmlQualifiedName&gt;<br />&#160;&#160;static member CreateFromText : schemaText:string -&gt; Schema<br />&#160;&#160;static member CreateFromUri : schemaUri:string -&gt; Schema<br /><br />Full name: AntaniXml.Schema<br /><br />--------------------<br />new : xmlSchemaSet:Schema.XmlSchemaSet -&gt; Schema</div>
+<div class="tip" id="fs6">static member Schema.CreateFromUri : schemaUri:string -&gt; Schema</div>
+<div class="tip" id="fs7">Multiple items<br />type XmlQualifiedName =<br />&#160;&#160;new : unit -&gt; XmlQualifiedName + 2 overloads<br />&#160;&#160;member Equals : other:obj -&gt; bool<br />&#160;&#160;member GetHashCode : unit -&gt; int<br />&#160;&#160;member IsEmpty : bool<br />&#160;&#160;member Name : string<br />&#160;&#160;member Namespace : string<br />&#160;&#160;member ToString : unit -&gt; string<br />&#160;&#160;static val Empty : XmlQualifiedName<br />&#160;&#160;static member ToString : name:string * ns:string -&gt; string<br /><br />Full name: System.Xml.XmlQualifiedName<br /><br />--------------------<br />XmlQualifiedName() : unit<br />XmlQualifiedName(name: string) : unit<br />XmlQualifiedName(name: string, ns: string) : unit</div>
 
         </div>
         <div class="span3">
