@@ -1,3 +1,8 @@
+#### 0.5.0 - August 30 2015
+* generator customization support
+* new public API (old is deprecated)
+
+
 #### 0.2.1 - August 21 2015
 * fixed dependenciy version issue
 

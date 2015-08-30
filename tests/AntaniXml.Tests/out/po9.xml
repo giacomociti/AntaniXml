@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<purchaseOrder>
+  <shipTo country="US">
+    <name>UkU0$0$ZNdN)L)iSG]G"E"bL@V&gt;y&gt;y[O9O~r~rTᕚ2HwkwkMA+fcySF0Fb&lt;AKLlVj49-9-9-2-2&amp;2&amp;2&amp;+ⶱ	N	</name>
+    <street>nznPn.D.g}g}g''`v`v` 6 YoYo/;/hRhR</street>
+    <city>dN0$SG]G]G)bL@V@V@"[E9뺵9O&gt;yTH2H2H~rMA+A+AwkF:$:RVT斕K?)(K+ab	9WmWmWm</city>
+    <state>In'='='䣢}g 6 6 `v`;/;/eYo(4(4(hRh!-!W!aKaI&amp;IPH2|4l	k_{+PAe?c7M7M0F0F0F0F)?)?)?)i</state>
+    <zip>-1844.6744073709551617</zip>
+  </shipTo>
+  <billTo>
+    <name>FC=1=1g[q*6*6*`Tj#
+#
+#c갣(K(KRh\FDDaU?x=x=xZN8q}q}qSGv뱔vjvj*</name>
+    <street>)Z)l1AX8,방VlVl%1%[OeO*M*j^H^H#
+McWAWAz'#4%8Uj#
+</street>
+    <city>wI3lxlxlNB,e{e{e{;t⚠t^t^t4mWmWmWm-fPfPfPU&amp;_I_I_I閇dXBX</city>
+    <state>_鰰	</state>
+    <zip>00184467440694145.84321</zip>
+  </billTo>
+  <items>
+    <item partNum="469-XE">
+      <productName>WmWmWmW\PfPfPfPUI_I_I_I	BXBXBXBQ;Q;Q;QVJ4J4J4J
+C-C-C-CH&lt;&amp;&lt;&amp;똠&amp;&lt;|5A5A5k5 .G*EF)Gw#5(zT/TYP-!-!aK&amp;</productName>
+      <quantity>1</quantity>
+      <USPrice>184467440822.99486209</USPrice>
+      <shipDate>1987-04-20</shipDate>
+    </item>
+  </items>
+</purchaseOrder>

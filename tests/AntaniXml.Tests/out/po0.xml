@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<purchaseOrder orderDate="1938-04-30">
+  <shipTo>
+    <name>H^C|A|A|A|&lt;u:u:u:K5n3n3n3D}g}g}g}=4\Q}&gt;kBJ;|As9eV0SN)}Ak{</name>
+    <street>\r\r\r\wUkUkUkUpNdNdNd$.G]G]G]LV@g&lt;|]"NEvE2}SfEY33.	]!p~iC4sBF:xj%jOeO</street>
+    <city>R&lt;R&lt;|5K5K5K5u.D.D.D3n'='='=}6 6 t92=!Q%V</city>
+    <state>w\p+p+p+_Ui$i$i$⾜NbLbLbL]E[E[EWT|5@W1[6`r6UR~oIIslX഻</state>
+    <zip>0.0000000000000004294967295</zip>
+  </shipTo>
+  <billTo country="US">
+    <name>pÜn)n)n薹i"g"g膠gLbJ`J`J`E~C~C~C~&gt;wKs3)U/Y-Ri4
+P|mjje@,X'5 zk*yEq/F\F\KaK</name>
+    <street>	s	s	I1l1l1l,B{e{e{e%^t^t^t^yWmW+Sit5•\
+\I	j}FJJE t8V</street>
+    <city>Si)bL</city>
+    <state>B,B,B,l1;%;%;%ey4y4y4y^r-r-r-&amp;A L-nHr</state>
+    <zip>-184467.44073709551617</zip>
+  </billTo>
+  <comment>&amp;k&amp;k&amp;kP	N	N	N	ᒸ]G]G]G]B{@{@{@{;t
+t'+}=S]2MyMWi|
+hZ;vm-f|f|f|f&amp;_u_u_u5zXnXnXn.8QgQgQg'
+:#x(T</comment>
+  <items>
+    <item partNum="178-ED">
+      <productName>CYCYCYHR&lt;R⬹R&lt;|?K5K5K5u.D.D.D.
+gW9UUH&lt;,J`.th
+-|@;#O@*@*cyc</productName>
+      <quantity>1</quantity>
+      <USPrice>-8589934.591</USPrice>
+      <shipDate>1931-04-14</shipDate>
+    </item>
+    <item partNum="371-WJ">
+      <productName>A+A+A0:$:$:</productName>
+      <quantity>1</quantity>
+      <USPrice>004.294967295</USPrice>
+      <comment>DZDZIS=</comment>
+    </item>
+    <item partNum="808-RG">
+      <productName>n)n)nSg"g"g"VL`J`J`J[E~C~C~YX'	%%
+T|K昄(Db]}Lm:s2:z?z?I3I	s	/&lt;hNdNi$iG]G]GbLb@V@V&gt;y#6oYoYoYo/hRhR</productName>
+      <quantity>1	</quantity>
+      <USPrice>-792281624958.17593519834398721</USPrice>
+      <comment>B,⿲,l%;%;%;{ey4y4y4t-r-br-Sh&gt;1m"dP8O{v@;mU~8Si뱂n)n)bLb"H2^g}g</comment>
+    </item>
+    <item partNum="111-RP">
+      <productName>@{@{;t
+t꯲t
+t4m2m2m</productName>
+      <quantity>1</quantity>
+      <USPrice>+792281.62514264337589248983041</USPrice>
+      <shipDate>1912-11-25</shipDate>
+    </item>
+    <item partNum="748-PV">
+      <productName>cycy9r\r\r\r2kUkUkUp+</productName>
+      <quantity>1</quantity>
+      <USPrice>-184467440780045189.12</USPrice>
+      <comment>A|AR:u:u:uUK3n3n3n.D}g쥒'mO?Uv=e4 n4KF7:V%Ne#9#9ycycw2]'b.C~7M7M
+w
+F0F</comment>
+    </item>
+  </items>
+</purchaseOrder>

@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<purchaseOrder>
+  <shipTo country="US">
+    <name>7p|pཆpRp0iiii)bxbxbxb"[q[q[</name>
+    <street>PfPfPUI_I_I_I	BXBXBXBG;Q;Q;QV{4J4J4F0it3eMj</street>
+    <city>F0p)?)?)?)i"8"8"8"b=1=1=1q[6*6*`*ja	I*㓚EoJh)J 3(P]z{V*n=(`'pje[r"9r\r\&gt;2aUkUkU7+ZNdNVy+Dd![~GwV</city>
+    <state>	7	a	k	I$0$Z$d5B{){S{]Q;t
+</state>
+    <zip>009223372036425.2790788</zip>
+  </shipTo>
+  <billTo country="US">
+    <name>)5).S.]."."'L'V'y'y y9O㌡r~rTr2kwkwk?g}+BMF!p</name>
+    <street>}g}=v`v`v`v6oYoYoY^/hRhRhRW</street>
+    <city>bV@V@V@V[O9O9O9yTH2H2H2r+A+A+A+k$x `AM\)Z[a7J)g=#TmA&gt;T?M'獎W&amp;r,\s	s	I3IxlxlNB,B</city>
+    <state>6 6 6v/;/;</state>
+    <zip>0079228162.458924105363825360898</zip>
+  </billTo>
+  <comment>ﯳ@V@V@V[O9O9O9OTH2H2H2HMA+A+A+AF:$:$F[Hm&amp;
+87)xL&lt;,E}
+A&amp;s,8,8,b,l%1%1%[Oe6*6*jTH^
+#
+#c</comment>
+  <items>
+    <item partNum="145-OW">
+      <productName>awaw7pZpZpZp0iSiSiSi)bLbLbL塉"[EK嬇K-sI_⡒C4~Ly)$ni4%,C#
+McWAWAz?zv@4r\ꮖ+a+</productName>
+      <quantity>4</quantity>
+      <USPrice>007922816244047736130729567846.0</USPrice>
+      <shipDate>1942-10-03</shipDate>
+    </item>
+    <item partNum="377-OT">
+      <productName>_I_I	BXBXBX]G;Q;Q;QVJ4J4J4</productName>
+      <quantity>4</quantity>
+      <USPrice>-5534023220824.3752962</USPrice>
+      <comment>bxb"[q[q[q1`૥jTjTj*cMc</comment>
+    </item>
+    <item partNum="303-JL">
+      <productName>1G1q*@*@*@</productName>
+      <quantity>1</quantity>
+      <USPrice>-79228162477370.849463304716286</USPrice>
+      <shipDate>1908-12-10</shipDate>
+    </item>
+  </items>
+</purchaseOrder>

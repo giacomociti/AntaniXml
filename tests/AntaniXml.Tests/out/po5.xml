@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<purchaseOrder orderDate="2089-03-02">
+  <shipTo country="US">
+    <name>@4@4j^t-9-9-cW2&amp;2&amp;2&amp;+P	7	a	k	I$0$Z$dLB{Ow7~Y	]1Vm8</name>
+    <street>
+~&gt;T
+w
+w
+w7p|p|pRp0iiii)bxbxbxb"[q[/Wmx9{`u`M7n쨐rJNNI$x_ZoI^%k]Lx
+*jvjE9#9#cycy</street>
+    <city>4mWmWmW\PffPfPUI_I_I_I	BXBXBXBG;Q;Q;M7M{&lt;lTq@-qGZ9*T/S'Q䖮:O:x
+KN}.s`J`1%[OCYCY*|^|&lt;R&lt;狕} ,kJእ_O</city>
+    <state>M7M7w0F0F0F0p)?)?)?)i"8"亞"8"b=1=1=1qEvP1rLvQo0Q':/
+dx]1uD/g.wqlby)@ycyc#9#9r\</state>
+    <zip>-7922816.2458924105381005230079</zip>
+  </shipTo>
+  <billTo>
+    <name>K5KPD.D.D.DI='='='=}6 6 6 6v/;/;/eYo(rft$/pC+H9u댼%8:++cL[/s)&amp;;,\</name>
+    <street>k$0$0$Z$d5)5).S.]."."'L'V'y'y y9O~r~rFnc腾s#M(ລdM(?pae;
+;2vqAIu&lt;%C9e*
+#\F:P:PKzUI3I3I	s	4WcLB\+c%</street>
+    <city>znznPD}g}g}g}=v`v`v`v6oYoYoY^/hRhRhR|qvh)r-5Wg-^qPAoF97h,QfQ+?(#XE`wa&lt;0f0pZp)5)</city>
+    <state>Nd$]G]G]G]bV@V@VV[O9O9O9OTH2H2H2rs'gH	c
+oRbh&gt;Q0!D&amp;1tHE[FT.8^Oy%@zRz\P:P:s	s	I3桒xlxltI#b%?嘬</state>
+    <zip>+0.000000018446744082299486206</zip>
+  </billTo>
+  <comment>*O*</comment>
+  <items>
+    <item partNum="650-SS">
+      <productName>dNSG]G]G]GL@V@V@V[E9O9O9OTy2H2H2H=1k[=YY"xSNd2xl;1O}?ySD.D}g}='巵'`\PDNBXB{S{]{;Q;t
+t
+J</productName>
+      <quantity>2</quantity>
+      <USPrice>-553.40232234013556737</USPrice>
+      <comment>g'`v`v`诘` YoYoYo/^RhRhRh(aKaKaKQatVrre!I]'uU/*J^:XUlSG]G]X"bV@V|i5=1g[q䀹6*6*`㫑jT
+#</comment>
+    </item>
+  </items>
+</purchaseOrder>

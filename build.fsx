@@ -308,7 +308,31 @@ Target "Release" (fun _ ->
     // release on github
     createClient (getBuildParamOrDefault "github-user" "") (getBuildParamOrDefault "github-pw" "")
     |> createDraft gitOwner gitName release.NugetVersion (release.SemVer.PreRelease <> None) release.Notes 
+    
     // TODO: |> uploadFile "PATH_TO_FILE"    
+    |> uploadFile "bin\AntaniXml\AntaniXml.dll"
+    |> uploadFile "bin\AntaniXml\AntaniXml.pdb"
+    
+    |> releaseDraft
+    |> Async.RunSynchronously
+)
+
+Target "Release2" (fun _ ->
+    StageAll ""
+    Git.Commit.Commit "" (sprintf "Bump version to %s" release.NugetVersion)
+    Branches.push ""
+
+    Branches.tag "" release.NugetVersion
+    Branches.pushTag "" "origin" release.NugetVersion
+    
+    // release on github
+    createClient (getBuildParamOrDefault "github-user" "") (getBuildParamOrDefault "github-pw" "")
+    |> createDraft gitOwner gitName release.NugetVersion (release.SemVer.PreRelease <> None) release.Notes 
+    
+    // TODO: |> uploadFile "PATH_TO_FILE"    
+    |> uploadFile "bin\AntaniXml\AntaniXml.dll"
+    |> uploadFile "bin\AntaniXml\AntaniXml.pdb"
+    
     |> releaseDraft
     |> Async.RunSynchronously
 )
