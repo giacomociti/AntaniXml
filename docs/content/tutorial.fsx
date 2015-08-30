@@ -10,17 +10,17 @@
 
 
     open AntaniXml
-
+    open System.Xml
 
 (**
 Tutorial
 ========================
 
-The [public API](http://giacomociti.github.io/AntaniXml/reference/antanixml-xmlelementgenerator.html) 
-comprises factory methods to create xml generators.
+The [public API](http://giacomociti.github.io/AntaniXml/reference/antanixml-schema.html) 
+comprises factory methods to load a schema.
 Usually schema definitions are given as xsd files, so you need to specify their Uri.
-Overloads accepting xsd as plain text are also provided: they're handy for experimenting with little xsd snippets.
-
+Overloads accepting xsd as plain text are also provided; they're handy for experimenting with 
+little xsd snippets:
 
 *)
 
@@ -31,16 +31,34 @@ Overloads accepting xsd as plain text are also provided: they're handy for exper
             <xs:element name="e2" type="xs:string" />
         </xs:schema>""" 
 
-    XmlElementGenerator
-        .CreateFromSchemaText(xsdText, "e1", "")
-        .GenerateInfinite()
-        |> Seq.take 5
-        |> Seq.iter (printfn "%A")
+    Schema.CreateFromText(xsdText)
+          .Generator(XmlQualifiedName("e1"))
+          .GenerateInfinite()
+          |> Seq.take 5
+          |> Seq.iter (printfn "%A")
+
 
 (**
 
+Choosing a global element we can get a generator for it.
+The same example in C# is:
 
-This may generate something like this:
+    var xsdText = @"
+        <xs:schema xmlns:xs = 'http://www.w3.org/2001/XMLSchema'
+            elementFormDefault = 'qualified' attributeFormDefault = 'unqualified' >
+            <xs:element name = 'e1' type = 'xs:int' />
+            <xs:element name = 'e2' type = 'xs:string' />
+        </xs:schema > ";
+
+    Schema.CreateFromText(xsdText)
+        .Generator(new XmlQualifiedName("e1"))
+        .GenerateInfinite()
+        .Take(5)
+        .ToList()
+        .ForEach(Console.WriteLine);
+
+
+and may generate something like this:
 
     [lang=xml]
     <e1>0</e1>
@@ -52,14 +70,21 @@ This may generate something like this:
 
 ### Property based testing
 
-For property based testing there are factory methods providing instances of the
+For property based testing we can get instances of the
 `Arbitrary` type [defined by FsCheck](https://fscheck.github.io/FsCheck/TestData.html):
 
 *)
-
-    let arb = XmlElementGenerator.CreateArbFromSchemaUri("po.xsd", "purchaseOrder", "")
+    let arb = Schema.CreateFromUri("po.xsd")
+                    .Arbitrary(XmlQualifiedName("purchaseOrder"))
+    
 
 (**
+
+Again, the C# version is almost the same:
+
+    var arb = Schema.CreateFromUri("po.xsd")
+        .Arbitrary(new XmlQualifiedName("purchaseOrder"));
+
 
 Examples of how to use this with `FsCheck.NUnit` are in the [unit tests](https://github.com/giacomociti/AntaniXml/blob/master/tests/AntaniXml.Tests/XmlGeneratorTest.fs) 
 (TBD: put here some examples).
@@ -85,9 +110,9 @@ Strongly typed access to xml documents is achieved with inference on samples. An
     open System.Xml.Linq
 
     let samples = 
-        XmlElementGenerator
-            .CreateFromSchemaUri(@"C:\temp\po.xsd", "purchaseOrder", "")
-            .Generate(5)
+        Schema.CreateFromUri(@"C:\temp\po.xsd")
+              .Generator(new XmlQualifiedName("purchaseOrder"))
+              .Generate(5)
     XElement(XName.Get("root"), samples).Save(@"C:\temp\samples.xml")
 
     type po = XmlProvider< @"C:\temp\samples.xml", SampleIsList = true>
@@ -123,12 +148,12 @@ But these complementary features for specifying constraints are at odd with the 
 
 
 ### Public API
-The type `XmlElementGenerator` is an OO (C# friendly) entry point,
-the rest of the library is organized in modules.
-At the moment they are not designed to be directly used by client code (in the future this may change
-in order to provide some *hook* to tweak generators).
-Also the design of the OO public API may change, 
-see this [issue](https://github.com/giacomociti/AntaniXml/issues/4).
+The public types of the `AntaniXml` namespace constitute the public API.
+Users of the library are expected to interact only with the `Schema` class and 
+sometimes with the `CustomGenerators` class.
+
+The rest of the library is organized in modules.
+Even if they are public they are not designed to be directly used by C# client code.
 
 
 *)

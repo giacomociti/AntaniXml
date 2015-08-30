@@ -7,6 +7,7 @@
 #r "AntaniXml.dll"
 
 open AntaniXml
+open System.Xml
 open System.Xml.Linq
 
 (**
@@ -26,9 +27,9 @@ an `XElement`, the `System.Xml.Linq` API is already well suited for this task:
 *)
 
 let samples = 
-    XmlElementGenerator
-        .CreateFromSchemaUri("foo", "e1", "")
-        .Generate 10
+    Schema.CreateFromUri("foo")
+          .Generator(XmlQualifiedName("e1"))
+          .Generate(10)
 
 samples
 |> Seq.mapi (fun i xml ->
@@ -40,10 +41,10 @@ samples
 
 (**
 
-The same in C# is
+The same in C# is:
 
-        var samples = XmlElementGenerator
-            .CreateFromSchemaUri("foo.xsd", "e1", "")
+        var samples = Schema.CreateFromUri("foo.xsd")
+            .Generator(new XmlQualifiedName("e1"))
             .Generate(10);
 
         samples.Descendants("bar")
@@ -55,11 +56,9 @@ The same in C# is
             .ToList()
             .ForEach(Console.WriteLine);
                    
-
-
 The above example is just to get the idea. If you don't like imperative code
 you can map the element to another one, but for little fixes the
-imperative approach may be just fine.
+mutability allowed in `System.Xml.Linq` may be just fine.
 
 ### Providing you own generators
 

@@ -31,33 +31,42 @@ In fact many examples are given in both languages.
 Example
 -------
 
-The first example is straightforward, just obtain a generator from a factory method, 
-specifying the xsd file and the element definition within the schema to use as a template.
-Then call the `Generate` method to get the desired number of samples:
+The first example is straightforward, given a schema file you have to choose an element 
+definition to use as a template. Then you call the `Generate` method to get the 
+desired number of samples:
 
 *)
 #r "AntaniXml.dll"
 open AntaniXml
+open System.Xml
 
 let samples = 
-    XmlElementGenerator
-        .CreateFromSchemaUri("po.xsd", elmName = "purchaseOrder", elmNs = "")
-        .Generate(10)
+    Schema.CreateFromUri("po.xsd")
+          .Generator(XmlQualifiedName("purchaseOrder"))
+          .Generate(10)
 
 (**
 
 The C# code is almost the same:
 
-    var samples = XmlElementGenerator
-        .CreateFromSchemaUri("po.xsd", elmName: "purchaseOrder", elmNs: "")
+    var samples = Schema.CreateFromUri("po.xsd")
+        .Generator(new XmlQualifiedName("purchaseOrder"))
         .Generate(10);
-
-
-Notice that in both languages to enhance readability we used named arguments for the element name and namespace.
 
 
 There is also a `GenerateInfinite` method allowing never ending sequences of random xml to be created on demand.
 This may be handy for stress testing so that you don't have to produce and store up-front huge amounts of data.
+
+
+AntaniXml is built on top of the awesome [FsCheck](https://github.com/fscheck/FsCheck) library, 
+and you can use it for property based testing with FsCheck.
+Property based testing is an interesting and effective technique. 
+FsCheck is well documented to get you started. This library provides `Arbitrary` instances 
+so that you can feed tests with random (but valid) xml.
+
+While the first example shows the easiest way to use the library, there is another public API 
+allowing more control on random generators. FsCheck types are exposed so that you can directly
+use their advanced features. Examples are available in the rest of the documentation.
 
 
 
