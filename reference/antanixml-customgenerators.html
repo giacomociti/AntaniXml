@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>ConstrGen<'a> - AntaniXml</title>
+    <title>CustomGenerators - AntaniXml</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Giacomo Citi"/>
@@ -35,34 +35,56 @@
 
 
 
-<h1>ConstrGen<'a></h1>
+<h1>CustomGenerators</h1>
 <p>
   <span>Namespace: AntaniXml</span><br />
-  <span>Parent Module: <a href="antanixml-constrainedgenerators.html">ConstrainedGenerators</a></span>
 </p>
 <div class="xmldoc">
-<p>a generator paired with a property satisfied by its samples</p>
-
-
 </div>
-  <h3>Record Fields</h3>
+  <h3>Constructors</h3>
   <table class="table table-bordered member-list">
     <thead>
-      <tr><td>Record Field</td><td>Description</td></tr>
+      <tr><td>Constructor</td><td>Description</td></tr>
     </thead>
     <tbody>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '104', 104)" onmouseover="showTip(event, '104', 104)">
-            description
+          <code onmouseout="hideTip(event, '211', 211)" onmouseover="showTip(event, '211', 211)">
+            new()
           </code>
-          <div class="tip" id="104">
-            <strong>Signature:</strong> string<br />
+          <div class="tip" id="211">
+            <strong>Signature:</strong> unit -&gt; CustomGenerators<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L10-10" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/CustomGenerators.fs#L25-25" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Instance members</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Instance member</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '212', 212)" onmouseover="showTip(event, '212', 212)">
+            ForComplexType(complexTypeName, mapping)
+          </code>
+          <div class="tip" id="212">
+            <strong>Signature:</strong> (complexTypeName:XmlQualifiedName * mapping:Func&lt;XElement,XElement&gt;) -&gt; CustomGenerators<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/CustomGenerators.fs#L41-41" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -72,15 +94,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '105', 105)" onmouseover="showTip(event, '105', 105)">
-            gen
+          <code onmouseout="hideTip(event, '213', 213)" onmouseover="showTip(event, '213', 213)">
+            ForComplexType(...)
           </code>
-          <div class="tip" id="105">
-            <strong>Signature:</strong> Gen&lt;&#39;a&gt;<br />
+          <div class="tip" id="213">
+            <strong>Signature:</strong> (complexTypeName:XmlQualifiedName * generator:Gen&lt;XElement&gt;) -&gt; CustomGenerators<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L10-10" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/CustomGenerators.fs#L38-38" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -90,15 +112,33 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '106', 106)" onmouseover="showTip(event, '106', 106)">
-            prop
+          <code onmouseout="hideTip(event, '214', 214)" onmouseover="showTip(event, '214', 214)">
+            ForElement(elementName, mapping)
           </code>
-          <div class="tip" id="106">
-            <strong>Signature:</strong> &#39;a -&gt; bool<br />
+          <div class="tip" id="214">
+            <strong>Signature:</strong> (elementName:XmlQualifiedName * mapping:Func&lt;XElement,XElement&gt;) -&gt; CustomGenerators<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L10-10" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/CustomGenerators.fs#L35-35" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '215', 215)" onmouseover="showTip(event, '215', 215)">
+            ForElement(elementName, generator)
+          </code>
+          <div class="tip" id="215">
+            <strong>Signature:</strong> (elementName:XmlQualifiedName * generator:Gen&lt;XElement&gt;) -&gt; CustomGenerators<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/CustomGenerators.fs#L32-32" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
