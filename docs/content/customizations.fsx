@@ -161,7 +161,7 @@ The equivalent C# code is the following:
 
 The main thing to notice is the `CustomGenerators` class and its method accepting a mapping
 for transforming in uppercase the value of the `id` attribute for all the elements of type `barType`.
-The `Arbitrary' instance created embeds a generator, and `Gen.sample` is the FsCheck method to create
+The `Arbitrary` instance created embeds a generator, and `Gen.sample` is the FsCheck method to create
 samples, specifying a size (5 in the example but let's ignore the concept of size for now)
 and the number of samples to create.
 The element generated may look like this:
