@@ -240,7 +240,7 @@ both element definitions.</p>
 
 <p>The main thing to notice is the <code>CustomGenerators</code> class and its method accepting a mapping
 for transforming in uppercase the value of the <code>id</code> attribute for all the elements of type <code>barType</code>.
-The <code>Arbitrary' instance created embeds a generator, and</code>Gen.sample` is the FsCheck method to create
+The <code>Arbitrary</code> instance created embeds a generator, and <code>Gen.sample</code> is the FsCheck method to create
 samples, specifying a size (5 in the example but let's ignore the concept of size for now)
 and the number of samples to create.
 The element generated may look like this:</p>
