@@ -41,7 +41,7 @@
 
 <p>For some schemas the generator may produce something not correct (for example ignoring identity constraints).
 Or maybe the generated values simply look ugly to you (you may want meaningful words instead of random gibberish).
-Obviously one option is to change the produced output by using XSLT or by any other mean. Since the output is
+Obviously one option is to change the produced output by using XSLT or by any other means. Since the output is
 an <code>XElement</code>, the <code>System.Xml.Linq</code> API is already well suited for this task:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
@@ -58,7 +58,7 @@ an <code>XElement</code>, the <code>System.Xml.Linq</code> API is already well s
 <span class="l">12: </span>
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs6', 8)" onmouseover="showTip(event, 'fs6', 8)" class="i">samples</span> <span class="o">=</span> 
-    <span onmouseout="hideTip(event, 'fs7', 9)" onmouseover="showTip(event, 'fs7', 9)" class="t">Schema</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs8', 10)" onmouseover="showTip(event, 'fs8', 10)" class="f">CreateFromUri</span>(<span class="s">&quot;foo&quot;</span>)
+    <span onmouseout="hideTip(event, 'fs7', 9)" onmouseover="showTip(event, 'fs7', 9)" class="t">Schema</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs8', 10)" onmouseover="showTip(event, 'fs8', 10)" class="f">CreateFromUri</span>(<span class="s">&quot;foo.xsd&quot;</span>)
           <span class="o">.</span><span class="f">Generator</span>(<span onmouseout="hideTip(event, 'fs9', 11)" onmouseover="showTip(event, 'fs9', 11)" class="t">XmlQualifiedName</span>(<span class="s">&quot;e1&quot;</span>))
           <span class="o">.</span><span class="f">Generate</span>(<span class="n">10</span>)
 
@@ -88,18 +88,18 @@ an <code>XElement</code>, the <code>System.Xml.Linq</code> API is already well s
 <span class="l">11: </span>
 <span class="l">12: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">    <span class="i">var</span> <span class="i">samples</span> <span class="o">=</span> <span class="i">Schema</span><span class="o">.</span><span class="i">CreateFromUri</span>(<span class="s">&quot;foo.xsd&quot;</span>)
-        <span class="o">.</span><span class="i">Generator</span>(<span class="k">new</span> <span class="i">XmlQualifiedName</span>(<span class="s">&quot;e1&quot;</span>))
-        <span class="o">.</span><span class="i">Generate</span>(<span class="n">10</span>);
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">var</span> <span class="i">samples</span> <span class="o">=</span> <span class="i">Schema</span><span class="o">.</span><span class="i">CreateFromUri</span>(<span class="s">&quot;foo.xsd&quot;</span>)
+    <span class="o">.</span><span class="i">Generator</span>(<span class="k">new</span> <span class="i">XmlQualifiedName</span>(<span class="s">&quot;e1&quot;</span>))
+    <span class="o">.</span><span class="i">Generate</span>(<span class="n">10</span>);
 
-    <span class="i">samples</span><span class="o">.</span><span class="i">Descendants</span>(<span class="s">&quot;bar&quot;</span>)
-        <span class="o">.</span><span class="i">Select</span>((<span class="i">bar</span>, <span class="i">i</span>) <span class="o">=&gt;</span>
-            {
-                <span class="i">bar</span><span class="o">.</span><span class="i">Attribute</span>(<span class="s">&quot;id&quot;</span>)<span class="o">.</span><span class="i">Value</span> <span class="o">=</span> <span class="i">i</span><span class="o">.</span><span class="i">ToString</span>();
-                <span class="k">return</span> <span class="i">bar</span>;
-            })
-        <span class="o">.</span><span class="i">ToList</span>()
-        <span class="o">.</span><span class="i">ForEach</span>(<span class="i">Console</span><span class="o">.</span><span class="i">WriteLine</span>);
+<span class="i">samples</span><span class="o">.</span><span class="i">Descendants</span>(<span class="s">&quot;bar&quot;</span>)
+    <span class="o">.</span><span class="i">Select</span>((<span class="i">bar</span>, <span class="i">i</span>) <span class="o">=&gt;</span>
+        {
+            <span class="i">bar</span><span class="o">.</span><span class="i">Attribute</span>(<span class="s">&quot;id&quot;</span>)<span class="o">.</span><span class="i">Value</span> <span class="o">=</span> <span class="i">i</span><span class="o">.</span><span class="i">ToString</span>();
+            <span class="k">return</span> <span class="i">bar</span>;
+        })
+    <span class="o">.</span><span class="i">ToList</span>()
+    <span class="o">.</span><span class="i">ForEach</span>(<span class="i">Console</span><span class="o">.</span><span class="i">WriteLine</span>);
 </code></pre></td>
 </tr>
 </table>
@@ -110,16 +110,16 @@ mutability allowed in <code>System.Xml.Linq</code> may be just fine.</p>
 
 <h3><a name="Providing-your-own-generators" class="anchor" href="#Providing-your-own-generators">Providing your own generators</a></h3>
 
-<p>Allowing custom generators is of course a superior alternative.</p>
+<p>Custom generators are of course a superior alternative.</p>
 
-<p>To keep things simple, custom generators are allowed only for elements and for global complex types.
-The only way to customize the generation of simple types and attributes is to provide generators for
-the enclosing elements or global complex types. 
+<p>To keep things simple, customizations are allowed only for elements and for global complex types.
+The only way to customize attributes and values of simple types, is to provide 
+custom generators for the enclosing elements or global complex types. 
 Hopefully this is an acceptable limitation for most practical purposes.</p>
 
 <p>FsCheck provides excellent documentation about creating custom generators, both in F# and in C#.
 Anyway in AntaniXml there is also an option to provide only a mapping function, so the default 
-generators are used but the generated elements are then transformed with a custom function.
+generators are still used but the generated elements are then transformed with a custom function.
 Custom generators are expected to produce <code>XElement</code> instances.
 In case of complex types the name of the generated element actually is not important because it
 will be replaced by the proper element name required in each context.</p>
@@ -137,13 +137,13 @@ the custom generator is <em>not</em> picked up.</p>
 <p>Custom generators for elements instead may have a broader reach.
 When a custom generator is provided for elements with a given qualified name, that generator is used for all
 elements with such a name, regardless of their type.
-So, in case the schema is designed in a <em>Russian doll</em> style, custom generators for elements are a better bet.
+So, in case the schema is designed in <em>Russian doll</em> style, custom generators for elements are a better bet.
 Just beware of (nasty) schemas where two distinct element definitions describe elements with the exact same name 
 but different content models. In this case a custom generator may not be used because it would apply to
 both element definitions.</p>
 
 <p>Let's give a few concrete examples. In the following we'll be using this schema 
-(assuming a string variable xsdText holds it):</p>
+(assuming a string variable <code>xsdText</code> holds it):</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
 <span class="l"> 2: </span>
@@ -173,7 +173,10 @@ both element definitions.</p>
             <span class="k">&lt;/</span><span class="i">xs:sequence</span><span class="k">&gt;</span>
         <span class="k">&lt;/</span><span class="i">xs:complexType</span><span class="k">&gt;</span>
     <span class="k">&lt;/</span><span class="i">xs:element</span><span class="k">&gt;</span>
-<span class="k">&lt;/</span><span class="i">xs:schema</span><span class="k">&gt;</span></code></pre></td></tr></table>
+<span class="k">&lt;/</span><span class="i">xs:schema</span><span class="k">&gt;</span>
+</code></pre></td></tr></table>
+
+<p>First we show a custmization for a complex type:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
 <span class="l"> 2: </span>
@@ -204,22 +207,6 @@ both element definitions.</p>
 </tr>
 </table>
 
-<p>The element generated may look like this:</p>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-<span class="l">2: </span>
-<span class="l">3: </span>
-<span class="l">4: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="xml"><span class="k">&lt;</span><span class="i">foo</span><span class="k">&gt;</span>
-  <span class="k">&lt;</span><span class="i">bar</span> <span class="o">id</span>="<span class="o">FX</span>(<span class="o">-K䤊Q</span>&<span class="o">amp</span>;#<span class="o">xA</span>;<span class="o">N</span>(<span class="o">7RIS</span>.&<span class="o">amp</span>;<span class="o">quot</span>;. <span class="k">/&gt;</span>
-  <span class="k">&lt;</span><span class="i">baz</span><span class="k">&gt;</span>j慬X"bL@V'yQy[y9O~r~rTH2kwkwkMA+dzdЁdz:$]s<span class="k">&lt;/</span><span class="i">baz</span><span class="k">&gt;</span>
-<span class="k">&lt;/</span><span class="i">foo</span><span class="k">&gt;</span>
-</code></pre></td></tr></table>
-
-<p>Yes, text is gibberish (but for testing purposes usually it's a good idea to probe a system
-with strange data), anyway you see the attribute value is all upper case thanks to the customization.</p>
-
 <p>The equivalent C# code is the following:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
@@ -238,11 +225,11 @@ with strange data), anyway you see the attribute value is all upper case thanks 
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">var</span> <span class="i">foo</span> <span class="o">=</span> <span class="k">new</span> <span class="i">XmlQualifiedName</span>(<span class="s">&quot;foo&quot;</span>);
 <span class="i">var</span> <span class="i">barType</span> <span class="o">=</span> <span class="k">new</span> <span class="i">XmlQualifiedName</span>(<span class="s">&quot;barType&quot;</span>);
 <span class="i">var</span> <span class="i">cust</span> <span class="o">=</span> <span class="k">new</span> <span class="i">CustomGenerators</span>()
-    <span class="o">.</span><span class="i">ForElement</span>(<span class="i">barType</span>, <span class="i">x</span> <span class="o">=&gt;</span>
+    <span class="o">.</span><span class="i">ForComplexType</span>(<span class="i">barType</span>, <span class="i">xml</span> <span class="o">=&gt;</span>
     {
         <span class="i">var</span> <span onmouseout="hideTip(event, 'fs33', 63)" onmouseover="showTip(event, 'fs33', 63)" class="i">id</span> <span class="o">=</span> <span class="i">xml</span><span class="o">.</span><span class="i">Attribute</span>(<span class="s">&quot;id&quot;</span>);
         <span onmouseout="hideTip(event, 'fs33', 64)" onmouseover="showTip(event, 'fs33', 64)" class="i">id</span><span class="o">.</span><span class="i">Value</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs33', 65)" onmouseover="showTip(event, 'fs33', 65)" class="i">id</span><span class="o">.</span><span class="i">Value</span><span class="o">.</span><span class="i">ToUpper</span>();
-        <span class="k">return</span> <span class="i">x</span>;
+        <span class="k">return</span> <span class="i">xml</span>;
     });
 <span class="i">var</span> <span class="i">arb</span> <span class="o">=</span> <span class="i">Schema</span><span class="o">.</span><span class="i">CreateFromText</span>(<span class="i">xsdText</span>)<span class="o">.</span><span class="i">Arbitrary</span>(<span class="i">foo</span>, <span class="i">cust</span>);
 <span class="i">var</span> <span class="i">samples</span> <span class="o">=</span> <span class="i">Gen</span><span class="o">.</span><span class="i">Sample</span>(<span class="n">5</span>, <span class="n">1</span>, <span class="i">arb</span><span class="o">.</span><span class="i">Generator</span>);
@@ -252,7 +239,30 @@ with strange data), anyway you see the attribute value is all upper case thanks 
 </table>
 
 <p>The main thing to notice is the <code>CustomGenerators</code> class and its method accepting a mapping
-for transforming the generated elements.</p>
+for transforming in uppercase the value of the <code>id</code> attribute for all the elements of type <code>barType</code>.
+The <code>Arbitrary' instance created embeds a generator, and</code>Gen.sample` is the FsCheck method to create
+samples, specifying a size (5 in the example but let's ignore the concept of size for now)
+and the number of samples to create.
+The element generated may look like this:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="xml"><span class="k">&lt;</span><span class="i">foo</span><span class="k">&gt;</span>
+  <span class="k">&lt;</span><span class="i">bar</span> <span class="o">id</span><span class="k">="FX(-K䤊Q&amp;#xA;N(7RIS"</span> <span class="k">/&gt;</span>
+  <span class="k">&lt;</span><span class="i">baz</span><span class="k">&gt;</span>j慬X@V'yQy[y9O~r~rTH2kwkwkMA+dzdЁdz:$]s<span class="k">&lt;/</span><span class="i">baz</span><span class="k">&gt;</span>
+<span class="k">&lt;/</span><span class="i">foo</span><span class="k">&gt;</span>
+</code></pre></td></tr></table>
+
+<p>Yes, text is gibberish (but for testing purposes usually it's a good idea to probe a system
+with strange data), anyway you see the value of attribute <code>id</code> is all upper case thanks to 
+the customization.</p>
+
+<p>In the next example instead we are creating a generator from scratch using the FsCheck combinators.
+Starting from a set of fixed string values, a generator ranging over such a set is built and then mapped
+to another one that wraps the random string values in xml element.</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
@@ -262,7 +272,6 @@ for transforming the generated elements.</p>
 <span class="l">6: </span>
 <span class="l">7: </span>
 <span class="l">8: </span>
-<span class="l">9: </span>
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs34', 66)" onmouseover="showTip(event, 'fs34', 66)" class="i">baz</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 67)" onmouseover="showTip(event, 'fs9', 67)" class="t">XmlQualifiedName</span>(<span class="s">&quot;baz&quot;</span>)
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs35', 68)" onmouseover="showTip(event, 'fs35', 68)" class="i">abcGen</span> <span class="o">=</span> 
@@ -272,36 +281,6 @@ for transforming the generated elements.</p>
 <span onmouseout="hideTip(event, 'fs7', 76)" onmouseover="showTip(event, 'fs7', 76)" class="t">Schema</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs32', 77)" onmouseover="showTip(event, 'fs32', 77)" class="f">CreateFromText</span>(<span onmouseout="hideTip(event, 'fs5', 78)" onmouseover="showTip(event, 'fs5', 78)" class="i">xsdText</span>)<span class="o">.</span><span class="f">Arbitrary</span>(<span onmouseout="hideTip(event, 'fs23', 79)" onmouseover="showTip(event, 'fs23', 79)" class="i">foo</span>, <span onmouseout="hideTip(event, 'fs36', 80)" onmouseover="showTip(event, 'fs36', 80)" class="i">cus</span>)<span class="o">.</span><span class="i">Generator</span>
 <span class="o">|&gt;</span> <span class="i">Gen</span><span class="o">.</span><span class="i">sample</span> <span class="n">5</span> <span class="n">2</span>
 <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs10', 81)" onmouseover="showTip(event, 'fs10', 81)" class="t">Seq</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs20', 82)" onmouseover="showTip(event, 'fs20', 82)" class="f">iter</span> (<span onmouseout="hideTip(event, 'fs21', 83)" onmouseover="showTip(event, 'fs21', 83)" class="f">printfn</span> <span class="s">&quot;</span><span class="pf">%A</span><span class="s">&quot;</span>)
-    
-</code></pre></td>
-</tr>
-</table>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
-<span class="l"> 2: </span>
-<span class="l"> 3: </span>
-<span class="l"> 4: </span>
-<span class="l"> 5: </span>
-<span class="l"> 6: </span>
-<span class="l"> 7: </span>
-<span class="l"> 8: </span>
-<span class="l"> 9: </span>
-<span class="l">10: </span>
-<span class="l">11: </span>
-<span class="l">12: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">In</span> <span class="i">the</span> <span class="i">example</span> <span class="i">above</span> <span class="i">instead</span> <span class="i">we</span> <span class="i">are</span> <span class="i">creating</span> <span class="i">a</span> <span class="i">generator</span> <span class="i">from</span> <span class="i">scratch</span> <span onmouseout="hideTip(event, 'fs37', 84)" onmouseover="showTip(event, 'fs37', 84)" class="i">using</span> <span class="i">the</span> <span class="i">FsCheck</span> <span class="i">combinators</span><span class="o">.</span>
-<span class="i">Now</span> <span class="k">`</span><span class="i">baz</span><span class="k">`</span> <span class="i">is</span> <span class="i">no</span> <span class="i">more</span> <span class="i">gibberish</span> <span class="i">because</span> <span class="i">we</span> <span class="i">took</span> <span class="i">full</span> <span class="i">control</span> <span class="k">of</span> <span class="i">the</span> <span class="i">random</span> <span class="i">generation</span><span class="o">.</span>
-
-[<span class="i">lang</span><span class="o">=</span><span class="i">xml</span>]
-<span class="o">&lt;</span><span class="i">foo</span><span class="o">&gt;</span>
-  <span class="o">&lt;</span><span class="i">bar</span> <span onmouseout="hideTip(event, 'fs33', 85)" onmouseover="showTip(event, 'fs33', 85)" class="i">id</span><span class="o">=</span><span class="s">&quot;,B{e{e{;%;t^t^t4y4mWmWm-r-fPfPf&amp;amp;k&amp;amp;_&quot;</span> <span class="o">/&gt;</span>
-  <span class="o">&lt;</span><span class="i">baz</span><span class="o">&gt;</span><span class="i">b</span><span class="o">&lt;/</span><span class="i">baz</span><span class="o">&gt;</span>
-<span class="o">&lt;/</span><span class="i">foo</span><span class="o">&gt;</span>
-<span class="o">&lt;</span><span class="i">foo</span><span class="o">&gt;</span>
-  <span class="o">&lt;</span><span class="i">bar</span> <span onmouseout="hideTip(event, 'fs33', 86)" onmouseover="showTip(event, 'fs33', 86)" class="i">id</span><span class="o">=</span><span class="s">&quot;ZDZB}B}BS=S５v;v;L玲o4o4o&amp;#xA;E/h~h~h(&amp;gt;(awawa!7!ZpZpZu0:SiSiSn)bLbLbLv[/-&amp;#x9;|cFh!;EBog7c&quot;</span> <span class="o">/&gt;</span>
-  <span class="o">&lt;</span><span class="i">baz</span><span class="o">&gt;</span><span class="i">c</span><span class="o">&lt;/</span><span class="i">baz</span><span class="o">&gt;</span>
-<span class="o">&lt;/</span><span class="i">foo</span><span class="o">&gt;</span>
 </code></pre></td>
 </tr>
 </table>
@@ -315,12 +294,10 @@ for transforming the generated elements.</p>
 <span class="l">5: </span>
 <span class="l">6: </span>
 <span class="l">7: </span>
-<span class="l">8: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">var</span> <span class="i">foo</span> <span class="o">=</span> <span class="k">new</span> <span class="i">XmlQualifiedName</span>(<span class="s">&quot;foo&quot;</span>);
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">var</span> <span class="i">baz</span> <span class="o">=</span> <span class="k">new</span> <span class="i">XmlQualifiedName</span>(<span class="s">&quot;baz&quot;</span>);
 <span class="i">var</span> <span class="i">abcGen</span> <span class="o">=</span> <span class="i">Gen</span><span class="o">.</span><span class="i">Elements</span>(<span class="k">new</span>[] { <span class="s">&quot;a&quot;</span>, <span class="s">&quot;b&quot;</span>, <span class="s">&quot;c&quot;</span> })
     <span class="o">.</span><span class="i">Select</span>(<span class="i">x</span> <span class="o">=&gt;</span> <span class="k">new</span> <span class="i">XElement</span>(<span class="s">&quot;baz&quot;</span>, <span class="i">x</span>));
-<span class="i">var</span> <span class="i">baz</span> <span class="o">=</span> <span class="k">new</span> <span class="i">XmlQualifiedName</span>(<span class="s">&quot;baz&quot;</span>);
 <span class="i">var</span> <span class="i">cus</span> <span class="o">=</span> <span class="k">new</span> <span class="i">CustomGenerators</span>()<span class="o">.</span><span class="i">ForElement</span>(<span class="i">baz</span>, <span class="i">abcGen</span>);
 <span class="i">var</span> <span class="i">arb</span> <span class="o">=</span> <span class="i">Schema</span><span class="o">.</span><span class="i">CreateFromText</span>(<span class="i">xsdText</span>)<span class="o">.</span><span class="i">Arbitrary</span>(<span class="i">foo</span>, <span class="i">cus</span>);
 <span class="i">var</span> <span class="i">samples</span> <span class="o">=</span> <span class="i">Gen</span><span class="o">.</span><span class="i">Sample</span>(<span class="n">5</span>, <span class="n">2</span>, <span class="i">arb</span><span class="o">.</span><span class="i">Generator</span>);
@@ -328,6 +305,29 @@ for transforming the generated elements.</p>
 </code></pre></td>
 </tr>
 </table>
+
+<p>Now <code>baz</code> is no more gibberish because we took full control of the random generation:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="xml"><span class="k">&lt;</span><span class="i">foo</span><span class="k">&gt;</span>
+  <span class="k">&lt;</span><span class="i">bar</span> <span class="o">id</span><span class="k">=",B{e{e{;%;t^t^t4y4mWmWm-r-fPfPf&amp;amp;k&amp;amp;_"</span> <span class="k">/&gt;</span>
+  <span class="k">&lt;</span><span class="i">baz</span><span class="k">&gt;</span>b<span class="k">&lt;/</span><span class="i">baz</span><span class="k">&gt;</span>
+<span class="k">&lt;/</span><span class="i">foo</span><span class="k">&gt;</span>
+<span class="k">&lt;</span><span class="i">foo</span><span class="k">&gt;</span>
+  <span class="k">&lt;</span><span class="i">bar</span> <span class="o">id</span><span class="k">="ZDZB}B}BS=S５"</span> <span class="k">/&gt;</span>
+  <span class="k">&lt;</span><span class="i">baz</span><span class="k">&gt;</span>c<span class="k">&lt;/</span><span class="i">baz</span><span class="k">&gt;</span>
+<span class="k">&lt;/</span><span class="i">foo</span><span class="k">&gt;</span>
+</code></pre></td></tr></table>
+
+<p>FsCheck provides many more combinators to compositionally create many kinds of generators.</p>
 
 <div class="tip" id="fs1">namespace AntaniXml</div>
 <div class="tip" id="fs2">namespace System</div>
@@ -365,7 +365,6 @@ for transforming the generated elements.</p>
 <div class="tip" id="fs34">val baz : XmlQualifiedName<br /><br />Full name: Customizations.baz</div>
 <div class="tip" id="fs35">val abcGen : obj<br /><br />Full name: Customizations.abcGen</div>
 <div class="tip" id="fs36">val cus : CustomGenerators<br /><br />Full name: Customizations.cus</div>
-<div class="tip" id="fs37">val using : resource:&#39;T -&gt; action:(&#39;T -&gt; &#39;U) -&gt; &#39;U (requires &#39;T :&gt; System.IDisposable)<br /><br />Full name: Microsoft.FSharp.Core.Operators.using</div>
 
         </div>
         <div class="span3">
