@@ -306,7 +306,7 @@ module XsdFactory =
 
             let simpleContent (complexType: XmlSchemaComplexType) = 
                 let rec getSimpleType (xmlSchemaType : XmlSchemaType) = 
-                    match xmlSchemaType.BaseXmlSchemaType with
+                    match xmlSchemaType with
                     | :? XmlSchemaSimpleType as result -> result
                     | x -> getSimpleType x.BaseXmlSchemaType
 

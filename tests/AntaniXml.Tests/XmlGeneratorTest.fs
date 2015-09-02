@@ -360,6 +360,21 @@ module XmlGeneratorTest =
         """
 
     [<Test>]
+    let ``multiple derivations are supported``() = check """
+       <xs:element name="OccurrenceDate" type="OccurrenceDateType"/>
+	    <xs:complexType name="OccurrenceDateType">
+		    <xs:simpleContent>
+			    <xs:extension base="DateType"/>
+		    </xs:simpleContent>
+	    </xs:complexType>
+	    <xs:complexType name="DateType">
+		    <xs:simpleContent>
+			    <xs:extension base="xs:date"/>
+		    </xs:simpleContent>
+	    </xs:complexType>
+        """
+
+    [<Test>]
     let ``cyclic elements are supported``() = check """
         <xs:complexType name="TextType" mixed="true">
 		    <xs:choice minOccurs="0" maxOccurs="unbounded">
