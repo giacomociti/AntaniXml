@@ -10,6 +10,7 @@
 
 
     open AntaniXml
+    open XsdFactory
     open System.Xml
 
 (**
@@ -86,10 +87,69 @@ Again, the C# version is almost the same:
         .Arbitrary(new XmlQualifiedName("purchaseOrder"));
 
 
-Examples of how to use this with `FsCheck.NUnit` are in the [unit tests](https://github.com/giacomociti/AntaniXml/blob/master/tests/AntaniXml.Tests/XmlGeneratorTest.fs) 
-(TBD: put here some examples).
-Notice that at the moment we lack proper shrinking so counter-examples 
+The idea of property based testing is to express a specification with boolean functions (properties).
+But instead of trying to *prove* that a property holds, we simply check that the function is true for a big number of randomly
+generated input values.
+
+In our context the first, obligatory example is validity.
+This is of course a property we always expect to hold and hopefully AntaniXml produces valid elements, 
+but it's worth checking it because for some schema it may not be the case,
+and you may discover the need to customize generators in order to obtain valid elements.
+
+The `Check.Quick` function generates a certain number of values using the given `Arbitrary` instance and,
+for each one, checks if the property holds; in this case it checks if the generated element is valid:
+
+*)
+    open FsCheck
+    
+    let schema = Schema.CreateFromUri("foo.xsd")
+    let arbFoo = schema.Arbitrary(XmlQualifiedName("foo"))
+    let isValid (elm: System.Xml.Linq.XElement) = 
+        match schema.Validate(elm) with 
+        | ValidationResult.Success -> true
+        | _ -> false
+   
+    Check.Quick(Prop.forAll arbFoo isValid)
+    
+
+(**
+
+
+The same in C# is:
+
+    var schema = Schema.CreateFromUri("foo.xsd");
+    var arbFoo = schema.Arbitrary(new XmlQualifiedName("foo"));
+
+    Check.Quick(Prop.ForAll(arbFoo, x => schema.Validate(x).IsSuccess));
+
+
+In the standard output a message like the following should be printed 
+    
+    Ok, passed 100 tests.
+
+In case a counter-example is found, it is printed instead.
+FsCheck has a concept of shrinking aimed at minimizing counter-examples.
+At the moment AntaniXml lacks proper support for shrinking so counter-examples 
 provided for failing tests may be bigger than necessary.
+
+When checking properties in a unit test, the function `Check.QuickThrowOnFailure` may be used instead of `Check.Quick` 
+so that a test failure is triggered when a property does not hold.
+For popular unit testing frameworks like NUnit and XUnit there are also extensions enabling to 
+express FsCheck properties more directly.
+
+A more interesting example of property based testing is about XML data binding and serialization.
+Suppose you have a class `Foo` representing a global element in a schema.
+This kind of data binding classes are often obtained with tools 
+like [`xsd.exe`](https://msdn.microsoft.com/en-us/library/x6c1kb0s(v=vs.110).aspx).
+It may be interesting to check that all valid Foo elements can be properly deserialized into instances
+of the corresponding class. And serializing such instances back to XML should result in equivalent elements.
+Probably it's not required for the resulting elements to be identical to the original ones, especially when it
+comes to formatting details; but at least we should expect no loss of contents.
+You may be surprised to discover that for many schemas it is quite hard or impossible to get a suitable data binding class.
+This is due to the [X/O impedance mismatch](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.105.1550&rep=rep1&type=pdf).
+
+
+
 
 ### [Creating samples for the XML type provider](#XMLTypeProvider)
 
