@@ -20,16 +20,30 @@ module FacetBasedGenerators =
     open LexicalMappings
     open ConstrainedGenerators
 
+
     // generate random strings from regex
     // https://github.com/moodmosaic/Fare 
     // known limitations:
     // the character classes \i and \c are specific to W3C XML Schema (hence are not supported)
+    
+
+    let xeger pattern =
+        let isSupported = 
+            [ ".*.*"
+              ".*:.*"
+            ] 
+            |> List.forall ((<>) pattern)
+        if isSupported then 
+            let x = Xeger(pattern)
+            gen {return x.Generate() }
+        else Gen.constant ("unsupported pattern " + pattern)
+
+
     let genPattern patterns = 
         // xsd allows multiple patterns in the same simpleType definition
         // valid values must conform to at least one pattern, but not necessarily to all
         patterns 
-        |> List.map (fun x -> Xeger(x))
-        |> List.map (fun x -> gen { return x.Generate() })
+        |> List.map xeger
         |> Gen.oneof
 
     let inline isMatch (inp, pat) =
