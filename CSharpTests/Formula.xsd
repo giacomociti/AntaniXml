@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2015 sp2 (x64) (http://www.altova.com) by Giacomo Citi (Crif SpA) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="Formula" abstract="true"/>
+	<xs:element name="Prop" type="xs:string" substitutionGroup="Formula"/>
+	<xs:element name="And" substitutionGroup="Formula">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Formula" minOccurs="2" maxOccurs="2"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

@@ -112,9 +112,6 @@ module XmlGenerator =
     let decreaseSize = float >> log >> ceil >> int
 
 
-  
-
-
     let genElementCustom (customGenerators: Customization.Maps) xsdElement = 
 
         let chooseOccurs (Min x, maxOccurs) size = 
@@ -149,17 +146,32 @@ module XmlGenerator =
                         Gen.frequency [8, gen; 2, Gen.constant nil]
                     else gen
 
-            let gen() = 
+            let gen() = // generator for this element definition
                 match xsdElement.Type with
                 | Simple simpleType -> genSimpleElement simpleType
                 | Complex complexType -> genComplex complexType xsdElement.ElementName size
+            
+            let genSubst() = // generators for substitutes
+                xsdElement.SubstitutionGroup
+                |> Seq.filter (fun x -> size > 0 || not x.IsRecursive)
+                |> Seq.map (fun x -> genElement' x (if x.IsRecursive then size/2 else size))
+                |> Seq.toList
+
+            let genWithSubst() = // generator for this element including substitutes
+                match xsdElement.IsAbstract, genSubst() with
+                | true, [] -> 
+                    gen() // invalid but there's no alternative
+                | true,  x  -> 
+                    Gen.oneof x
+                | false, [] -> gen()
+                | false, x  -> Gen.oneof <| gen() :: x
 
             match customGenerators.elementGens.TryFind xsdElement.ElementName with
             | Some g -> g
             | None -> 
                 match customGenerators.elementMaps.TryFind xsdElement.ElementName with
-                | Some mapping -> gen() |> Gen.map mapping 
-                | None -> gen()
+                | Some mapping -> genWithSubst() |> Gen.map mapping 
+                | None -> genWithSubst()
 
 
         and genComplex complexType elmName size = 

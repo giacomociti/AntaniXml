@@ -46,14 +46,44 @@ module XsdFactory =
         Patterns       = []
         WhiteSpace     = None }          
 
-    let private hasCycles x = 
+    let getElm (xmlSchemaSet: XmlSchemaSet) (name: XmlQualifiedName) =
+         xmlSchemaSet.GlobalElements.Values
+            |> ofType<XmlSchemaElement>
+            |> Seq.find (fun e -> e.QualifiedName = name)
+            
+
+    /// elements in the given schema that may substitute the given one
+    let subst (xmlSchemaSet: XmlSchemaSet)  = 
+        memoize <| fun (element: XmlSchemaElement) ->
+
+        let rec collect 
+            (items: System.Collections.Generic.HashSet<XmlSchemaElement>)
+            (elm: XmlSchemaElement) =
+
+            let alt (elm: XmlSchemaElement) =
+                xmlSchemaSet.GlobalElements.Values
+                |> ofType<XmlSchemaElement>
+                |> Seq.filter (fun e -> not e.SubstitutionGroup.IsEmpty)
+                |> Seq.filter (fun e -> e.SubstitutionGroup = elm.QualifiedName)
+
+            for x in alt elm do 
+                if items.Add x then collect items x 
+
+        let items = System.Collections.Generic.HashSet()
+        collect items element 
+        items |> List.ofSeq
+    
+
+    let private hasCycles subst = 
+        memoize <| fun x ->
         let items = System.Collections.Generic.HashSet<XmlSchemaObject>()
         let rec closure (obj: XmlSchemaObject) =
             let nav innerObj =
                 if items.Add innerObj then closure innerObj
             match obj with
             | :? XmlSchemaElement as e -> 
-                nav e.ElementSchemaType 
+                nav e.ElementSchemaType
+                (subst e) |> Seq.iter nav
             | :? XmlSchemaComplexType as c -> 
                 nav c.ContentTypeParticle
             | :? XmlSchemaGroupRef as r -> 
@@ -250,20 +280,25 @@ module XsdFactory =
               else xsdSimpleType x.AttributeSchemaType
           FixedValue = if x.FixedValue = null then None else Some x.FixedValue }
 
-    let rec xsdElement = 
-        memoize <| 
-        fun (elm: XmlSchemaElement) ->
-//        if hasCycles elm 
-//        then failwithf "Recursive schemas are not supported. \
-//            Element '%A' has cycles." elm.QualifiedName
+
+    let rec xsdElement xmlSchemaSet = 
+        let subst = subst xmlSchemaSet
+        let hasCycles = hasCycles subst
+        memoize <| fun (elm: XmlSchemaElement) ->
         { ElementName = xsdName elm.QualifiedName
-          Type = xsdType elm.ElementSchemaType
+          Type = xsdType xmlSchemaSet elm.ElementSchemaType 
           IsNillable = elm.IsNillable
+          IsAbstract = elm.IsAbstract
+          IsRecursive = hasCycles elm
+          SubstitutionGroup = 
+            subst elm 
+            |> Seq.filter (fun x -> x <> elm) 
+            |> Seq.map (xsdElement xmlSchemaSet) 
+            |> Seq.toList
           FixedValue = if elm.FixedValue = null then None else Some elm.FixedValue }
 
-    and private xsdType = 
-        memoize <| 
-        function
+    and private xsdType (xmlSchemaSet: XmlSchemaSet) = 
+        memoize <| function
         | :? XmlSchemaSimpleType  as simple  -> simple |> xsdSimpleType |> Simple
         | :? XmlSchemaComplexType as complex -> 
 
@@ -301,7 +336,12 @@ module XsdFactory =
                     Any (occurs, ns)
                 | :? XmlSchemaGroupBase as grp -> xsdParticles grp
                 | :? XmlSchemaGroupRef as grpRef -> xsdParticle grpRef.Particle
-                | :? XmlSchemaElement as elm -> Element (occurs, xsdElement elm)
+                | :? XmlSchemaElement as elm -> 
+                    // a bit tricky, but an element reference may not carry on data
+                    // like IsAbstract, so we better reach for the global element definition
+                    let elm = if elm.RefName.IsEmpty then elm 
+                              else getElm xmlSchemaSet elm.RefName
+                    Element (occurs, xsdElement xmlSchemaSet elm)
                 | _ -> Empty // XmlSchemaParticle.EmptyParticle
 
             let simpleContent (complexType: XmlSchemaComplexType) = 
@@ -345,15 +385,16 @@ module XsdFactory =
         | xmlSchemaType -> failwithf "unknown type: %A" xmlSchemaType
 
     let xsdSchema (xsd : XmlSchemaSet) = 
+        
         { Types = 
               xsd.GlobalTypes.Values
               |> ofType<XmlSchemaType>
-              |> Seq.map (fun x -> xsdName x.QualifiedName, xsdType x)
+              |> Seq.map (fun x -> xsdName x.QualifiedName, xsdType xsd x)
               |> Map.ofSeq
           Elements = 
               xsd.GlobalElements.Values
               |> ofType<XmlSchemaElement>
-              |> Seq.map xsdElement
+              |> Seq.map (xsdElement xsd)
               |> List.ofSeq
           Attributes = 
               xsd.GlobalAttributes.Values

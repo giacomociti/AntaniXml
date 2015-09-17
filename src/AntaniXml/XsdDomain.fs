@@ -142,6 +142,9 @@ module XsdDomain =
         { ElementName: XsdName
           Type: XsdType
           IsNillable: bool
+          IsAbstract: bool
+          IsRecursive: bool
+          SubstitutionGroup: XsdElement list
           FixedValue: string option }
 
     and XsdType = 

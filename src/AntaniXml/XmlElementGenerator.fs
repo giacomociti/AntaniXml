@@ -19,7 +19,7 @@ type IXmlElementGenerator =
 /// This is the public API of AntaniXml.
 /// It provides random generators for global elements defined in the given Xml Schema.
 type Schema(xmlSchemaSet: XmlSchemaSet) =
-    
+
     /// Factory method to load a schema from its Uri.
     static member CreateFromUri schemaUri = Schema(xmlSchemaSetFromUri schemaUri)
     /// Factory method to parse a schema from plain text.
@@ -51,8 +51,8 @@ type Schema(xmlSchemaSet: XmlSchemaSet) =
         |> function 
         | None -> failwithf "element %A not found" elementName
         | Some e -> e
-        |> xsdElement
-        |> genElementCustom (customizations.ToMaps())
+        |> xsdElement xmlSchemaSet
+        |> genElementCustom (customizations.ToMaps()) 
         |> FsCheck.Arb.fromGen
 
     /// The object created embeds a random generator of xml elements and it is
