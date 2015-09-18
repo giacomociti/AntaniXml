@@ -61,12 +61,16 @@ module XmlGeneratorTest =
 
     let checkSchema xsd = 
         let samples = 
-            (xsdSchema xsd).Elements 
-            |> List.map genElement
-            |> List.collect (Gen.sample 5 10)
+            let schema = Schema xsd
+            schema.GlobalElements 
+            |> Seq.map (fun x -> schema.Generator x)
+            |> Seq.collect (fun g -> g.Generate 10)
+            |> Seq.toList
+//            |> Seq.map genElement
+//            |> List.collect (Gen.sample 5 10)
         samples
-        |> List.map (isValid xsd)
-        |> List.forall id
+        |> Seq.map (isValid xsd)
+        |> Seq.forall id
         
     let makeSchema = 
         sprintf """
@@ -133,8 +137,11 @@ module XmlGeneratorTest =
         
     // arbitrary xml element for a given schema (likely with a single global element definition)
     let arb schemaSet = 
-        let xsd = xsdSchema schemaSet
-        xsd.Elements |> List.head |> genElement |> Arb.fromGen
+        let schema = Schema schemaSet
+        schema.GlobalElements 
+        |> Seq.head 
+        |> fun x -> schema.Arbitrary x
+        //xsd.Elements |> List.head |> genElement |> Arb.fromGen
         
     // a few examples with schemas having a single element of simple type;
     // these tests are subsumed by checkSimpleTypes;

@@ -8,6 +8,7 @@ open XmlGenerator
 open System.Xml
 open System.Xml.Linq
 open System.Xml.Schema
+open System.Collections.Generic
 
 // an OO API suitable also for c# client code
 /// Random generator of xml elements based on a schema definition
@@ -19,6 +20,53 @@ type IXmlElementGenerator =
 /// This is the public API of AntaniXml.
 /// It provides random generators for global elements defined in the given Xml Schema.
 type Schema(xmlSchemaSet: XmlSchemaSet) =
+
+    let getElm name =
+        xmlSchemaSet.GlobalElements.Item name :?> XmlSchemaElement
+
+    let subst' =
+        let alt =
+            xmlSchemaSet.GlobalElements.Values
+            |> ofType<XmlSchemaElement>
+            |> Seq.filter (fun e -> not e.SubstitutionGroup.IsEmpty)
+            |> Seq.groupBy (fun e -> e.SubstitutionGroup)
+            |> Seq.map (fun (name, values) -> getElm name, values |> List.ofSeq)
+            |> dict
+        fun e -> if alt.ContainsKey e then alt.Item e else []
+
+    let subst = 
+        memoize <| fun element ->
+        let items = HashSet()
+        let rec collect elm =
+            for x in subst' elm do 
+                if items.Add x then collect x 
+        collect element 
+        items |> List.ofSeq
+
+    let hasCycles = 
+        memoize <| fun element ->
+        let items = HashSet<XmlSchemaObject>()
+        let rec closure (obj: XmlSchemaObject) =
+            let nav innerObj =
+                if items.Add innerObj then closure innerObj
+            match obj with
+            | :? XmlSchemaElement as e -> 
+                if e.RefName.IsEmpty then
+                    nav e.ElementSchemaType
+                    (subst e) |> Seq.iter nav
+                else nav (getElm e.RefName)
+            | :? XmlSchemaComplexType as c -> 
+                nav c.ContentTypeParticle
+            | :? XmlSchemaGroupRef as r -> 
+                nav r.Particle
+            | :? XmlSchemaGroupBase as x -> 
+                x.Items 
+                |> ofType<XmlSchemaObject> 
+                |> Seq.iter nav
+            | _ -> ()
+        closure element
+        items.Contains element
+
 
     /// Factory method to load a schema from its Uri.
     static member CreateFromUri schemaUri = Schema(xmlSchemaSetFromUri schemaUri)
@@ -45,15 +93,23 @@ type Schema(xmlSchemaSet: XmlSchemaSet) =
     /// element definition is expected in the schema.
     /// - `customizations` - Custom generators to override the default behavior.
     member x.Arbitrary (elementName, (customizations: CustomGenerators)) =
-        xmlSchemaSet.GlobalElements.Values
-        |> ofType<System.Xml.Schema.XmlSchemaElement>
-        |> Seq.tryFind (fun e -> e.QualifiedName = elementName)
-        |> function 
-        | None -> failwithf "element %A not found" elementName
-        | Some e -> e
-        |> xsdElement xmlSchemaSet
-        |> genElementCustom (customizations.ToMaps()) 
-        |> FsCheck.Arb.fromGen
+
+        if xmlSchemaSet.GlobalElements.Contains elementName then
+            getElm elementName
+            |> xsdElement getElm subst hasCycles
+            |> genElementCustom (customizations.ToMaps()) 
+            |> FsCheck.Arb.fromGen  
+        else failwithf "element %A not found" elementName
+
+//        xmlSchemaSet.GlobalElements.Values
+//        |> ofType<System.Xml.Schema.XmlSchemaElement>
+//        |> Seq.tryFind (fun e -> e.QualifiedName = elementName)
+//        |> function 
+//        | None -> failwithf "element %A not found" elementName
+//        | Some e -> e
+//        |> xsdElement getElm subst hasCycles
+//        |> genElementCustom (customizations.ToMaps()) 
+//        |> FsCheck.Arb.fromGen
 
     /// The object created embeds a random generator of xml elements and it is
     /// suitable for property based testing with FsCheck.
@@ -88,64 +144,64 @@ type Schema(xmlSchemaSet: XmlSchemaSet) =
                   seq { while true do yield! x.Generate 100 } }
         
     
-        
-
-/// Factory for random generators of xml elements
-[<System.ObsoleteAttribute>]
-type XmlElementGenerator = 
-    
-    static member private createGen (xmlSchema, elmName, elmNs) = 
-        let name = 
-            { Namespace = elmNs
-              Name = elmName }
-        (xsdSchema xmlSchema).Elements
-        |> List.tryFind (fun e -> e.ElementName = name)
-        |> Option.map genElement
-        |> function 
-        | None -> failwithf "element %s:%s not found" elmNs elmName
-        | Some g -> g
-    
-    static member private createGen' (xmlSchema, elmName, elmNs) = 
-        let elementGenerator = XmlElementGenerator.createGen (xmlSchema, elmName, elmNs)
-        let size = 5
-        { new IXmlElementGenerator with
-              
-              member x.Generate n = 
-                  elementGenerator
-                  |> FsCheck.Gen.sample size n
-                  |> Array.ofList
-              
-              member x.GenerateInfinite() = 
-                  seq { while true do yield! x.Generate 100 } }
-    
-    /// Creates a random generator of xml elements with the given name and
-    /// namespace. The element definition is expected at the top level of
-    /// the provided schema.
-    /// ## Parameters
-    ///
-    /// - `xsdUri` - Uri of the xsd schema.
-    /// - `elmName` - Name of the element for which to create a generator.
-    /// - `elmNs` - element namespace; may be empty.
-    static member CreateFromSchemaUri(xsdUri, elmName, elmNs) = 
-        XmlElementGenerator.createGen' (xmlSchemaSetFromUri xsdUri, elmName, elmNs)
-    
-    /// Creates a random generator of xml elements with the given name and
-    /// namespace. The element definition is expected at the top level of
-    /// the xsd schema provided as a text string
-    /// ## Parameters
-    ///
-    /// - `xsdText` - xsd schema as a text string.
-    /// - `elmName` - Name of the element for which to create a generator.
-    /// - `elmNs` - element namespace; may be empty.
-    static member CreateFromSchemaText(xsdText, elmName, elmNs) = 
-        XmlElementGenerator.createGen' (xmlSchemaSet xsdText, elmName, elmNs)
-    
-    /// The object created embeds a random generator of xml elements and it is
-    /// suitable for property based testing with FsCheck.
-    static member CreateArbFromSchemaUri(xsdUri, elmName, elmNs) = 
-        XmlElementGenerator.createGen (xmlSchemaSetFromUri xsdUri, elmName, elmNs) |> FsCheck.Arb.fromGen
-    
-    /// The object created embeds a random generator of xml elements and it is
-    /// suitable for property based testing with FsCheck.
-    static member CreateArbFromSchemaText(xsdText, elmName, elmNs) = 
-        XmlElementGenerator.createGen (xmlSchemaSet xsdText, elmName, elmNs) |> FsCheck.Arb.fromGen
+//        
+//
+///// Factory for random generators of xml elements
+//[<System.ObsoleteAttribute>]
+//type XmlElementGenerator = 
+//    
+//    static member private createGen (xmlSchema, elmName, elmNs) = 
+//        let name = 
+//            { Namespace = elmNs
+//              Name = elmName }
+//        (xsdSchema xmlSchema).Elements
+//        |> List.tryFind (fun e -> e.ElementName = name)
+//        |> Option.map genElement
+//        |> function 
+//        | None -> failwithf "element %s:%s not found" elmNs elmName
+//        | Some g -> g
+//    
+//    static member private createGen' (xmlSchema, elmName, elmNs) = 
+//        let elementGenerator = XmlElementGenerator.createGen (xmlSchema, elmName, elmNs)
+//        let size = 5
+//        { new IXmlElementGenerator with
+//              
+//              member x.Generate n = 
+//                  elementGenerator
+//                  |> FsCheck.Gen.sample size n
+//                  |> Array.ofList
+//              
+//              member x.GenerateInfinite() = 
+//                  seq { while true do yield! x.Generate 100 } }
+//    
+//    /// Creates a random generator of xml elements with the given name and
+//    /// namespace. The element definition is expected at the top level of
+//    /// the provided schema.
+//    /// ## Parameters
+//    ///
+//    /// - `xsdUri` - Uri of the xsd schema.
+//    /// - `elmName` - Name of the element for which to create a generator.
+//    /// - `elmNs` - element namespace; may be empty.
+//    static member CreateFromSchemaUri(xsdUri, elmName, elmNs) = 
+//        XmlElementGenerator.createGen' (xmlSchemaSetFromUri xsdUri, elmName, elmNs)
+//    
+//    /// Creates a random generator of xml elements with the given name and
+//    /// namespace. The element definition is expected at the top level of
+//    /// the xsd schema provided as a text string
+//    /// ## Parameters
+//    ///
+//    /// - `xsdText` - xsd schema as a text string.
+//    /// - `elmName` - Name of the element for which to create a generator.
+//    /// - `elmNs` - element namespace; may be empty.
+//    static member CreateFromSchemaText(xsdText, elmName, elmNs) = 
+//        XmlElementGenerator.createGen' (xmlSchemaSet xsdText, elmName, elmNs)
+//    
+//    /// The object created embeds a random generator of xml elements and it is
+//    /// suitable for property based testing with FsCheck.
+//    static member CreateArbFromSchemaUri(xsdUri, elmName, elmNs) = 
+//        XmlElementGenerator.createGen (xmlSchemaSetFromUri xsdUri, elmName, elmNs) |> FsCheck.Arb.fromGen
+//    
+//    /// The object created embeds a random generator of xml elements and it is
+//    /// suitable for property based testing with FsCheck.
+//    static member CreateArbFromSchemaText(xsdText, elmName, elmNs) = 
+//        XmlElementGenerator.createGen (xmlSchemaSet xsdText, elmName, elmNs) |> FsCheck.Arb.fromGen
