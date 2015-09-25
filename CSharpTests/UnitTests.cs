@@ -17,17 +17,17 @@ namespace CSharpTests
         {
             switch (file)
             {
-                case "xmlopts":
-                    var nsOpts = "http://www.altova.com/xmlopts";
-                    return new CustomGenerators()
-                        .ForElement(new XmlQualifiedName("option", nsOpts),
-                            Gen.Constant(new XElement(XName.Get("core.linenumbers", nsOpts), true)));
+                //case "xmlopts":
+                //    var nsOpts = "http://www.altova.com/xmlopts";
+                //    return new CustomGenerators()
+                //        .ForElement(new XmlQualifiedName("option", nsOpts),
+                //            Gen.Constant(new XElement(XName.Get("core.linenumbers", nsOpts), true)));
 
-                case "config":
-                    var nsConfig = "http://www.altova.com/schemas/altova/raptorxml/config";
-                    return new CustomGenerators()
-                        .ForElement(new XmlQualifiedName("option", nsConfig),
-                            Gen.Constant(new XElement(XName.Get("http.environment", nsConfig), "foo")));
+                //case "config":
+                //    var nsConfig = "http://www.altova.com/schemas/altova/raptorxml/config";
+                //    return new CustomGenerators()
+                //        .ForElement(new XmlQualifiedName("option", nsConfig),
+                //            Gen.Constant(new XElement(XName.Get("http.environment", nsConfig), "foo")));
 
                 default: return new CustomGenerators();
             }
@@ -65,7 +65,7 @@ namespace CSharpTests
         [TestMethod]
         public void CheckSchemas()
         {
-            var path = @"C:\temp\Schemas\UBL";
+            var path = @"C:\temp\Schemas\";
 
             foreach (var xsd in Directory.EnumerateFiles(path, "*.xsd", SearchOption.AllDirectories)
                 .GroupBy(x => Path.GetFileNameWithoutExtension(x))
@@ -118,25 +118,25 @@ namespace CSharpTests
             }
             catch (XmlSchemaException e)
             {
-                //Error("XmlSchemaException", e.Message);
+                Error("XmlSchemaException", e.Message);
             }
             catch (Exception e)
             {
                 if (e.Source == "Fare")
                 {
-                    //Error("Fare", e.Message);
+                    Error("Fare", e.Message);
                 }
                 else if (e.Message.EndsWith("is an invalid character."))
                 {
-                    //Error("is an invalid character.", e.Message);
+                    Error("is an invalid character.", e.Message);
                 }
                 else if (e.Message.StartsWith("unsupported type"))
                 {
-                    //Error("unsupported type", e.Message); 
+                    Error("unsupported type", e.Message); 
                 }
                 else if (e.Message.StartsWith("cannot mix constraints"))
                 {
-                    //Error("cannot mix constraints", e.Message); 
+                    Error("cannot mix constraints", e.Message.Substring(0, 100)); 
                 }
                 else if (e.Source == "AntaniXml")
                 {
@@ -155,16 +155,16 @@ namespace CSharpTests
         public void AbstractRecursive()
         {
             var xsd = XsdFactory.xmlSchemaSetFromUri("Formula.xsd");
+
             var els = xsd.GlobalElements.Values.OfType<XmlSchemaElement>();
             var form = els.Single(x => x.Name == "Formula");
             var and = els.Single(x => x.Name == "And");
             var seq = (XmlSchemaSequence)((XmlSchemaComplexType)and.ElementSchemaType).ContentTypeParticle;
-            var formRef =(XmlSchemaElement)seq.Items[0];
+            var formRef = (XmlSchemaElement)seq.Items[0];
             Assert.IsTrue(form.IsAbstract);
             Assert.IsTrue(form.RefName.IsEmpty);
             Assert.IsFalse(form.QualifiedName.IsEmpty);
 
-            
             Assert.IsFalse(formRef.IsAbstract); // Notice this
             Assert.AreEqual(form.QualifiedName, formRef.QualifiedName);
             Assert.AreEqual(formRef.QualifiedName, formRef.RefName);
@@ -175,12 +175,9 @@ namespace CSharpTests
             var schema = new Schema(xsd);
 
             var gen = schema.Arbitrary(new XmlQualifiedName("Formula")).Generator;
-            var samples = gen.Sample(10, 10);
-
-            
+            var samples = gen.Sample(5, 500);
 
             samples.ToList().ForEach(Console.WriteLine);
-
             var allvalid = samples.All(x => schema.Validate(x).IsSuccess);
             Assert.IsTrue(allvalid);
         }

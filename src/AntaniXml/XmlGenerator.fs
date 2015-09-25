@@ -121,8 +121,10 @@ module XmlGenerator =
             | _ -> x, max x size 
             |> Gen.choose
 
-        let rec genElement' xsdElement size = 
-            
+        let rec genElement' = 
+            memoize <|
+            fun xsdElement size ->
+
             let genSimpleElement (simpleType: XsdSimpleType) = 
                 
                 let elementName = mapName xsdElement.ElementName

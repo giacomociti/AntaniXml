@@ -178,8 +178,7 @@ module XsdFactory =
         match simpleType.Datatype.Variety with
         | XmlSchemaDatatypeVariety.Atomic ->
             let atomicType, facets = xsdAtomicType simpleType 
-            { //SimpleTypeName = None // TODO
-              Facets = facets
+            { Facets = facets
               Variety = XsdAtom atomicType }
         | XmlSchemaDatatypeVariety.List ->
             let simpleType, facets = combineFacets simpleType
@@ -189,8 +188,7 @@ module XsdFactory =
                     match xsdList.ItemType, xsdList.BaseItemType with
                     | null, null -> failwith "cannot find list item type"
                     | null, x | x, _ -> x
-                { //SimpleTypeName = None // TODO
-                  Facets = facets
+                { Facets = facets
                   Variety = XsdList (xsdSimpleType item) }
             | _ -> failwith "expected XmlSchemaSimpleTypeList"
         | XmlSchemaDatatypeVariety.Union ->
@@ -201,8 +199,7 @@ module XsdFactory =
                     xsdUnion.BaseMemberTypes
                     |> Array.map xsdSimpleType
                     |> List.ofArray
-                { //SimpleTypeName = None // TODO
-                  Facets = facets
+                { Facets = facets
                   Variety = XsdUnion(baseTypes) }
 
             | _ -> failwith "expected XmlSchemaSimpleTypeUnion"
@@ -223,8 +220,7 @@ module XsdFactory =
               then // seems like it is null when Prohibited
                   assert (xsdAttributeUse x.Use = XsdAttributeUse.Prohibited)
                   // return a fake value that will be ignored
-                  {  //SimpleTypeName = None
-                     Facets = emptyFacets
+                  {  Facets = emptyFacets
                      Variety = XsdAtom XsdAtomicType.AnyAtomicType }
               else xsdSimpleType x.AttributeSchemaType
           FixedValue = if x.FixedValue = null then None else Some x.FixedValue }
@@ -232,9 +228,12 @@ module XsdFactory =
     
         
 
-    let rec xsdElement getElm subst hasCycles = 
-        //memoize <| 
-        fun (elm: XmlSchemaElement) ->
+    let rec xsdElement = 
+        memoize <| 
+        fun (elm: XmlSchemaElement) 
+            (getElm: XmlQualifiedName -> XmlSchemaElement)
+            (subst: XmlSchemaElement -> XmlSchemaElement list) 
+            (hasCycles: XmlSchemaElement -> bool) ->
         { ElementName = xsdName elm.QualifiedName
           Type = xsdType getElm subst hasCycles elm.ElementSchemaType 
           IsNillable = elm.IsNillable
@@ -243,13 +242,11 @@ module XsdFactory =
           SubstitutionGroup = 
             subst elm 
             |> Seq.filter (fun x -> x <> elm) 
-            |> Seq.map (xsdElement getElm subst hasCycles) 
-            |> Seq.toList
+            |> Seq.map (fun e -> xsdElement e getElm subst hasCycles) 
           FixedValue = if elm.FixedValue = null then None else Some elm.FixedValue }
 
 
     and private xsdType getElm subst hasCycles = 
-        //memoize <| 
         function
         | :? XmlSchemaSimpleType  as simple  -> simple |> xsdSimpleType |> Simple
         | :? XmlSchemaComplexType as complex -> 
@@ -292,7 +289,7 @@ module XsdFactory =
                     // a bit tricky, but an element reference may not carry on info
                     // like IsAbstract, so we better reach for the global element definition
                     let elm = if elm.RefName.IsEmpty then elm else getElm elm.RefName
-                    Element (occurs, xsdElement getElm subst hasCycles elm)
+                    Element (occurs, xsdElement elm getElm subst hasCycles)
                 | _ -> Empty // XmlSchemaParticle.EmptyParticle
 
             let simpleContent (complexType: XmlSchemaComplexType) = 

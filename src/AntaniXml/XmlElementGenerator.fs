@@ -77,6 +77,11 @@ type Schema(xmlSchemaSet: XmlSchemaSet) =
     member x.Validate element = validate xmlSchemaSet element
     /// Helper method providing validation.
     member x.Validate element = validateElement xmlSchemaSet element
+    /// Helper method providing validation.
+    member x.IsValid element = 
+        match validateElement xmlSchemaSet element with
+        | Success -> true
+        | _ -> false
 
     /// Global elements defined in the given schema.
     member x.GlobalElements = 
@@ -95,21 +100,10 @@ type Schema(xmlSchemaSet: XmlSchemaSet) =
     member x.Arbitrary (elementName, (customizations: CustomGenerators)) =
 
         if xmlSchemaSet.GlobalElements.Contains elementName then
-            getElm elementName
-            |> xsdElement getElm subst hasCycles
+            xsdElement (getElm elementName) getElm subst hasCycles
             |> genElementCustom (customizations.ToMaps()) 
             |> FsCheck.Arb.fromGen  
         else failwithf "element %A not found" elementName
-
-//        xmlSchemaSet.GlobalElements.Values
-//        |> ofType<System.Xml.Schema.XmlSchemaElement>
-//        |> Seq.tryFind (fun e -> e.QualifiedName = elementName)
-//        |> function 
-//        | None -> failwithf "element %A not found" elementName
-//        | Some e -> e
-//        |> xsdElement getElm subst hasCycles
-//        |> genElementCustom (customizations.ToMaps()) 
-//        |> FsCheck.Arb.fromGen
 
     /// The object created embeds a random generator of xml elements and it is
     /// suitable for property based testing with FsCheck.

@@ -138,13 +138,14 @@ module XsdDomain =
 
     type XsdAttributeUse = Required | Optional | Prohibited
 
+    [<ReferenceEquality; NoComparison>]
     type XsdElement = 
         { ElementName: XsdName
           Type: XsdType
           IsNillable: bool
           IsAbstract: bool
           IsRecursive: bool
-          SubstitutionGroup: XsdElement list
+          SubstitutionGroup: XsdElement seq
           FixedValue: string option }
 
     and XsdType = 
@@ -170,9 +171,9 @@ module XsdDomain =
         | Choice   of Occurs * seq<XsdParticle> // lazyness of seq allows circular definitions
         | Sequence of Occurs * seq<XsdParticle> // lazyness of seq allows circular definitions
 
-    type XsdSchema = 
-        { Types: Map<XsdName, XsdType>
-          Elements: XsdElement list
-          Attributes: XsdAttribute list }
+//    type XsdSchema = 
+//        { Types: Map<XsdName, XsdType>
+//          Elements: XsdElement list
+//          Attributes: XsdAttribute list }
 
 

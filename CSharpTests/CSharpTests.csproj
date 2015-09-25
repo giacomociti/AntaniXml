@@ -68,17 +68,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\src\AntaniXml\AntaniXml.fsproj">
-      <Project>{f6798b94-7fd7-427e-96ea-918cde2a8838}</Project>
-      <Name>AntaniXml</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Formula.xsd">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\src\AntaniXml\AntaniXml.fsproj">
+      <Project>{f6798b94-7fd7-427e-96ea-918cde2a8838}</Project>
+      <Name>AntaniXml</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

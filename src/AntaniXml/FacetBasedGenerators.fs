@@ -28,9 +28,11 @@ module FacetBasedGenerators =
     
 
     let xeger pattern =
+        //TODO better handling of issues
         let isSupported = 
             [ ".*.*"
               ".*:.*"
+              "([0-9]+|[0-9]+.[0-9]*|[0-9]*.[0-9]+)Hz"
             ] 
             |> List.forall ((<>) pattern)
         if isSupported then 
