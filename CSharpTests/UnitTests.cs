@@ -7,6 +7,8 @@ using System.Xml.Schema;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AntaniXml;
 using FsCheck;
+using Fare;
+using System.Collections.Generic;
 
 namespace CSharpTests
 {
@@ -182,5 +184,42 @@ namespace CSharpTests
             Assert.IsTrue(allvalid);
         }
 
+
+        [TestMethod]
+        public void FareGen()
+        {
+            var pattern = "[a-z]+";
+            var items1 = Xegers(pattern);
+            var items2 = Xegers(pattern);
+            var same = Enumerable.SequenceEqual(items1, items2);
+            Assert.IsFalse(same);
+        }
+
+        [TestMethod]
+        public void FareGenRnd()
+        {
+            var pattern = "[a-z]+";
+            var rnd = new System.Random();
+            var items1 = Xegers(pattern, rnd);
+            var items2 = Xegers(pattern, rnd);
+            var same = Enumerable.SequenceEqual(items1, items2);
+            Assert.IsFalse(same);
+        }
+
+        static IEnumerable<string> Xegers(string pattern)
+        {
+            var xeger = new Xeger(pattern);
+            var result = Enumerable.Range(0, 10).Select(x => xeger.Generate());
+            result.ToList().ForEach(Console.WriteLine);
+            return result;
+        }
+
+        static IEnumerable<string> Xegers(string pattern, System.Random rnd)
+        {
+            var xeger = new Xeger(pattern, rnd);
+            var result = Enumerable.Range(0, 10).Select(x => xeger.Generate());
+            result.ToList().ForEach(Console.WriteLine);
+            return result;
+        }
     }
 }

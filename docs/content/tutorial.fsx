@@ -138,17 +138,19 @@ For popular unit testing frameworks like NUnit and XUnit there are also extensio
 express FsCheck properties more directly.
 
 A more interesting example of property based testing is about XML data binding and serialization.
-Suppose you have a class `Foo` representing a global element in a schema.
+Suppose you have a class representing a global element in a schema.
 This kind of data binding classes are often obtained with tools 
 like [`xsd.exe`](https://msdn.microsoft.com/en-us/library/x6c1kb0s(v=vs.110).aspx).
-It may be interesting to check that all valid Foo elements can be properly deserialized into instances
+It may be interesting to check that all valid elements can be properly deserialized into instances
 of the corresponding class. And serializing such instances back to XML should result in equivalent elements.
 Probably it's not required for the resulting elements to be identical to the original ones, especially when it
 comes to formatting details; but at least we should expect no loss of contents.
 You may be surprised to discover that for many schemas it is quite hard or impossible to get a suitable data binding class.
 This is due to the [X/O impedance mismatch](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.105.1550&rep=rep1&type=pdf).
 
-
+One more use case is schema refinement. Evolving a schema ensuring backward compatibility means that all the
+elements valid according to the old version of the schema should also be valid with the new version.
+This can be checked with property based testing.
 
 
 ### [Creating samples for the XML type provider](#XMLTypeProvider)
@@ -189,15 +191,12 @@ Future versions of FSharp.Data may support xsd.
 [XML Schema](http://www.w3.org/XML/Schema) is rich and complex, it's inevitable to have some limitations.
 A few ones are known and listed below. Some of them may hopefully be addressed in the future.
 But likely there are many more unknown limitations. If you find one please raise an [issue](https://github.com/giacomociti/AntaniXml/issues).
-Anyway don't be too scared of this disclaimer. I think AntaniXml can cope with many nuances and support many features 
+Anyway don't be too scared of this disclaimer. AntaniXml can cope with many nuances and support many features 
 (like regex patterns thanks to [Fare](https://github.com/moodmosaic/Fare)).
 The main limitations currently known are:
 
 #### built-in types
 A few built-in types are not supported: Notation, NmTokens, Id, Idref, Idrefs, Entity and Entities.
-
-#### abstract types and elements
-See this [issue](https://github.com/giacomociti/AntaniXml/issues/5).
 
 #### identity and subset constraint
 
@@ -206,6 +205,12 @@ Version 1.1 also introduced assertions to allow further constraints.
 Schemas are primarily grammar based, so they are a good fit for random generators.
 But these complementary features for specifying constraints are at odd with the generative approach.
 
+#### wildcards
+With certain kinds of wildcards (e.g. `##other`) it may be impossible to generate valid contents.
+
+#### regex patterns
+Some regex patterns may not be properly supported, for example those using the character 
+classes `\i` and `\c` which are specific to W3C XML Schema.
 
 ### Public API
 The public types of the `AntaniXml` namespace constitute the public API.

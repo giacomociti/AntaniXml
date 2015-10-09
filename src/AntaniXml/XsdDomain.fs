@@ -170,10 +170,3 @@ module XsdDomain =
         | All      of Occurs * seq<XsdParticle> // lazyness of seq allows circular definitions
         | Choice   of Occurs * seq<XsdParticle> // lazyness of seq allows circular definitions
         | Sequence of Occurs * seq<XsdParticle> // lazyness of seq allows circular definitions
-
-//    type XsdSchema = 
-//        { Types: Map<XsdName, XsdType>
-//          Elements: XsdElement list
-//          Attributes: XsdAttribute list }
-
-

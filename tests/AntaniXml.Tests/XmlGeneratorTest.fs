@@ -404,6 +404,19 @@ module XmlGeneratorTest =
           </xs:sequence>
         </xs:complexType>
         """
+
+    [<Test>]
+    let ``abstract recursive elements are supported with substitution groups``() = check """
+    	<xs:element name="Formula" abstract="true"/>
+	    <xs:element name="Prop" type="xs:string" substitutionGroup="Formula"/>
+	    <xs:element name="And" substitutionGroup="Formula">
+		    <xs:complexType>
+			    <xs:sequence>
+				    <xs:element ref="Formula" minOccurs="2" maxOccurs="2"/>
+			    </xs:sequence>
+		    </xs:complexType>
+	    </xs:element>
+    """
 //    [<Test>]
 //    let ``pattern issue``() = check """
 //        <xs:element name="DateTime" type="DateTimeType" />
