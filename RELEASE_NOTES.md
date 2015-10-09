@@ -1,3 +1,7 @@
+#### 0.6.0 - October 09 2015
+* abstract elements support
+
+
 #### 0.5.0 - August 30 2015
 * generator customization support
 * new public API (old is deprecated)
