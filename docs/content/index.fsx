@@ -25,8 +25,8 @@ kind of xml is defined by a certain schema.
   <div class="span1"></div>
 </div>
 
-AntaniXml is developed in [F#](http://fsharp.org) but the public API should be usable also from C#.
-In fact many examples are given in both languages.
+AntaniXml is developed in [F#](http://fsharp.org) but the public API is usable also from C#.
+In fact most examples are given in both languages.
 
 Example
 -------
