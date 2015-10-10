@@ -50,8 +50,8 @@ kind of xml is defined by a certain schema.</p>
   <div class="span1"></div>
 </div>
 
-<p>AntaniXml is developed in <a href="http://fsharp.org">F#</a> but the public API should be usable also from C#.
-In fact many examples are given in both languages.</p>
+<p>AntaniXml is developed in <a href="http://fsharp.org">F#</a> but the public API is usable also from C#.
+In fact most examples are given in both languages.</p>
 
 <h2><a name="Example" class="anchor" href="#Example">Example</a></h2>
 
@@ -128,7 +128,7 @@ redistribution for both commercial and non-commercial purposes. For more informa
 <div class="tip" id="fs2">namespace System</div>
 <div class="tip" id="fs3">namespace System.Xml</div>
 <div class="tip" id="fs4">val samples : Linq.XElement array<br /><br />Full name: Index.samples</div>
-<div class="tip" id="fs5">Multiple items<br />namespace System.Xml.Schema<br /><br />--------------------<br />type Schema =<br />&#160;&#160;new : xmlSchemaSet:XmlSchemaSet -&gt; Schema<br />&#160;&#160;member Arbitrary : elementName:XmlQualifiedName -&gt; Arbitrary&lt;XElement&gt;<br />&#160;&#160;member Arbitrary : elementName:XmlQualifiedName * customizations:CustomGenerators -&gt; Arbitrary&lt;XElement&gt;<br />&#160;&#160;member Generator : elementName:XmlQualifiedName -&gt; IXmlElementGenerator<br />&#160;&#160;member Validate : element:XElement -&gt; ValidationResult<br />&#160;&#160;member Validate : element:string -&gt; ValidationResult<br />&#160;&#160;member GlobalElements : IEnumerable&lt;XmlQualifiedName&gt;<br />&#160;&#160;static member CreateFromText : schemaText:string -&gt; Schema<br />&#160;&#160;static member CreateFromUri : schemaUri:string -&gt; Schema<br /><br />Full name: AntaniXml.Schema<br /><br />--------------------<br />new : xmlSchemaSet:Schema.XmlSchemaSet -&gt; Schema</div>
+<div class="tip" id="fs5">Multiple items<br />namespace System.Xml.Schema<br /><br />--------------------<br />type Schema =<br />&#160;&#160;new : xmlSchemaSet:XmlSchemaSet -&gt; Schema<br />&#160;&#160;member Arbitrary : elementName:XmlQualifiedName -&gt; Arbitrary&lt;XElement&gt;<br />&#160;&#160;member Arbitrary : elementName:XmlQualifiedName * customizations:CustomGenerators -&gt; Arbitrary&lt;XElement&gt;<br />&#160;&#160;member Generator : elementName:XmlQualifiedName -&gt; IXmlElementGenerator<br />&#160;&#160;member IsValid : element:XElement -&gt; bool<br />&#160;&#160;member Validate : element:XElement -&gt; ValidationResult<br />&#160;&#160;member Validate : element:string -&gt; ValidationResult<br />&#160;&#160;member GlobalElements : IEnumerable&lt;XmlQualifiedName&gt;<br />&#160;&#160;static member CreateFromText : schemaText:string -&gt; Schema<br />&#160;&#160;static member CreateFromUri : schemaUri:string -&gt; Schema<br /><br />Full name: AntaniXml.Schema<br /><br />--------------------<br />new : xmlSchemaSet:Schema.XmlSchemaSet -&gt; Schema</div>
 <div class="tip" id="fs6">static member Schema.CreateFromUri : schemaUri:string -&gt; Schema</div>
 <div class="tip" id="fs7">Multiple items<br />type XmlQualifiedName =<br />&#160;&#160;new : unit -&gt; XmlQualifiedName + 2 overloads<br />&#160;&#160;member Equals : other:obj -&gt; bool<br />&#160;&#160;member GetHashCode : unit -&gt; int<br />&#160;&#160;member IsEmpty : bool<br />&#160;&#160;member Name : string<br />&#160;&#160;member Namespace : string<br />&#160;&#160;member ToString : unit -&gt; string<br />&#160;&#160;static val Empty : XmlQualifiedName<br />&#160;&#160;static member ToString : name:string * ns:string -&gt; string<br /><br />Full name: System.Xml.XmlQualifiedName<br /><br />--------------------<br />XmlQualifiedName() : unit<br />XmlQualifiedName(name: string) : unit<br />XmlQualifiedName(name: string, ns: string) : unit</div>
 

@@ -220,15 +220,19 @@ For popular unit testing frameworks like NUnit and XUnit there are also extensio
 express FsCheck properties more directly.</p>
 
 <p>A more interesting example of property based testing is about XML data binding and serialization.
-Suppose you have a class <code>Foo</code> representing a global element in a schema.
+Suppose you have a class representing a global element in a schema.
 This kind of data binding classes are often obtained with tools 
 like <a href="https://msdn.microsoft.com/en-us/library/x6c1kb0s(v=vs.110).aspx"><code>xsd.exe</code></a>.
-It may be interesting to check that all valid Foo elements can be properly deserialized into instances
+It may be interesting to check that all valid elements can be properly deserialized into instances
 of the corresponding class. And serializing such instances back to XML should result in equivalent elements.
 Probably it's not required for the resulting elements to be identical to the original ones, especially when it
 comes to formatting details; but at least we should expect no loss of contents.
 You may be surprised to discover that for many schemas it is quite hard or impossible to get a suitable data binding class.
 This is due to the <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.105.1550&amp;rep=rep1&amp;type=pdf">X/O impedance mismatch</a>.</p>
+
+<p>One more use case is schema refinement. Evolving a schema ensuring backward compatibility means that all the
+elements valid according to the old version of the schema should also be valid with the new version.
+This can be checked with property based testing.</p>
 
 <h3><a name="Creating-samples-for-the-XML-type-provider" class="anchor" href="#Creating-samples-for-the-XML-type-provider"><a href="#XMLTypeProvider">Creating samples for the XML type provider</a></a></h3>
 
@@ -274,7 +278,7 @@ Future versions of FSharp.Data may support xsd.</p>
 <p><a href="http://www.w3.org/XML/Schema">XML Schema</a> is rich and complex, it's inevitable to have some limitations.
 A few ones are known and listed below. Some of them may hopefully be addressed in the future.
 But likely there are many more unknown limitations. If you find one please raise an <a href="https://github.com/giacomociti/AntaniXml/issues">issue</a>.
-Anyway don't be too scared of this disclaimer. I think AntaniXml can cope with many nuances and support many features 
+Anyway don't be too scared of this disclaimer. AntaniXml can cope with many nuances and support many features 
 (like regex patterns thanks to <a href="https://github.com/moodmosaic/Fare">Fare</a>).
 The main limitations currently known are:</p>
 
@@ -282,16 +286,21 @@ The main limitations currently known are:</p>
 
 <p>A few built-in types are not supported: Notation, NmTokens, Id, Idref, Idrefs, Entity and Entities.</p>
 
-<h4><a name="abstract-types-and-elements" class="anchor" href="#abstract-types-and-elements">abstract types and elements</a></h4>
-
-<p>See this <a href="https://github.com/giacomociti/AntaniXml/issues/5">issue</a>.</p>
-
 <h4><a name="identity-and-subset-constraint" class="anchor" href="#identity-and-subset-constraint">identity and subset constraint</a></h4>
 
 <p>XML Schema provides rough equivalents of primary and foreign keys in databases.
 Version 1.1 also introduced assertions to allow further constraints.
 Schemas are primarily grammar based, so they are a good fit for random generators.
 But these complementary features for specifying constraints are at odd with the generative approach.</p>
+
+<h4><a name="wildcards" class="anchor" href="#wildcards">wildcards</a></h4>
+
+<p>With certain kinds of wildcards (e.g. <code>##other</code>) it may be impossible to generate valid contents.</p>
+
+<h4><a name="regex-patterns" class="anchor" href="#regex-patterns">regex patterns</a></h4>
+
+<p>Some regex patterns may not be properly supported, for example those using the character 
+classes <code>\i</code> and <code>\c</code> which are specific to W3C XML Schema.</p>
 
 <h3><a name="Public-API" class="anchor" href="#Public-API">Public API</a></h3>
 
@@ -307,7 +316,7 @@ Even if they are public they are not designed to be directly used by C# client c
 <div class="tip" id="fs3">namespace System</div>
 <div class="tip" id="fs4">namespace System.Xml</div>
 <div class="tip" id="fs5">val xsdText : string<br /><br />Full name: Tutorial.xsdText</div>
-<div class="tip" id="fs6">Multiple items<br />namespace System.Xml.Schema<br /><br />--------------------<br />type Schema =<br />&#160;&#160;new : xmlSchemaSet:XmlSchemaSet -&gt; Schema<br />&#160;&#160;member Arbitrary : elementName:XmlQualifiedName -&gt; Arbitrary&lt;XElement&gt;<br />&#160;&#160;member Arbitrary : elementName:XmlQualifiedName * customizations:CustomGenerators -&gt; Arbitrary&lt;XElement&gt;<br />&#160;&#160;member Generator : elementName:XmlQualifiedName -&gt; IXmlElementGenerator<br />&#160;&#160;member Validate : element:XElement -&gt; ValidationResult<br />&#160;&#160;member Validate : element:string -&gt; ValidationResult<br />&#160;&#160;member GlobalElements : IEnumerable&lt;XmlQualifiedName&gt;<br />&#160;&#160;static member CreateFromText : schemaText:string -&gt; Schema<br />&#160;&#160;static member CreateFromUri : schemaUri:string -&gt; Schema<br /><br />Full name: AntaniXml.Schema<br /><br />--------------------<br />new : xmlSchemaSet:Schema.XmlSchemaSet -&gt; Schema</div>
+<div class="tip" id="fs6">Multiple items<br />namespace System.Xml.Schema<br /><br />--------------------<br />type Schema =<br />&#160;&#160;new : xmlSchemaSet:XmlSchemaSet -&gt; Schema<br />&#160;&#160;member Arbitrary : elementName:XmlQualifiedName -&gt; Arbitrary&lt;XElement&gt;<br />&#160;&#160;member Arbitrary : elementName:XmlQualifiedName * customizations:CustomGenerators -&gt; Arbitrary&lt;XElement&gt;<br />&#160;&#160;member Generator : elementName:XmlQualifiedName -&gt; IXmlElementGenerator<br />&#160;&#160;member IsValid : element:XElement -&gt; bool<br />&#160;&#160;member Validate : element:XElement -&gt; ValidationResult<br />&#160;&#160;member Validate : element:string -&gt; ValidationResult<br />&#160;&#160;member GlobalElements : IEnumerable&lt;XmlQualifiedName&gt;<br />&#160;&#160;static member CreateFromText : schemaText:string -&gt; Schema<br />&#160;&#160;static member CreateFromUri : schemaUri:string -&gt; Schema<br /><br />Full name: AntaniXml.Schema<br /><br />--------------------<br />new : xmlSchemaSet:Schema.XmlSchemaSet -&gt; Schema</div>
 <div class="tip" id="fs7">static member Schema.CreateFromText : schemaText:string -&gt; Schema</div>
 <div class="tip" id="fs8">Multiple items<br />type XmlQualifiedName =<br />&#160;&#160;new : unit -&gt; XmlQualifiedName + 2 overloads<br />&#160;&#160;member Equals : other:obj -&gt; bool<br />&#160;&#160;member GetHashCode : unit -&gt; int<br />&#160;&#160;member IsEmpty : bool<br />&#160;&#160;member Name : string<br />&#160;&#160;member Namespace : string<br />&#160;&#160;member ToString : unit -&gt; string<br />&#160;&#160;static val Empty : XmlQualifiedName<br />&#160;&#160;static member ToString : name:string * ns:string -&gt; string<br /><br />Full name: System.Xml.XmlQualifiedName<br /><br />--------------------<br />XmlQualifiedName() : unit<br />XmlQualifiedName(name: string) : unit<br />XmlQualifiedName(name: string, ns: string) : unit</div>
 <div class="tip" id="fs9">module Seq<br /><br />from Microsoft.FSharp.Collections</div>
