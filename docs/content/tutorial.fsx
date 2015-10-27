@@ -104,13 +104,8 @@ for each one, checks if the property holds; in this case it checks if the genera
     
     let schema = Schema.CreateFromUri("foo.xsd")
     let arbFoo = schema.Arbitrary(XmlQualifiedName("foo"))
-    let isValid (elm: System.Xml.Linq.XElement) = 
-        match schema.Validate(elm) with 
-        | ValidationResult.Success -> true
-        | _ -> false
-   
-    Check.Quick(Prop.forAll arbFoo isValid)
-    
+    Prop.forAll arbFoo schema.IsValid
+    |> Check.Quick 
 
 (**
 
@@ -119,8 +114,8 @@ The same in C# is:
 
     var schema = Schema.CreateFromUri("foo.xsd");
     var arbFoo = schema.Arbitrary(new XmlQualifiedName("foo"));
-
-    Check.Quick(Prop.ForAll(arbFoo, x => schema.Validate(x).IsSuccess));
+    Prop.ForAll(arbFoo, x => schema.IsValid(x))
+        .QuickCheck();
 
 
 In the standard output a message like the following should be printed 
@@ -148,9 +143,37 @@ comes to formatting details; but at least we should expect no loss of contents.
 You may be surprised to discover that for many schemas it is quite hard or impossible to get a suitable data binding class.
 This is due to the [X/O impedance mismatch](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.105.1550&rep=rep1&type=pdf).
 
-One more use case is schema refinement. Evolving a schema ensuring backward compatibility means that all the
-elements valid according to the old version of the schema should also be valid with the new version.
+One more use case is schema evolution. Evolving a schema ensuring backward compatibility means that all the
+elements valid according to the old version of the schema should also be valid for the new version.
 This can be checked with property based testing.
+
+*)
+    open FsCheck
+    
+    let oldSchema = Schema.CreateFromUri("old.xsd")
+    let newSchema = Schema.CreateFromUri("new.xsd")
+    let arbFooOld = oldSchema.Arbitrary(XmlQualifiedName("foo"))
+
+    let isStillValid elm = oldSchema.IsValid elm ==> newSchema.IsValid elm
+
+    Prop.forAll arbFooOld isStillValid
+    |> Check.Quick
+
+(**
+
+The same in C# is:
+
+    var oldSchema = Schema.CreateFromUri("old.xsd");
+    var newSchema = Schema.CreateFromUri("new.xsd");
+    var arbFooOld = oldSchema.Arbitrary(new XmlQualifiedName("foo"));
+    Prop.ForAll(arbFooOld, x => oldSchema.IsValid(x).When(newSchema.IsValid(x)))
+        .QuickCheck();
+
+In this example we also see in action a conditional property, 
+expressed in F# with the `==>` operator and in C# with the fluent method `When`.
+Again, the concept of conditional property is well explained 
+in the [FsCheck documentation](https://fscheck.github.io/FsCheck/Properties.html).
+
 
 
 ### [Creating samples for the XML type provider](#XMLTypeProvider)
