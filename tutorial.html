@@ -158,29 +158,19 @@ and you may discover the need to customize generators in order to obtain valid e
 <p>The <code>Check.Quick</code> function generates a certain number of values using the given <code>Arbitrary</code> instance and,
 for each one, checks if the property holds; in this case it checks if the generated element is valid:</p>
 
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
-<span class="l"> 2: </span>
-<span class="l"> 3: </span>
-<span class="l"> 4: </span>
-<span class="l"> 5: </span>
-<span class="l"> 6: </span>
-<span class="l"> 7: </span>
-<span class="l"> 8: </span>
-<span class="l"> 9: </span>
-<span class="l">10: </span>
-<span class="l">11: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">    <span class="k">open</span> <span onmouseout="hideTip(event, 'fs15', 19)" onmouseover="showTip(event, 'fs15', 19)" class="i">FsCheck</span>
     
     <span class="k">let</span> <span onmouseout="hideTip(event, 'fs16', 20)" onmouseover="showTip(event, 'fs16', 20)" class="i">schema</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs6', 21)" onmouseover="showTip(event, 'fs6', 21)" class="t">Schema</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs14', 22)" onmouseover="showTip(event, 'fs14', 22)" class="f">CreateFromUri</span>(<span class="s">&quot;foo.xsd&quot;</span>)
     <span class="k">let</span> <span onmouseout="hideTip(event, 'fs17', 23)" onmouseover="showTip(event, 'fs17', 23)" class="i">arbFoo</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs16', 24)" onmouseover="showTip(event, 'fs16', 24)" class="i">schema</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs18', 25)" onmouseover="showTip(event, 'fs18', 25)" class="f">Arbitrary</span>(<span onmouseout="hideTip(event, 'fs8', 26)" onmouseover="showTip(event, 'fs8', 26)" class="t">XmlQualifiedName</span>(<span class="s">&quot;foo&quot;</span>))
-    <span class="k">let</span> <span onmouseout="hideTip(event, 'fs19', 27)" onmouseover="showTip(event, 'fs19', 27)" class="f">isValid</span> (<span onmouseout="hideTip(event, 'fs20', 28)" onmouseover="showTip(event, 'fs20', 28)" class="i">elm</span><span class="o">:</span> <span onmouseout="hideTip(event, 'fs3', 29)" onmouseover="showTip(event, 'fs3', 29)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs4', 30)" onmouseover="showTip(event, 'fs4', 30)" class="i">Xml</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs21', 31)" onmouseover="showTip(event, 'fs21', 31)" class="i">Linq</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs22', 32)" onmouseover="showTip(event, 'fs22', 32)" class="t">XElement</span>) <span class="o">=</span> 
-        <span class="k">match</span> <span onmouseout="hideTip(event, 'fs16', 33)" onmouseover="showTip(event, 'fs16', 33)" class="i">schema</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs23', 34)" onmouseover="showTip(event, 'fs23', 34)" class="f">Validate</span>(<span onmouseout="hideTip(event, 'fs20', 35)" onmouseover="showTip(event, 'fs20', 35)" class="i">elm</span>) <span class="k">with</span> 
-        | <span onmouseout="hideTip(event, 'fs24', 36)" onmouseover="showTip(event, 'fs24', 36)" class="t">ValidationResult</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs25', 37)" onmouseover="showTip(event, 'fs25', 37)" class="p">Success</span> <span class="k">-&gt;</span> <span class="k">true</span>
-        | _ <span class="k">-&gt;</span> <span class="k">false</span>
-   
-    <span class="i">Check</span><span class="o">.</span><span class="i">Quick</span>(<span class="i">Prop</span><span class="o">.</span><span class="i">forAll</span> <span onmouseout="hideTip(event, 'fs17', 38)" onmouseover="showTip(event, 'fs17', 38)" class="i">arbFoo</span> <span onmouseout="hideTip(event, 'fs19', 39)" onmouseover="showTip(event, 'fs19', 39)" class="i">isValid</span>)
-    
+    <span class="i">Prop</span><span class="o">.</span><span class="i">forAll</span> <span onmouseout="hideTip(event, 'fs17', 27)" onmouseover="showTip(event, 'fs17', 27)" class="i">arbFoo</span> <span onmouseout="hideTip(event, 'fs16', 28)" onmouseover="showTip(event, 'fs16', 28)" class="i">schema</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs19', 29)" onmouseover="showTip(event, 'fs19', 29)" class="i">IsValid</span>
+    <span class="o">|&gt;</span> <span class="i">Check</span><span class="o">.</span><span class="i">Quick</span> 
 </code></pre></td>
 </tr>
 </table>
@@ -194,8 +184,8 @@ for each one, checks if the property holds; in this case it checks if the genera
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">var</span> <span class="i">schema</span> <span class="o">=</span> <span class="i">Schema</span><span class="o">.</span><span class="i">CreateFromUri</span>(<span class="s">&quot;foo.xsd&quot;</span>);
 <span class="i">var</span> <span class="i">arbFoo</span> <span class="o">=</span> <span class="i">schema</span><span class="o">.</span><span class="i">Arbitrary</span>(<span class="k">new</span> <span class="i">XmlQualifiedName</span>(<span class="s">&quot;foo&quot;</span>));
-
-<span class="i">Check</span><span class="o">.</span><span class="i">Quick</span>(<span class="i">Prop</span><span class="o">.</span><span class="i">ForAll</span>(<span class="i">arbFoo</span>, <span class="i">x</span> <span class="o">=&gt;</span> <span class="i">schema</span><span class="o">.</span><span class="i">Validate</span>(<span class="i">x</span>)<span class="o">.</span><span class="i">IsSuccess</span>));
+<span class="i">Prop</span><span class="o">.</span><span class="i">ForAll</span>(<span class="i">arbFoo</span>, <span class="i">x</span> <span class="o">=&gt;</span> <span class="i">schema</span><span class="o">.</span><span class="i">IsValid</span>(<span class="i">x</span>))
+    <span class="o">.</span><span class="i">QuickCheck</span>();
 </code></pre></td>
 </tr>
 </table>
@@ -230,9 +220,56 @@ comes to formatting details; but at least we should expect no loss of contents.
 You may be surprised to discover that for many schemas it is quite hard or impossible to get a suitable data binding class.
 This is due to the <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.105.1550&amp;rep=rep1&amp;type=pdf">X/O impedance mismatch</a>.</p>
 
-<p>One more use case is schema refinement. Evolving a schema ensuring backward compatibility means that all the
-elements valid according to the old version of the schema should also be valid with the new version.
+<p>One more use case is schema evolution. Evolving a schema ensuring backward compatibility means that all the
+elements valid according to the old version of the schema should also be valid for the new version.
 This can be checked with property based testing.</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">    <span class="k">open</span> <span onmouseout="hideTip(event, 'fs15', 30)" onmouseover="showTip(event, 'fs15', 30)" class="i">FsCheck</span>
+    
+    <span class="k">let</span> <span onmouseout="hideTip(event, 'fs20', 31)" onmouseover="showTip(event, 'fs20', 31)" class="i">oldSchema</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs6', 32)" onmouseover="showTip(event, 'fs6', 32)" class="t">Schema</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs14', 33)" onmouseover="showTip(event, 'fs14', 33)" class="f">CreateFromUri</span>(<span class="s">&quot;old.xsd&quot;</span>)
+    <span class="k">let</span> <span onmouseout="hideTip(event, 'fs21', 34)" onmouseover="showTip(event, 'fs21', 34)" class="i">newSchema</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs6', 35)" onmouseover="showTip(event, 'fs6', 35)" class="t">Schema</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs14', 36)" onmouseover="showTip(event, 'fs14', 36)" class="f">CreateFromUri</span>(<span class="s">&quot;new.xsd&quot;</span>)
+    <span class="k">let</span> <span onmouseout="hideTip(event, 'fs22', 37)" onmouseover="showTip(event, 'fs22', 37)" class="i">arbFooOld</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs20', 38)" onmouseover="showTip(event, 'fs20', 38)" class="i">oldSchema</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs18', 39)" onmouseover="showTip(event, 'fs18', 39)" class="f">Arbitrary</span>(<span onmouseout="hideTip(event, 'fs8', 40)" onmouseover="showTip(event, 'fs8', 40)" class="t">XmlQualifiedName</span>(<span class="s">&quot;foo&quot;</span>))
+
+    <span class="k">let</span> <span class="i">isStillValid</span> <span onmouseout="hideTip(event, 'fs23', 41)" onmouseover="showTip(event, 'fs23', 41)" class="i">elm</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs20', 42)" onmouseover="showTip(event, 'fs20', 42)" class="i">oldSchema</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs19', 43)" onmouseover="showTip(event, 'fs19', 43)" class="f">IsValid</span> <span onmouseout="hideTip(event, 'fs23', 44)" onmouseover="showTip(event, 'fs23', 44)" class="i">elm</span> <span class="o">==&gt;</span> <span onmouseout="hideTip(event, 'fs21', 45)" onmouseover="showTip(event, 'fs21', 45)" class="i">newSchema</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs19', 46)" onmouseover="showTip(event, 'fs19', 46)" class="f">IsValid</span> <span onmouseout="hideTip(event, 'fs23', 47)" onmouseover="showTip(event, 'fs23', 47)" class="i">elm</span>
+
+    <span class="i">Prop</span><span class="o">.</span><span class="i">forAll</span> <span onmouseout="hideTip(event, 'fs22', 48)" onmouseover="showTip(event, 'fs22', 48)" class="i">arbFooOld</span> <span class="i">isStillValid</span>
+    <span class="o">|&gt;</span> <span class="i">Check</span><span class="o">.</span><span class="i">Quick</span>
+</code></pre></td>
+</tr>
+</table>
+
+<p>The same in C# is:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">var</span> <span class="i">oldSchema</span> <span class="o">=</span> <span class="i">Schema</span><span class="o">.</span><span class="i">CreateFromUri</span>(<span class="s">&quot;old.xsd&quot;</span>);
+<span class="i">var</span> <span class="i">newSchema</span> <span class="o">=</span> <span class="i">Schema</span><span class="o">.</span><span class="i">CreateFromUri</span>(<span class="s">&quot;new.xsd&quot;</span>);
+<span class="i">var</span> <span class="i">arbFooOld</span> <span class="o">=</span> <span class="i">oldSchema</span><span class="o">.</span><span class="i">Arbitrary</span>(<span class="k">new</span> <span class="i">XmlQualifiedName</span>(<span class="s">&quot;foo&quot;</span>));
+<span class="i">Prop</span><span class="o">.</span><span class="i">ForAll</span>(<span class="i">arbFooOld</span>, <span class="i">x</span> <span class="o">=&gt;</span> <span class="i">oldSchema</span><span class="o">.</span><span class="i">IsValid</span>(<span class="i">x</span>)<span class="o">.</span><span class="i">When</span>(<span class="i">newSchema</span><span class="o">.</span><span class="i">IsValid</span>(<span class="i">x</span>)))
+    <span class="o">.</span><span class="i">QuickCheck</span>();
+</code></pre></td>
+</tr>
+</table>
+
+<p>In this example we also see in action a conditional property, 
+expressed in F# with the <code>==&gt;</code> operator and in C# with the fluent method <code>When</code>.
+Again, the concept of conditional property is well explained 
+in the <a href="https://fscheck.github.io/FsCheck/Properties.html">FsCheck documentation</a>.</p>
 
 <h3><a name="Creating-samples-for-the-XML-type-provider" class="anchor" href="#Creating-samples-for-the-XML-type-provider"><a href="#XMLTypeProvider">Creating samples for the XML type provider</a></a></h3>
 
@@ -254,18 +291,18 @@ Strongly typed access to xml documents is achieved with inference on samples. An
 <span class="l">11: </span>
 <span class="l">12: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">    <span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 40)" onmouseover="showTip(event, 'fs1', 40)" class="i">AntaniXml</span>
-    <span class="k">open</span> <span onmouseout="hideTip(event, 'fs3', 41)" onmouseover="showTip(event, 'fs3', 41)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs26', 42)" onmouseover="showTip(event, 'fs26', 42)" class="i">IO</span>
-    <span class="k">open</span> <span onmouseout="hideTip(event, 'fs27', 43)" onmouseover="showTip(event, 'fs27', 43)" class="i">FSharp</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs28', 44)" onmouseover="showTip(event, 'fs28', 44)" class="i">Data</span>
-    <span class="k">open</span> <span onmouseout="hideTip(event, 'fs3', 45)" onmouseover="showTip(event, 'fs3', 45)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs4', 46)" onmouseover="showTip(event, 'fs4', 46)" class="i">Xml</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs21', 47)" onmouseover="showTip(event, 'fs21', 47)" class="i">Linq</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">    <span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 49)" onmouseover="showTip(event, 'fs1', 49)" class="i">AntaniXml</span>
+    <span class="k">open</span> <span onmouseout="hideTip(event, 'fs3', 50)" onmouseover="showTip(event, 'fs3', 50)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs24', 51)" onmouseover="showTip(event, 'fs24', 51)" class="i">IO</span>
+    <span class="k">open</span> <span onmouseout="hideTip(event, 'fs25', 52)" onmouseover="showTip(event, 'fs25', 52)" class="i">FSharp</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs26', 53)" onmouseover="showTip(event, 'fs26', 53)" class="i">Data</span>
+    <span class="k">open</span> <span onmouseout="hideTip(event, 'fs3', 54)" onmouseover="showTip(event, 'fs3', 54)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs4', 55)" onmouseover="showTip(event, 'fs4', 55)" class="i">Xml</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs27', 56)" onmouseover="showTip(event, 'fs27', 56)" class="i">Linq</span>
 
-    <span class="k">let</span> <span onmouseout="hideTip(event, 'fs29', 48)" onmouseover="showTip(event, 'fs29', 48)" class="i">samples</span> <span class="o">=</span> 
-        <span onmouseout="hideTip(event, 'fs6', 49)" onmouseover="showTip(event, 'fs6', 49)" class="t">Schema</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs14', 50)" onmouseover="showTip(event, 'fs14', 50)" class="f">CreateFromUri</span>(<span class="s">@&quot;C:\temp\po.xsd&quot;</span>)
-              <span class="o">.</span><span class="f">Generator</span>(<span class="k">new</span> <span onmouseout="hideTip(event, 'fs8', 51)" onmouseover="showTip(event, 'fs8', 51)" class="t">XmlQualifiedName</span>(<span class="s">&quot;purchaseOrder&quot;</span>))
+    <span class="k">let</span> <span onmouseout="hideTip(event, 'fs28', 57)" onmouseover="showTip(event, 'fs28', 57)" class="i">samples</span> <span class="o">=</span> 
+        <span onmouseout="hideTip(event, 'fs6', 58)" onmouseover="showTip(event, 'fs6', 58)" class="t">Schema</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs14', 59)" onmouseover="showTip(event, 'fs14', 59)" class="f">CreateFromUri</span>(<span class="s">@&quot;C:\temp\po.xsd&quot;</span>)
+              <span class="o">.</span><span class="f">Generator</span>(<span class="k">new</span> <span onmouseout="hideTip(event, 'fs8', 60)" onmouseover="showTip(event, 'fs8', 60)" class="t">XmlQualifiedName</span>(<span class="s">&quot;purchaseOrder&quot;</span>))
               <span class="o">.</span><span class="f">Generate</span>(<span class="n">5</span>)
-    <span onmouseout="hideTip(event, 'fs30', 52)" onmouseover="showTip(event, 'fs30', 52)" class="t">XElement</span>(<span onmouseout="hideTip(event, 'fs31', 53)" onmouseover="showTip(event, 'fs31', 53)" class="t">XName</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs32', 54)" onmouseover="showTip(event, 'fs32', 54)" class="f">Get</span>(<span class="s">&quot;root&quot;</span>), <span onmouseout="hideTip(event, 'fs29', 55)" onmouseover="showTip(event, 'fs29', 55)" class="i">samples</span>)<span class="o">.</span><span class="f">Save</span>(<span class="s">@&quot;C:\temp\samples.xml&quot;</span>)
+    <span onmouseout="hideTip(event, 'fs29', 61)" onmouseover="showTip(event, 'fs29', 61)" class="t">XElement</span>(<span onmouseout="hideTip(event, 'fs30', 62)" onmouseover="showTip(event, 'fs30', 62)" class="t">XName</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs31', 63)" onmouseover="showTip(event, 'fs31', 63)" class="f">Get</span>(<span class="s">&quot;root&quot;</span>), <span onmouseout="hideTip(event, 'fs28', 64)" onmouseover="showTip(event, 'fs28', 64)" class="i">samples</span>)<span class="o">.</span><span class="f">Save</span>(<span class="s">@&quot;C:\temp\samples.xml&quot;</span>)
 
-    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs33', 56)" onmouseover="showTip(event, 'fs33', 56)" class="t">po</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs34', 57)" onmouseover="showTip(event, 'fs34', 57)" class="t">XmlProvider</span><span class="o">&lt;</span> <span class="s">@&quot;C:\temp\samples.xml&quot;</span>, <span class="i">SampleIsList</span> <span class="o">=</span> <span class="k">true</span><span class="o">&gt;</span>
+    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs32', 65)" onmouseover="showTip(event, 'fs32', 65)" class="t">po</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs33', 66)" onmouseover="showTip(event, 'fs33', 66)" class="t">XmlProvider</span><span class="o">&lt;</span> <span class="s">@&quot;C:\temp\samples.xml&quot;</span>, <span class="i">SampleIsList</span> <span class="o">=</span> <span class="k">true</span><span class="o">&gt;</span>
 </code></pre></td>
 </tr>
 </table>
@@ -329,22 +366,21 @@ Even if they are public they are not designed to be directly used by C# client c
 <div class="tip" id="fs16">val schema : Schema<br /><br />Full name: Tutorial.schema</div>
 <div class="tip" id="fs17">val arbFoo : FsCheck.Arbitrary&lt;Linq.XElement&gt;<br /><br />Full name: Tutorial.arbFoo</div>
 <div class="tip" id="fs18">member Schema.Arbitrary : elementName:XmlQualifiedName -&gt; FsCheck.Arbitrary&lt;Linq.XElement&gt;<br />member Schema.Arbitrary : elementName:XmlQualifiedName * customizations:CustomGenerators -&gt; FsCheck.Arbitrary&lt;Linq.XElement&gt;</div>
-<div class="tip" id="fs19">val isValid : elm:Linq.XElement -&gt; bool<br /><br />Full name: Tutorial.isValid</div>
-<div class="tip" id="fs20">val elm : Linq.XElement</div>
-<div class="tip" id="fs21">namespace System.Xml.Linq</div>
-<div class="tip" id="fs22">Multiple items<br />type XElement =<br />&#160;&#160;inherit XContainer<br />&#160;&#160;new : name:XName -&gt; XElement + 4 overloads<br />&#160;&#160;member AncestorsAndSelf : unit -&gt; IEnumerable&lt;XElement&gt; + 1 overload<br />&#160;&#160;member Attribute : name:XName -&gt; XAttribute<br />&#160;&#160;member Attributes : unit -&gt; IEnumerable&lt;XAttribute&gt; + 1 overload<br />&#160;&#160;member DescendantNodesAndSelf : unit -&gt; IEnumerable&lt;XNode&gt;<br />&#160;&#160;member DescendantsAndSelf : unit -&gt; IEnumerable&lt;XElement&gt; + 1 overload<br />&#160;&#160;member FirstAttribute : XAttribute<br />&#160;&#160;member GetDefaultNamespace : unit -&gt; XNamespace<br />&#160;&#160;member GetNamespaceOfPrefix : prefix:string -&gt; XNamespace<br />&#160;&#160;member GetPrefixOfNamespace : ns:XNamespace -&gt; string<br />&#160;&#160;...<br /><br />Full name: System.Xml.Linq.XElement<br /><br />--------------------<br />Linq.XElement(name: Linq.XName) : unit<br />Linq.XElement(other: Linq.XElement) : unit<br />Linq.XElement(other: Linq.XStreamingElement) : unit<br />Linq.XElement(name: Linq.XName, content: obj) : unit<br />Linq.XElement(name: Linq.XName, params content: obj []) : unit</div>
-<div class="tip" id="fs23">member Schema.Validate : element:Linq.XElement -&gt; ValidationResult<br />member Schema.Validate : element:string -&gt; ValidationResult</div>
-<div class="tip" id="fs24">type ValidationResult =<br />&#160;&#160;| Success<br />&#160;&#160;| Failure of XmlSchemaException<br />&#160;&#160;member Errors : seq&lt;XmlSchemaException&gt;<br /><br />Full name: AntaniXml.XsdFactory.ValidationResult</div>
-<div class="tip" id="fs25">union case ValidationResult.Success: ValidationResult</div>
-<div class="tip" id="fs26">namespace System.IO</div>
-<div class="tip" id="fs27">namespace FSharp</div>
-<div class="tip" id="fs28">namespace FSharp.Data</div>
-<div class="tip" id="fs29">val samples : XElement array<br /><br />Full name: Tutorial.samples</div>
-<div class="tip" id="fs30">Multiple items<br />type XElement =<br />&#160;&#160;inherit XContainer<br />&#160;&#160;new : name:XName -&gt; XElement + 4 overloads<br />&#160;&#160;member AncestorsAndSelf : unit -&gt; IEnumerable&lt;XElement&gt; + 1 overload<br />&#160;&#160;member Attribute : name:XName -&gt; XAttribute<br />&#160;&#160;member Attributes : unit -&gt; IEnumerable&lt;XAttribute&gt; + 1 overload<br />&#160;&#160;member DescendantNodesAndSelf : unit -&gt; IEnumerable&lt;XNode&gt;<br />&#160;&#160;member DescendantsAndSelf : unit -&gt; IEnumerable&lt;XElement&gt; + 1 overload<br />&#160;&#160;member FirstAttribute : XAttribute<br />&#160;&#160;member GetDefaultNamespace : unit -&gt; XNamespace<br />&#160;&#160;member GetNamespaceOfPrefix : prefix:string -&gt; XNamespace<br />&#160;&#160;member GetPrefixOfNamespace : ns:XNamespace -&gt; string<br />&#160;&#160;...<br /><br />Full name: System.Xml.Linq.XElement<br /><br />--------------------<br />XElement(name: XName) : unit<br />XElement(other: XElement) : unit<br />XElement(other: XStreamingElement) : unit<br />XElement(name: XName, content: obj) : unit<br />XElement(name: XName, params content: obj []) : unit</div>
-<div class="tip" id="fs31">type XName =<br />&#160;&#160;member Equals : obj:obj -&gt; bool<br />&#160;&#160;member GetHashCode : unit -&gt; int<br />&#160;&#160;member LocalName : string<br />&#160;&#160;member Namespace : XNamespace<br />&#160;&#160;member NamespaceName : string<br />&#160;&#160;member ToString : unit -&gt; string<br />&#160;&#160;static member Get : expandedName:string -&gt; XName + 1 overload<br /><br />Full name: System.Xml.Linq.XName</div>
-<div class="tip" id="fs32">XName.Get(expandedName: string) : XName<br />XName.Get(localName: string, namespaceName: string) : XName</div>
-<div class="tip" id="fs33">type po = XmlProvider&lt;...&gt;<br /><br />Full name: Tutorial.po</div>
-<div class="tip" id="fs34">type XmlProvider<br /><br />Full name: FSharp.Data.XmlProvider<br /><em><br /><br />&lt;summary&gt;Typed representation of a XML file.&lt;/summary&gt;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;Sample&#39;&gt;Location of a XML sample file or a string containing a sample XML document.&lt;/param&gt;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;SampleIsList&#39;&gt;If true, the children of the root in the sample document represent individual samples for the inference.&lt;/param&gt;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;Global&#39;&gt;If true, the inference unifies all XML elements with the same name.&lt;/param&gt;                     <br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;Culture&#39;&gt;The culture used for parsing numbers and dates. Defaults to the invariant culture.&lt;/param&gt;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;Encoding&#39;&gt;The encoding used to read the sample. You can specify either the character set name or the codepage number. Defaults to UTF8 for files, and to ISO-8859-1 the for HTTP requests, unless `charset` is specified in the `Content-Type` response header.&lt;/param&gt;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;ResolutionFolder&#39;&gt;A directory that is used when resolving relative file references (at design time and in hosted execution).&lt;/param&gt;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;EmbeddedResource&#39;&gt;When specified, the type provider first attempts to load the sample from the specified resource <br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;(e.g. &#39;MyCompany.MyAssembly, resource_name.xml&#39;). This is useful when exposing types generated by the type provider.&lt;/param&gt;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;InferTypesFromValues&#39;&gt;If true, turns on additional type inference from values. <br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;(e.g. type inference infers string values such as &quot;123&quot; as ints and values constrained to 0 and 1 as booleans. The XmlProvider also infers string values as JSON.)&lt;/param&gt;</em></div>
+<div class="tip" id="fs19">member Schema.IsValid : element:Linq.XElement -&gt; bool</div>
+<div class="tip" id="fs20">val oldSchema : Schema<br /><br />Full name: Tutorial.oldSchema</div>
+<div class="tip" id="fs21">val newSchema : Schema<br /><br />Full name: Tutorial.newSchema</div>
+<div class="tip" id="fs22">val arbFooOld : FsCheck.Arbitrary&lt;Linq.XElement&gt;<br /><br />Full name: Tutorial.arbFooOld</div>
+<div class="tip" id="fs23">val elm : &#39;a (requires &#39;a :&gt; Linq.XElement)</div>
+<div class="tip" id="fs24">namespace System.IO</div>
+<div class="tip" id="fs25">namespace FSharp</div>
+<div class="tip" id="fs26">namespace FSharp.Data</div>
+<div class="tip" id="fs27">namespace System.Xml.Linq</div>
+<div class="tip" id="fs28">val samples : XElement array<br /><br />Full name: Tutorial.samples</div>
+<div class="tip" id="fs29">Multiple items<br />type XElement =<br />&#160;&#160;inherit XContainer<br />&#160;&#160;new : name:XName -&gt; XElement + 4 overloads<br />&#160;&#160;member AncestorsAndSelf : unit -&gt; IEnumerable&lt;XElement&gt; + 1 overload<br />&#160;&#160;member Attribute : name:XName -&gt; XAttribute<br />&#160;&#160;member Attributes : unit -&gt; IEnumerable&lt;XAttribute&gt; + 1 overload<br />&#160;&#160;member DescendantNodesAndSelf : unit -&gt; IEnumerable&lt;XNode&gt;<br />&#160;&#160;member DescendantsAndSelf : unit -&gt; IEnumerable&lt;XElement&gt; + 1 overload<br />&#160;&#160;member FirstAttribute : XAttribute<br />&#160;&#160;member GetDefaultNamespace : unit -&gt; XNamespace<br />&#160;&#160;member GetNamespaceOfPrefix : prefix:string -&gt; XNamespace<br />&#160;&#160;member GetPrefixOfNamespace : ns:XNamespace -&gt; string<br />&#160;&#160;...<br /><br />Full name: System.Xml.Linq.XElement<br /><br />--------------------<br />XElement(name: XName) : unit<br />XElement(other: XElement) : unit<br />XElement(other: XStreamingElement) : unit<br />XElement(name: XName, content: obj) : unit<br />XElement(name: XName, params content: obj []) : unit</div>
+<div class="tip" id="fs30">type XName =<br />&#160;&#160;member Equals : obj:obj -&gt; bool<br />&#160;&#160;member GetHashCode : unit -&gt; int<br />&#160;&#160;member LocalName : string<br />&#160;&#160;member Namespace : XNamespace<br />&#160;&#160;member NamespaceName : string<br />&#160;&#160;member ToString : unit -&gt; string<br />&#160;&#160;static member Get : expandedName:string -&gt; XName + 1 overload<br /><br />Full name: System.Xml.Linq.XName</div>
+<div class="tip" id="fs31">XName.Get(expandedName: string) : XName<br />XName.Get(localName: string, namespaceName: string) : XName</div>
+<div class="tip" id="fs32">type po = XmlProvider&lt;...&gt;<br /><br />Full name: Tutorial.po</div>
+<div class="tip" id="fs33">type XmlProvider<br /><br />Full name: FSharp.Data.XmlProvider<br /><em><br /><br />&lt;summary&gt;Typed representation of a XML file.&lt;/summary&gt;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;Sample&#39;&gt;Location of a XML sample file or a string containing a sample XML document.&lt;/param&gt;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;SampleIsList&#39;&gt;If true, the children of the root in the sample document represent individual samples for the inference.&lt;/param&gt;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;Global&#39;&gt;If true, the inference unifies all XML elements with the same name.&lt;/param&gt;                     <br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;Culture&#39;&gt;The culture used for parsing numbers and dates. Defaults to the invariant culture.&lt;/param&gt;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;Encoding&#39;&gt;The encoding used to read the sample. You can specify either the character set name or the codepage number. Defaults to UTF8 for files, and to ISO-8859-1 the for HTTP requests, unless `charset` is specified in the `Content-Type` response header.&lt;/param&gt;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;ResolutionFolder&#39;&gt;A directory that is used when resolving relative file references (at design time and in hosted execution).&lt;/param&gt;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;EmbeddedResource&#39;&gt;When specified, the type provider first attempts to load the sample from the specified resource <br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;(e.g. &#39;MyCompany.MyAssembly, resource_name.xml&#39;). This is useful when exposing types generated by the type provider.&lt;/param&gt;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;InferTypesFromValues&#39;&gt;If true, turns on additional type inference from values. <br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;(e.g. type inference infers string values such as &quot;123&quot; as ints and values constrained to 0 and 1 as booleans. The XmlProvider also infers string values as JSON.)&lt;/param&gt;</em></div>
 
         </div>
         <div class="span3">
