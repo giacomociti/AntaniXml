@@ -65,8 +65,8 @@ FsCheck is well documented to get you started. This library provides `Arbitrary`
 so that you can feed tests with random (but valid) xml.
 
 While the first example shows the easiest way to use the library, there is another public API 
-allowing more control on random generators. FsCheck types are exposed so that you can directly
-use their advanced features. Examples are available in the rest of the documentation.
+allowing finer control on random generators. This API also exposes FsCheck types so that you can 
+directly use their advanced features. Examples are available in the rest of the documentation.
 
 
 

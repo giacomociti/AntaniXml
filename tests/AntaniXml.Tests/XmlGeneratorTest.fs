@@ -605,9 +605,9 @@ module CombinedConstraintsTest =
     [<Test>]
     let ``pattern and length facets may be combined`` () =  
         
-        let g1 = { gen = genPattern ["[1-9][0-9]"] 
-                   description = "pattern"
-                   prop = fun x -> 10 <= int x && int x <= 99 } 
+        let g1 = { Gen = genPattern ["[1-9][0-9]"] 
+                   Description = "pattern"
+                   Prop = fun x -> 10 <= int x && int x <= 99 } 
         let intGen = Arb.Default.Int32().Generator
         let g2 = boundedGen intGen LexicalMappings.XsdInt XsdFactory.emptyFacets 8 95 1
         let g3, probeResults = probeAndMix [g1; g2] 
@@ -627,10 +627,10 @@ module LexicalMappingsTest =
     open LexicalMappings
     
     let lexicalMappings lexMap equiv x = 
-        let lexicalRepresentations = lexMap.format x
+        let lexicalRepresentations = lexMap.Format x
         //printfn "%A -> %A" x lexicalRepresentations
         lexicalRepresentations 
-        |> List.map lexMap.parse
+        |> List.map lexMap.Parse
         |> List.forall (equiv x)
 
     [<Property>] 

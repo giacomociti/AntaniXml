@@ -11,14 +11,14 @@
     module Customization =
         /// FSharp friendly customizations
         type Maps = {
-            elementGens: Map<XsdName, Gen<XElement>>
-            elementMaps: Map<XsdName, XElement -> XElement>
-            complexGens: Map<XsdName, Gen<XElement>> 
-            complexMaps: Map<XsdName, XElement -> XElement> }
-            with static member empty = { elementGens = Map.empty
-                                         elementMaps = Map.empty
-                                         complexGens = Map.empty 
-                                         complexMaps = Map.empty }
+            ElementGens: Map<XsdName, Gen<XElement>>
+            ElementMaps: Map<XsdName, XElement -> XElement>
+            ComplexGens: Map<XsdName, Gen<XElement>> 
+            ComplexMaps: Map<XsdName, XElement -> XElement> }
+            with static member empty = { ElementGens = Map.empty
+                                         ElementMaps = Map.empty
+                                         ComplexGens = Map.empty 
+                                         ComplexMaps = Map.empty }
 
     open Customization
 
@@ -43,22 +43,22 @@
             this
 
         member internal this.ToMaps() =
-            {  elementGens = 
+            {  ElementGens = 
                     elementGenerators.Keys
                     |> Seq.map (fun x -> xsdName x, elementGenerators.Item x)
                     |> Map.ofSeq
-               elementMaps =
+               ElementMaps =
                     elementGeneratorMaps.Keys
                     |> Seq.map (fun x -> 
                         xsdName x,
                         let func = elementGeneratorMaps.Item x
                         fun x -> func.Invoke x)
                     |> Map.ofSeq
-               complexGens = 
+               ComplexGens = 
                     complexTypeGenerators.Keys
                     |> Seq.map (fun x -> xsdName x, complexTypeGenerators.Item x)
                     |> Map.ofSeq
-               complexMaps = 
+               ComplexMaps = 
                     complexTypeGeneratorMaps.Keys
                     |> Seq.map (fun x -> 
                         xsdName x,

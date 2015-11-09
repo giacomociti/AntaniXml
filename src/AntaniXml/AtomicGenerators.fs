@@ -51,16 +51,16 @@ module AtomicGenerators =
                              CultureTypes.SpecificCultures)
                 |> Array.filter ((<>) CultureInfo.InvariantCulture)
                 |> Array.map (fun x -> x.Name)
-        { gen = Gen.elements languages
-          description = "languages"
-          prop = fun _ -> true }
+        { Gen = Gen.elements languages
+          Description = "languages"
+          Prop = fun _ -> true }
         |> applyTextFacets facets Collapse
 
     // http://www.w3.org/TR/xmlschema-2/#boolean
     let genBool facets = 
-        { gen = Gen.elements [true; false]
-          description = "booleans"
-          prop = fun _ -> true }
+        { Gen = Gen.elements [true; false]
+          Description = "booleans"
+          Prop = fun _ -> true }
         |> lexMap XsdBool
         |> applyTextFacets facets Collapse
 
@@ -151,9 +151,9 @@ module AtomicGenerators =
     let genHexBinary facets =
         let min, max = lengthBounds facets 0 20
         let pattern = sprintf "([0-9a-fA-F]{2}){%i,%i}" min max
-        { gen = genPattern [pattern]
-          description = "hexBinary"
-          prop = hasPattern [pattern] }
+        { Gen = genPattern [pattern]
+          Description = "hexBinary"
+          Prop = hasPattern [pattern] }
         |> applyTextFacets facets Collapse
            
 
@@ -178,9 +178,9 @@ module AtomicGenerators =
     let genAnyURI facets = 
         //todo better pattern
         let pattern = "[a-zA-Z]+"
-        { gen = genPattern [pattern]
-          description = "anyURI"
-          prop = hasPattern [pattern] }
+        { Gen = genPattern [pattern]
+          Description = "anyURI"
+          Prop = hasPattern [pattern] }
         |> applyTextFacets facets Collapse
             
 
@@ -191,9 +191,9 @@ module AtomicGenerators =
     let genQName facets = 
         // we avoid generating the prefix because it should match a real prefix declaration
         let pattern = "[a-zA-Z]([a-zA-Z0-9_.])*"
-        { gen = genPattern [pattern]
-          description = "QName"
-          prop = hasPattern [pattern] }
+        { Gen = genPattern [pattern]
+          Description = "QName"
+          Prop = hasPattern [pattern] }
         |> applyTextFacets facets Collapse
 
 

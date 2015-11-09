@@ -60,17 +60,17 @@ module FacetBasedGenerators =
     let patternGen facets = 
         facets.Patterns 
         |> List.filter(fun x -> not x.IsEmpty)
-        |> List.map (fun x -> Some { gen  = genPattern x
-                                     description = sprintf "pattern %A" x
-                                     prop = hasPattern x })
+        |> List.map (fun x -> Some { Gen  = genPattern x
+                                     Description = sprintf "pattern %A" x
+                                     Prop = hasPattern x })
             
     let enumGen facets =
         match facets.Enumeration with
         | [] -> None
         | items -> 
-            Some { gen  = Gen.elements items
-                   description = sprintf "enum %A" items
-                   prop = fun x -> items |> List.exists ((=) x) }
+            Some { Gen  = Gen.elements items
+                   Description = sprintf "enum %A" items
+                   Prop = fun x -> items |> List.exists ((=) x) }
           
    
           
@@ -81,7 +81,7 @@ module FacetBasedGenerators =
         | None, Some min, None -> min, defaultMax
         | None, None, Some max -> defaultMin, max
         | None, Some min, Some max -> min, max
-        | _ as x -> failwithf "Unexpected combination of facets %A" x
+        | x -> failwithf "Unexpected combination of facets %A" x
 
     
                 
@@ -110,9 +110,9 @@ module FacetBasedGenerators =
             minLen <= len && len <= maxLen
 
         let v = lengthBounds facets defaultMin defaultMax
-        { gen = generator v
-          description = sprintf "length %A" v
-          prop = isBoundedString v }
+        { Gen = generator v
+          Description = sprintf "length %A" v
+          Prop = isBoundedString v }
 
     /// Creates a generator of values constrained to an interval determined by facets
     /// or by the default min and max provided. Epsilon allows adjusting bounds for
@@ -121,13 +121,13 @@ module FacetBasedGenerators =
     let inline boundedGen baseGen lex facets defaultMin defaultMax (epsilon: ^a) =
         let lowerConstraint, minValue =
             match facets.MinInclusive, facets.MinExclusive with
-            | Some x, None -> let v = lex.parse x in (fun x -> x >= v), v
-            | None, Some x -> let v = lex.parse x in (fun x -> x >  v), v + epsilon
+            | Some x, None -> let v = lex.Parse x in (fun x -> x >= v), v
+            | None, Some x -> let v = lex.Parse x in (fun x -> x >  v), v + epsilon
             | _            -> let v = defaultMin  in (fun x -> x >= v), v
         let upperConstraint, maxValue =
             match facets.MaxInclusive, facets.MaxExclusive with
-            | Some x, None -> let v = lex.parse x in (fun x -> x <= v), v
-            | None, Some x -> let v = lex.parse x in (fun x -> x <  v), v - epsilon
+            | Some x, None -> let v = lex.Parse x in (fun x -> x <= v), v
+            | None, Some x -> let v = lex.Parse x in (fun x -> x <  v), v - epsilon
             | _            -> let v = defaultMax  in (fun x -> x <= v), v
         // instead of failing we may decrease epsilon?
         if (minValue > maxValue) then failwith "range is too narrow"
@@ -137,9 +137,9 @@ module FacetBasedGenerators =
             elif not (upperConstraint x) then maxValue
             else x
 
-        { gen = baseGen 
-          description = "boundedGen" // todo better description
-          prop = fun x -> lowerConstraint x && upperConstraint x }
+        { Gen = baseGen 
+          Description = "boundedGen" // todo better description
+          Prop = fun x -> lowerConstraint x && upperConstraint x }
         |> map forceBounds
         |> lexMap lex
        

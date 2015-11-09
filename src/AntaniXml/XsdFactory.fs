@@ -30,7 +30,7 @@ module XsdFactory =
     let private getFacet<'a when 'a :> XmlSchemaFacet> (facets: seq<XmlSchemaFacet>) = 
         facets 
         |> Seq.tryFind(fun x -> x :? 'a) 
-        |> Option.map (fun x -> x.Value)   
+        |> Option.map (fun x -> x.Value)
         
     let emptyFacets = {
         Length         = None
@@ -40,11 +40,11 @@ module XsdFactory =
         MaxExclusive   = None
         MinInclusive   = None
         MinExclusive   = None
-        TotalDigits    = None  
+        TotalDigits    = None
         FractionDigits = None
         Enumeration    = []
         Patterns       = []
-        WhiteSpace     = None }          
+        WhiteSpace     = None }
 
     let xsdName (x: XmlQualifiedName) = 
         { Namespace = x.Namespace; Name = x.Name }
@@ -83,7 +83,7 @@ module XsdFactory =
                                 | [] -> []
                                 | xs -> [xs]
         WhiteSpace = facets |> getFacet<XmlSchemaWhiteSpaceFacet> 
-            |> Option.map (function                
+            |> Option.map (function
                 | "collapse" -> Collapse
                 | "preserve" -> Preserve
                 | "replace"  -> Replace
@@ -126,7 +126,7 @@ module XsdFactory =
             MaxExclusive   = maxExc
             MinInclusive   = minInc
             MinExclusive   = minExc
-            TotalDigits    = firstWithValue [derivedFacets.TotalDigits; baseFacets.TotalDigits]  
+            TotalDigits    = firstWithValue [derivedFacets.TotalDigits; baseFacets.TotalDigits]
             FractionDigits = firstWithValue [derivedFacets.FractionDigits; baseFacets.FractionDigits] 
             Enumeration    = 
                 match baseFacets.Enumeration, derivedFacets.Enumeration with
@@ -265,7 +265,7 @@ module XsdFactory =
                         grp.Items
                         |> ofType<XmlSchemaParticle> 
                         |> Seq.map xsdParticle
-                    // particles is not materialized to avoid  
+                    // particles is not materialized to avoid
                     // loops in case of recursive schemas
                     match grp with
                     | :? XmlSchemaAll      -> All (occurs, particles)

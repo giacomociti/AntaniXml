@@ -120,7 +120,7 @@ module XsdDomain =
     /// Most simple types are atomic, but there are also list and union types.
     /// To represent their nested structure we need recursive types.
     type XsdSimpleTypeVariety = 
-        | XsdAtom  of XsdAtomicType  
+        | XsdAtom  of XsdAtomicType
         /// in a value of type list, items are separated by a single space.
         /// A list of union is allowed, list of list not.
         | XsdList  of XsdSimpleType 

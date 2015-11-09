@@ -46,17 +46,17 @@ module XmlGenerator =
 //        | Entity // what about Entities?
         | Integer -> genInteger
         | NonPositiveInteger -> genNonPositiveInteger
-        | NegativeInteger -> genNegativeInteger     
+        | NegativeInteger -> genNegativeInteger
         | Long -> genLong 
-        | Int  -> genInt    
+        | Int  -> genInt
         | Short -> genShort 
         | Byte -> genByte
         | NonNegativeInteger -> genNonNegativeInteger
         | UnsignedLong -> genUnsignedLong 
-        | UnsignedInt -> genUnsignedInt  
+        | UnsignedInt -> genUnsignedInt
         | UnsignedShort -> genUnsignedShort
         | UnsignedByte -> genUnsignedByte
-        | PositiveInteger -> genPositiveInteger    
+        | PositiveInteger -> genPositiveInteger
     
     let rec genSimple = 
         memoize <| fun (simpleType: XsdSimpleType) ->
@@ -76,13 +76,13 @@ module XmlGenerator =
                 | Some x, _ | None, Some x -> x
                 | None, None -> min + 5 // we should use size instead?
             {
-                gen = gen {
+                Gen = gen {
                     let! n = Gen.choose(min, max)
                     return! genSimple t 
                             |> Gen.listOfLength n 
                             |> Gen.map (String.concat " ") } 
-                description = "list"
-                prop = fun x -> 
+                Description = "list"
+                Prop = fun x -> 
                     let actualLength = (x.Split [|' '|]).Length
                     minLen |> Option.forall (fun l -> actualLength >= l) &&
                     maxLen |> Option.forall (fun l -> actualLength <= l) &&
@@ -90,9 +90,9 @@ module XmlGenerator =
             } |> applyTextFacets simpleType.Facets WhitespaceHandling.Preserve
         | XsdUnion ts -> // Union facets: pattern and enumeration
             {
-                gen = ts |> List.map genSimple |> Gen.oneof
-                description = "union"
-                prop = fun _ -> true
+                Gen = ts |> List.map genSimple |> Gen.oneof
+                Description = "union"
+                Prop = fun _ -> true
             } |> applyTextFacets simpleType.Facets WhitespaceHandling.Preserve 
         
     let mapName (xsdName: XsdName) = XName.Get(xsdName.Name, xsdName.Namespace)
@@ -168,10 +168,10 @@ module XmlGenerator =
                 | false, [] -> gen()
                 | false, x  -> Gen.oneof <| gen() :: x
 
-            match customGenerators.elementGens.TryFind xsdElement.ElementName with
+            match customGenerators.ElementGens.TryFind xsdElement.ElementName with
             | Some g -> g
             | None -> 
-                match customGenerators.elementMaps.TryFind xsdElement.ElementName with
+                match customGenerators.ElementMaps.TryFind xsdElement.ElementName with
                 | Some mapping -> genWithSubst() |> Gen.map mapping 
                 | None -> genWithSubst()
 
@@ -179,8 +179,8 @@ module XmlGenerator =
         and genComplex complexType elmName size = 
             
             match complexType.ComplexTypeName with
-            | Some x when customGenerators.complexGens.ContainsKey x -> 
-                customGenerators.complexGens.Item x
+            | Some x when customGenerators.ComplexGens.ContainsKey x -> 
+                customGenerators.ComplexGens.Item x
                 |> Gen.map (fun x -> x.Name <- mapName elmName; x)
             | _ ->
           
@@ -205,7 +205,7 @@ module XmlGenerator =
                                 yield e
                             yield lastText } }
             let gen = 
-                gen {   
+                gen { 
                     let! nodes = genNodes
                     let! attrs = 
                         complexType.Attributes
@@ -216,8 +216,8 @@ module XmlGenerator =
                     return XElement(mapName elmName, items) } 
 
             match complexType.ComplexTypeName with
-            | Some x when customGenerators.complexMaps.ContainsKey x -> 
-                gen |> Gen.map(customGenerators.complexMaps.Item x)
+            | Some x when customGenerators.ComplexMaps.ContainsKey x -> 
+                gen |> Gen.map(customGenerators.ComplexMaps.Item x)
             | _ -> gen
 
         and genParticle xsdParticle size : Gen<seq<XElement>> = 

@@ -24,21 +24,21 @@ module LexicalMappings =
 
 
     /// values may have multiple representations
-    type LexMap<'a> = { parse: string -> 'a; format: 'a -> string list }
+    type LexMap<'a> = { Parse: string -> 'a; Format: 'a -> string list }
 
     // lexical mappings for built-in datatypes
 
-    let XsdString = { parse = id; format = fun x -> [x] }
+    let XsdString = { Parse = id; Format = fun x -> [x] }
 
     let XsdBool = 
-        { parse = XmlConvert.ToBoolean
-          format = function 
+        { Parse = XmlConvert.ToBoolean
+          Format = function 
             | true  -> ["true";  "1"] 
             | false -> ["false"; "0"] }
         
     let XsdDecimal =
-        { parse = XmlConvert.ToDecimal
-          format = fun x -> 
+        { Parse = XmlConvert.ToDecimal
+          Format = fun x -> 
             let canonical = XmlConvert.ToString x
             if x >= 0M 
             then [ canonical
@@ -47,121 +47,121 @@ module LexicalMappings =
             else [ canonical ] }
 
     let XsdFloat = 
-        { parse = XmlConvert.ToSingle 
-          format = fun x -> 
+        { Parse = XmlConvert.ToSingle 
+          Format = fun x -> 
             [ XmlConvert.ToString x
             // todo other representations (e.g. prefix +) 
             ] }
 
     let XsdDouble = 
-        { parse = XmlConvert.ToDouble
-          format = fun x -> 
+        { Parse = XmlConvert.ToDouble
+          Format = fun x -> 
             [ XmlConvert.ToString x
             // todo other representations (e.g. prefix +) 
             ] }
 
     let XsdDuration = 
-        { parse = XmlConvert.ToTimeSpan
-          format = fun x -> 
+        { Parse = XmlConvert.ToTimeSpan
+          Format = fun x -> 
             [ XmlConvert.ToString x
             // todo other representations 
             ] }
 
     let XsdDateTime = 
-        { parse = fun x ->
+        { Parse = fun x ->
             XmlConvert.ToDateTime(x, XmlDateTimeSerializationMode.RoundtripKind)
-          format = fun x -> 
+          Format = fun x -> 
             XmlDateTimeSerializationMode.GetValues(typeof<XmlDateTimeSerializationMode>) 
             |> Seq.cast<XmlDateTimeSerializationMode>
             |> Seq.map (fun serMode -> XmlConvert.ToString(x, serMode))
             |> List.ofSeq } // todo other representations?
         
     let XsdTime = 
-        { parse = fun x ->
+        { Parse = fun x ->
             XmlConvert.ToDateTime(x, XmlDateTimeSerializationMode.RoundtripKind)
-          format = fun x -> 
+          Format = fun x -> 
             [ XmlConvert.ToString(x, "HH:mm:ss.fff")
             // todo other representations?
             ] } 
 
     let XsdDate = 
-        { parse = fun x ->
+        { Parse = fun x ->
             XmlConvert.ToDateTime(x, XmlDateTimeSerializationMode.RoundtripKind)
-          format = fun x -> 
+          Format = fun x -> 
             [ XmlConvert.ToString(x, "yyyy-MM-dd")
             // todo other representations?
             ] } 
 
     let XsdGYearMonth = 
-        { parse = fun x ->
+        { Parse = fun x ->
             XmlConvert.ToDateTime(x, XmlDateTimeSerializationMode.RoundtripKind)
-          format = fun x -> 
+          Format = fun x -> 
             [ XmlConvert.ToString(x.Date, "yyyy-MM")
             // todo other representations?
             ] } 
 
     let XsdGYear = 
-        { parse = fun x ->
+        { Parse = fun x ->
             XmlConvert.ToDateTime(x, XmlDateTimeSerializationMode.RoundtripKind)
-          format = fun x -> 
+          Format = fun x -> 
             [ XmlConvert.ToString(x.Date, "yyyy")
             // todo other representations?
             ] } 
 
     let XsdGMonthDay = 
-        { parse = fun x ->
+        { Parse = fun x ->
             XmlConvert.ToDateTime(x, XmlDateTimeSerializationMode.RoundtripKind)
-          format = fun x -> 
+          Format = fun x -> 
             [ XmlConvert.ToString(x.Date, "--MM-dd")
             // todo other representations?
             ] } 
             
     let XsdGDay = 
-        { parse = fun x ->
+        { Parse = fun x ->
             XmlConvert.ToDateTime(x, XmlDateTimeSerializationMode.RoundtripKind)
-          format = fun x -> 
+          Format = fun x -> 
             [ XmlConvert.ToString(x.Date, "---dd")
             // todo other representations?
             ] } 
             
     let XsdGMonth = 
-        { parse = fun x ->
+        { Parse = fun x ->
             XmlConvert.ToDateTime(x, XmlDateTimeSerializationMode.RoundtripKind)
-          format = fun x -> 
+          Format = fun x -> 
             [ XmlConvert.ToString(x.Date, "--MM")
             // todo other representations?
             ] } 
 
     // we use strings
-    let XsdHexBinary = { parse = id; format = fun x -> [x] }
+    let XsdHexBinary = { Parse = id; Format = fun x -> [x] }
 
 
     // lexical mappings for primitive datatypes derived from built-in datatypes
 
     let XsdInt = 
-        { parse = XmlConvert.ToInt32
-          format = fun x -> 
+        { Parse = XmlConvert.ToInt32
+          Format = fun x -> 
             [ XmlConvert.ToString x
             // todo other representations?
             ] } 
 
     let XsdUInt = 
-        { parse = XmlConvert.ToUInt32
-          format = fun x -> 
+        { Parse = XmlConvert.ToUInt32
+          Format = fun x -> 
             [ XmlConvert.ToString x
             // todo other representations?
             ] } 
 
     let XsdLong = 
-        { parse = XmlConvert.ToInt64
-          format = fun x -> 
+        { Parse = XmlConvert.ToInt64
+          Format = fun x -> 
             [ XmlConvert.ToString x
             // todo other representations?
             ] } 
 
     let XsdULong = 
-        { parse = XmlConvert.ToUInt64
-          format = fun x -> 
+        { Parse = XmlConvert.ToUInt64
+          Format = fun x -> 
             [ XmlConvert.ToString x
             // todo other representations?
             ] } 

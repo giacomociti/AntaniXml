@@ -94,7 +94,7 @@ type Schema(xmlSchemaSet: XmlSchemaSet) =
     /// ## Parameters
     ///
     /// - `elementName` - Qualified name of the element for which to 
-    /// create an istance of `Arbitrary`. A corresponding global  
+    /// create an istance of `Arbitrary`. A corresponding global
     /// element definition is expected in the schema.
     /// - `customizations` - Custom generators to override the default behavior.
     member x.Arbitrary (elementName, (customizations: CustomGenerators)) =
@@ -102,7 +102,7 @@ type Schema(xmlSchemaSet: XmlSchemaSet) =
         if xmlSchemaSet.GlobalElements.Contains elementName then
             xsdElement (getElm elementName) getElm subst hasCycles
             |> genElementCustom (customizations.ToMaps()) 
-            |> FsCheck.Arb.fromGen  
+            |> FsCheck.Arb.fromGen
         else failwithf "element %A not found" elementName
 
     /// The object created embeds a random generator of xml elements and it is
@@ -111,7 +111,7 @@ type Schema(xmlSchemaSet: XmlSchemaSet) =
     /// ## Parameters
     ///
     /// - `elementName` - Qualified name of the element for which to 
-    /// create an istance of `Arbitrary`. A corresponding global  
+    /// create an istance of `Arbitrary`. A corresponding global
     /// element definition is expected in the schema.
     member x.Arbitrary elementName =
         x.Arbitrary (elementName, CustomGenerators())

@@ -7,10 +7,10 @@ module ConstrainedGenerators =
     open LexicalMappings
 
     /// a generator paired with a property satisfied by its samples
-    type ConstrGen<'a> = { gen: Gen<'a>; prop: 'a -> bool; description: string }
+    type ConstrGen<'a> = { Gen: Gen<'a>; Prop: 'a -> bool; Description: string }
 
     /// logical and of the properties of all generators in a list
-    let all gens x = gens |> List.forall (fun gen -> gen.prop x)
+    let all gens x = gens |> List.forall (fun gen -> gen.Prop x)
 
     /// each generator is paired with two lists: the first list with
     /// the samples satisfying the properties of all the generators,
@@ -23,7 +23,7 @@ module ConstrainedGenerators =
         gens
         |> List.map (fun x -> 
             x,
-            x.gen
+            x.Gen
             |> Gen.sample samplesSize samplesNo 
             |> List.partition (all gens))
         
@@ -34,7 +34,7 @@ module ConstrainedGenerators =
         | [] -> None, []
         | [x] -> // only an optimization, but really worth it:
            // with a single generator we do not bother with probing it
-           Some(x.gen) , []
+           Some(x.Gen) , []
         | _  ->
             let samplesNo, thresholdPercentage = 100, 60
             let probeResults = probe samplesNo gens
@@ -42,7 +42,7 @@ module ConstrainedGenerators =
             let best = probeResults |> List.maxBy totalSuccesses
             let mixedGenerator =
                 if (totalSuccesses best) * 100 / samplesNo > thresholdPercentage 
-                then (fst best).gen |> Gen.suchThat (all gens) |> Some
+                then (fst best).Gen |> Gen.suchThat (all gens) |> Some
                 else None
             mixedGenerator, probeResults
 
@@ -55,23 +55,23 @@ module ConstrainedGenerators =
 
     let tryParse parse x =
         try Some (parse x)
-        with :? System.FormatException -> None   
+        with :? System.FormatException -> None
 
     let canParse parse x =
         match tryParse parse x with None -> false | _ -> true
 
     let lexMap m g =
-        { gen = 
-            gen { let! x = g.gen
-                  let! f = x |> m.format |> Gen.elements 
+        { Gen = 
+            gen { let! x = g.Gen
+                  let! f = x |> m.Format |> Gen.elements 
                   return f } 
-          description = "lexical mappings of " + g.description
-          prop = fun x -> 
-            match tryParse m.parse x with
+          Description = "lexical mappings of " + g.Description
+          Prop = fun x -> 
+            match tryParse m.Parse x with
             | None -> false
-            | Some x -> g.prop x } 
+            | Some x -> g.Prop x } 
 
-    let map f g = { g with gen = g.gen |> Gen.map f }
+    let map f g = { g with Gen = g.Gen |> Gen.map f }
 
 
     
