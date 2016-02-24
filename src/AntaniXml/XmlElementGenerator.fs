@@ -129,10 +129,27 @@ type Schema(xmlSchemaSet: XmlSchemaSet) =
         let size = 5 // todo variable size
         { new IXmlElementGenerator with
               
-              member x.Generate n = 
-                  generator
-                  |> FsCheck.Gen.sample size n
-                  |> Array.ofList
+//              member x.Generate n = 
+//                  generator
+//                  |> FsCheck.Gen.sample size n
+//                  |> Array.ofList
               
+//              member x.GenerateInfinite() = 
+//                  seq { while true do yield! x.Generate 100 } }
+              
+              member x.Generate n = 
+                  x.GenerateInfinite()
+                  |> Seq.take n
+                  |> Array.ofSeq
+
               member x.GenerateInfinite() = 
-                  seq { while true do yield! x.Generate 100 } }
+                  seq { while true do 
+                            yield! (FsCheck.Gen.sample 50 10 generator)
+                            yield! (FsCheck.Gen.sample 10 10 generator)
+                            yield! (FsCheck.Gen.sample 90 10 generator)
+                            yield! (FsCheck.Gen.sample 20 10 generator)
+                            yield! (FsCheck.Gen.sample 80 10 generator)
+                            yield! (FsCheck.Gen.sample 40 10 generator)
+                            yield! (FsCheck.Gen.sample 60 10 generator)
+                            yield! (FsCheck.Gen.sample 50 10 generator)
+                            yield! (FsCheck.Gen.sample 10000 5 generator) } }

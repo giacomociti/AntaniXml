@@ -109,7 +109,8 @@ module XmlGenerator =
         | Optional -> Gen.oneof [ attrGen; Gen.constant None ]
         | _ -> Gen.constant None
 
-    let decreaseSize = float >> log >> ceil >> int
+    //let decreaseSize = float >> log >> ceil >> int
+    let decreaseSize x = x / 2
 
 
     let genElementCustom (customGenerators: Customization.Maps) xsdElement = 
