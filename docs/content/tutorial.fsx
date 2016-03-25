@@ -33,7 +33,7 @@ little xsd snippets:
         </xs:schema>""" 
 
     Schema.CreateFromText(xsdText)
-          .Generator(XmlQualifiedName("e1"))
+          .Generator(XmlQualifiedName "e1")
           .GenerateInfinite()
           |> Seq.take 5
           |> Seq.iter (printfn "%A")
@@ -76,7 +76,7 @@ For property based testing we can get instances of the
 
 *)
     let arb = Schema.CreateFromUri("po.xsd")
-                    .Arbitrary(XmlQualifiedName("purchaseOrder"))
+                    .Arbitrary(XmlQualifiedName "purchaseOrder")
     
 
 (**
@@ -102,8 +102,8 @@ for each one, checks if the property holds; in this case it checks if the genera
 *)
     open FsCheck
     
-    let schema = Schema.CreateFromUri("foo.xsd")
-    let arbFoo = schema.Arbitrary(XmlQualifiedName("foo"))
+    let schema = Schema.CreateFromUri "foo.xsd"
+    let arbFoo = schema.Arbitrary(XmlQualifiedName "foo")
     Prop.forAll arbFoo schema.IsValid
     |> Check.Quick 
 
@@ -150,9 +150,9 @@ This can be checked with property based testing.
 *)
     open FsCheck
     
-    let oldSchema = Schema.CreateFromUri("old.xsd")
-    let newSchema = Schema.CreateFromUri("new.xsd")
-    let arbFooOld = oldSchema.Arbitrary(XmlQualifiedName("foo"))
+    let oldSchema = Schema.CreateFromUri "old.xsd"
+    let newSchema = Schema.CreateFromUri "new.xsd"
+    let arbFooOld = oldSchema.Arbitrary(XmlQualifiedName "foo")
 
     let isStillValid elm = oldSchema.IsValid elm ==> newSchema.IsValid elm
 
@@ -196,9 +196,9 @@ Strongly typed access to xml documents is achieved with inference on samples. An
 
     let samples = 
         Schema.CreateFromUri(@"C:\temp\po.xsd")
-              .Generator(new XmlQualifiedName("purchaseOrder"))
+              .Generator(new XmlQualifiedName "purchaseOrder")
               .Generate(5)
-    XElement(XName.Get("root"), samples).Save(@"C:\temp\samples.xml")
+    XElement(XName.Get "root", samples).Save(@"C:\temp\samples.xml")
 
     type po = XmlProvider< @"C:\temp\samples.xml", SampleIsList = true>
 

@@ -42,7 +42,7 @@ open System.Xml
 
 let samples = 
     Schema.CreateFromUri("po.xsd")
-          .Generator(XmlQualifiedName("purchaseOrder"))
+          .Generator(XmlQualifiedName "purchaseOrder")
           .Generate(10)
 
 (**

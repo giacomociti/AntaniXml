@@ -30,27 +30,26 @@ let xsdText = """
 Customizations
 ========================
 
-This article is about how you can customize the generated output.
-
+For some schemas the generator may produce something not correct (for example ignoring identity constraints).
+Or maybe the generated values simply look ugly to you (you may want meaningful words instead of random gibberish).
+There are a few options to customize  the generated output:
 
 ### Simply change the output
 
-For some schemas the generator may produce something not correct (for example ignoring identity constraints).
-Or maybe the generated values simply look ugly to you (you may want meaningful words instead of random gibberish).
-Obviously one option is to change the produced output by using XSLT or by any other means. Since the output is
-an `XElement`, the `System.Xml.Linq` API is already well suited for this task:
+Obviously one option is to change the produced output by using XSLT or by any other means. 
+For example since the output is an `XElement`, the `System.Xml.Linq` API is already well suited for this task:
 
 *)
 
 let samples = 
     Schema.CreateFromUri("foo.xsd")
-          .Generator(XmlQualifiedName("e1"))
+          .Generator(XmlQualifiedName "e1")
           .Generate(10)
 
 samples
 |> Seq.mapi (fun i xml ->
-    for bar in xml.Descendants(XName.Get("bar")) do
-        bar.Attribute(XName.Get("id")).Value <- i.ToString()
+    for bar in xml.Descendants(XName.Get "bar") do
+        bar.Attribute(XName.Get "id").Value <- i.ToString()
     xml)      
 |> Seq.iter (printfn "%A") 
     
@@ -125,16 +124,16 @@ Let's give a few concrete examples. In the following we'll be using this schema
         </xs:element>
     </xs:schema>
 
-First we show a custmization for a complex type:
+First we show a customization for a complex type:
 
 *)
 
 open FsCheck
 
-let foo = XmlQualifiedName("foo")
-let barType = XmlQualifiedName("barType")
+let foo = XmlQualifiedName "foo"
+let barType = XmlQualifiedName "barType"
 let toUpper (xml: XElement) = 
-    let id = xml.Attribute(XName.Get("id"))
+    let id = xml.Attribute(XName.Get "id")
     id.Value <- id.Value.ToUpper() 
     xml
 let cust = CustomGenerators().ForComplexType(barType, toUpper)
@@ -159,8 +158,10 @@ The equivalent C# code is the following:
     var samples = Gen.Sample(5, 1, arb.Generator);
     samples.ToList().ForEach(Console.WriteLine);
 
-The main thing to notice is the `CustomGenerators` class and its method accepting a mapping
+The main thing to notice is the `CustomGenerators` type and its `ForComplexType` method accepting a mapping
 for transforming in uppercase the value of the `id` attribute for all the elements of type `barType`.
+This example is about customizing the default generator with a custom mapping.
+Later we also show an example of replacing a custom generator with one created from scratch.
 The `Arbitrary` instance created embeds a generator, and `Gen.sample` is the FsCheck method to create
 samples, specifying a size (5 in the example but let's ignore the concept of size for now)
 and the number of samples to create.
@@ -179,14 +180,14 @@ the customization.
 
 In the next example instead we are creating a generator from scratch using the FsCheck combinators.
 Starting from a set of fixed string values, a generator ranging over such a set is built and then mapped
-to another one that wraps the random string values in xml element.
+to another one that wraps the random string values in xml elements.
 
 *)
 
-let baz = XmlQualifiedName("baz")
+let baz = XmlQualifiedName "baz"
 let abcGen = 
     Gen.elements ["a"; "b"; "c"] 
-    |> Gen.map (fun x -> XElement(XName.Get("baz"), x))
+    |> Gen.map (fun x -> XElement(XName.Get "baz", x))
 let cus = CustomGenerators().ForElement(baz, abcGen)
 Schema.CreateFromText(xsdText).Arbitrary(foo, cus).Generator
 |> Gen.sample 5 2
