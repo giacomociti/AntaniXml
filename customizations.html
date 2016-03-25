@@ -35,14 +35,14 @@
           
 <h1><a name="Customizations" class="anchor" href="#Customizations">Customizations</a></h1>
 
-<p>This article is about how you can customize the generated output.</p>
+<p>For some schemas the generator may produce something not correct (for example ignoring identity constraints).
+Or maybe the generated values simply look ugly to you (you may want meaningful words instead of random gibberish).
+There are a few options to customize  the generated output:</p>
 
 <h3><a name="Simply-change-the-output" class="anchor" href="#Simply-change-the-output">Simply change the output</a></h3>
 
-<p>For some schemas the generator may produce something not correct (for example ignoring identity constraints).
-Or maybe the generated values simply look ugly to you (you may want meaningful words instead of random gibberish).
-Obviously one option is to change the produced output by using XSLT or by any other means. Since the output is
-an <code>XElement</code>, the <code>System.Xml.Linq</code> API is already well suited for this task:</p>
+<p>Obviously one option is to change the produced output by using XSLT or by any other means. 
+For example since the output is an <code>XElement</code>, the <code>System.Xml.Linq</code> API is already well suited for this task:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
 <span class="l"> 2: </span>
@@ -59,13 +59,13 @@ an <code>XElement</code>, the <code>System.Xml.Linq</code> API is already well s
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs6', 8)" onmouseover="showTip(event, 'fs6', 8)" class="i">samples</span> <span class="o">=</span> 
     <span onmouseout="hideTip(event, 'fs7', 9)" onmouseover="showTip(event, 'fs7', 9)" class="t">Schema</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs8', 10)" onmouseover="showTip(event, 'fs8', 10)" class="f">CreateFromUri</span>(<span class="s">&quot;foo.xsd&quot;</span>)
-          <span class="o">.</span><span class="f">Generator</span>(<span onmouseout="hideTip(event, 'fs9', 11)" onmouseover="showTip(event, 'fs9', 11)" class="t">XmlQualifiedName</span>(<span class="s">&quot;e1&quot;</span>))
+          <span class="o">.</span><span class="f">Generator</span>(<span onmouseout="hideTip(event, 'fs9', 11)" onmouseover="showTip(event, 'fs9', 11)" class="t">XmlQualifiedName</span> <span class="s">&quot;e1&quot;</span>)
           <span class="o">.</span><span class="f">Generate</span>(<span class="n">10</span>)
 
 <span onmouseout="hideTip(event, 'fs6', 12)" onmouseover="showTip(event, 'fs6', 12)" class="i">samples</span>
 <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs10', 13)" onmouseover="showTip(event, 'fs10', 13)" class="t">Seq</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs11', 14)" onmouseover="showTip(event, 'fs11', 14)" class="f">mapi</span> (<span class="k">fun</span> <span onmouseout="hideTip(event, 'fs12', 15)" onmouseover="showTip(event, 'fs12', 15)" class="i">i</span> <span onmouseout="hideTip(event, 'fs13', 16)" onmouseover="showTip(event, 'fs13', 16)" class="i">xml</span> <span class="k">-&gt;</span>
-    <span class="k">for</span> <span onmouseout="hideTip(event, 'fs14', 17)" onmouseover="showTip(event, 'fs14', 17)" class="i">bar</span> <span class="k">in</span> <span onmouseout="hideTip(event, 'fs13', 18)" onmouseover="showTip(event, 'fs13', 18)" class="i">xml</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs15', 19)" onmouseover="showTip(event, 'fs15', 19)" class="f">Descendants</span>(<span onmouseout="hideTip(event, 'fs16', 20)" onmouseover="showTip(event, 'fs16', 20)" class="t">XName</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs17', 21)" onmouseover="showTip(event, 'fs17', 21)" class="f">Get</span>(<span class="s">&quot;bar&quot;</span>)) <span class="k">do</span>
-        <span onmouseout="hideTip(event, 'fs14', 22)" onmouseover="showTip(event, 'fs14', 22)" class="i">bar</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs18', 23)" onmouseover="showTip(event, 'fs18', 23)" class="f">Attribute</span>(<span onmouseout="hideTip(event, 'fs16', 24)" onmouseover="showTip(event, 'fs16', 24)" class="t">XName</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs17', 25)" onmouseover="showTip(event, 'fs17', 25)" class="f">Get</span>(<span class="s">&quot;id&quot;</span>))<span class="o">.</span><span class="i">Value</span> <span class="o">&lt;-</span> <span onmouseout="hideTip(event, 'fs12', 26)" onmouseover="showTip(event, 'fs12', 26)" class="i">i</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs19', 27)" onmouseover="showTip(event, 'fs19', 27)" class="f">ToString</span>()
+    <span class="k">for</span> <span onmouseout="hideTip(event, 'fs14', 17)" onmouseover="showTip(event, 'fs14', 17)" class="i">bar</span> <span class="k">in</span> <span onmouseout="hideTip(event, 'fs13', 18)" onmouseover="showTip(event, 'fs13', 18)" class="i">xml</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs15', 19)" onmouseover="showTip(event, 'fs15', 19)" class="f">Descendants</span>(<span onmouseout="hideTip(event, 'fs16', 20)" onmouseover="showTip(event, 'fs16', 20)" class="t">XName</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs17', 21)" onmouseover="showTip(event, 'fs17', 21)" class="f">Get</span> <span class="s">&quot;bar&quot;</span>) <span class="k">do</span>
+        <span onmouseout="hideTip(event, 'fs14', 22)" onmouseover="showTip(event, 'fs14', 22)" class="i">bar</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs18', 23)" onmouseover="showTip(event, 'fs18', 23)" class="f">Attribute</span>(<span onmouseout="hideTip(event, 'fs16', 24)" onmouseover="showTip(event, 'fs16', 24)" class="t">XName</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs17', 25)" onmouseover="showTip(event, 'fs17', 25)" class="f">Get</span> <span class="s">&quot;id&quot;</span>)<span class="o">.</span><span class="i">Value</span> <span class="o">&lt;-</span> <span onmouseout="hideTip(event, 'fs12', 26)" onmouseover="showTip(event, 'fs12', 26)" class="i">i</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs19', 27)" onmouseover="showTip(event, 'fs19', 27)" class="f">ToString</span>()
     <span onmouseout="hideTip(event, 'fs13', 28)" onmouseover="showTip(event, 'fs13', 28)" class="i">xml</span>)      
 <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs10', 29)" onmouseover="showTip(event, 'fs10', 29)" class="t">Seq</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs20', 30)" onmouseover="showTip(event, 'fs20', 30)" class="f">iter</span> (<span onmouseout="hideTip(event, 'fs21', 31)" onmouseover="showTip(event, 'fs21', 31)" class="f">printfn</span> <span class="s">&quot;</span><span class="pf">%A</span><span class="s">&quot;</span>) 
     
@@ -176,7 +176,7 @@ both element definitions.</p>
 <span class="k">&lt;/</span><span class="i">xs:schema</span><span class="k">&gt;</span>
 </code></pre></td></tr></table>
 
-<p>First we show a custmization for a complex type:</p>
+<p>First we show a customization for a complex type:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
 <span class="l"> 2: </span>
@@ -193,10 +193,10 @@ both element definitions.</p>
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs22', 32)" onmouseover="showTip(event, 'fs22', 32)" class="i">FsCheck</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs23', 33)" onmouseover="showTip(event, 'fs23', 33)" class="i">foo</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 34)" onmouseover="showTip(event, 'fs9', 34)" class="t">XmlQualifiedName</span>(<span class="s">&quot;foo&quot;</span>)
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs24', 35)" onmouseover="showTip(event, 'fs24', 35)" class="i">barType</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 36)" onmouseover="showTip(event, 'fs9', 36)" class="t">XmlQualifiedName</span>(<span class="s">&quot;barType&quot;</span>)
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs23', 33)" onmouseover="showTip(event, 'fs23', 33)" class="i">foo</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 34)" onmouseover="showTip(event, 'fs9', 34)" class="t">XmlQualifiedName</span> <span class="s">&quot;foo&quot;</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs24', 35)" onmouseover="showTip(event, 'fs24', 35)" class="i">barType</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 36)" onmouseover="showTip(event, 'fs9', 36)" class="t">XmlQualifiedName</span> <span class="s">&quot;barType&quot;</span>
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs25', 37)" onmouseover="showTip(event, 'fs25', 37)" class="f">toUpper</span> (<span onmouseout="hideTip(event, 'fs13', 38)" onmouseover="showTip(event, 'fs13', 38)" class="i">xml</span><span class="o">:</span> <span onmouseout="hideTip(event, 'fs26', 39)" onmouseover="showTip(event, 'fs26', 39)" class="t">XElement</span>) <span class="o">=</span> 
-    <span class="k">let</span> <span onmouseout="hideTip(event, 'fs27', 40)" onmouseover="showTip(event, 'fs27', 40)" class="i">id</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs13', 41)" onmouseover="showTip(event, 'fs13', 41)" class="i">xml</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs18', 42)" onmouseover="showTip(event, 'fs18', 42)" class="f">Attribute</span>(<span onmouseout="hideTip(event, 'fs16', 43)" onmouseover="showTip(event, 'fs16', 43)" class="t">XName</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs17', 44)" onmouseover="showTip(event, 'fs17', 44)" class="f">Get</span>(<span class="s">&quot;id&quot;</span>))
+    <span class="k">let</span> <span onmouseout="hideTip(event, 'fs27', 40)" onmouseover="showTip(event, 'fs27', 40)" class="i">id</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs13', 41)" onmouseover="showTip(event, 'fs13', 41)" class="i">xml</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs18', 42)" onmouseover="showTip(event, 'fs18', 42)" class="f">Attribute</span>(<span onmouseout="hideTip(event, 'fs16', 43)" onmouseover="showTip(event, 'fs16', 43)" class="t">XName</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs17', 44)" onmouseover="showTip(event, 'fs17', 44)" class="f">Get</span> <span class="s">&quot;id&quot;</span>)
     <span onmouseout="hideTip(event, 'fs27', 45)" onmouseover="showTip(event, 'fs27', 45)" class="i">id</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs28', 46)" onmouseover="showTip(event, 'fs28', 46)" class="i">Value</span> <span class="o">&lt;-</span> <span onmouseout="hideTip(event, 'fs27', 47)" onmouseover="showTip(event, 'fs27', 47)" class="i">id</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs28', 48)" onmouseover="showTip(event, 'fs28', 48)" class="i">Value</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs29', 49)" onmouseover="showTip(event, 'fs29', 49)" class="f">ToUpper</span>() 
     <span onmouseout="hideTip(event, 'fs13', 50)" onmouseover="showTip(event, 'fs13', 50)" class="i">xml</span>
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs30', 51)" onmouseover="showTip(event, 'fs30', 51)" class="i">cust</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs31', 52)" onmouseover="showTip(event, 'fs31', 52)" class="t">CustomGenerators</span>()<span class="o">.</span><span class="f">ForComplexType</span>(<span onmouseout="hideTip(event, 'fs24', 53)" onmouseover="showTip(event, 'fs24', 53)" class="i">barType</span>, <span onmouseout="hideTip(event, 'fs25', 54)" onmouseover="showTip(event, 'fs25', 54)" class="f">toUpper</span>)
@@ -238,8 +238,10 @@ both element definitions.</p>
 </tr>
 </table>
 
-<p>The main thing to notice is the <code>CustomGenerators</code> class and its method accepting a mapping
+<p>The main thing to notice is the <code>CustomGenerators</code> type and its <code>ForComplexType</code> method accepting a mapping
 for transforming in uppercase the value of the <code>id</code> attribute for all the elements of type <code>barType</code>.
+This example is about customizing the default generator with a custom mapping.
+Later we also show an example of replacing a custom generator with one created from scratch.
 The <code>Arbitrary</code> instance created embeds a generator, and <code>Gen.sample</code> is the FsCheck method to create
 samples, specifying a size (5 in the example but let's ignore the concept of size for now)
 and the number of samples to create.
@@ -262,7 +264,7 @@ the customization.</p>
 
 <p>In the next example instead we are creating a generator from scratch using the FsCheck combinators.
 Starting from a set of fixed string values, a generator ranging over such a set is built and then mapped
-to another one that wraps the random string values in xml element.</p>
+to another one that wraps the random string values in xml elements.</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
@@ -273,10 +275,10 @@ to another one that wraps the random string values in xml element.</p>
 <span class="l">7: </span>
 <span class="l">8: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs34', 66)" onmouseover="showTip(event, 'fs34', 66)" class="i">baz</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 67)" onmouseover="showTip(event, 'fs9', 67)" class="t">XmlQualifiedName</span>(<span class="s">&quot;baz&quot;</span>)
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs34', 66)" onmouseover="showTip(event, 'fs34', 66)" class="i">baz</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 67)" onmouseover="showTip(event, 'fs9', 67)" class="t">XmlQualifiedName</span> <span class="s">&quot;baz&quot;</span>
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs35', 68)" onmouseover="showTip(event, 'fs35', 68)" class="i">abcGen</span> <span class="o">=</span> 
     <span class="i">Gen</span><span class="o">.</span><span class="i">elements</span> [<span class="s">&quot;a&quot;</span>; <span class="s">&quot;b&quot;</span>; <span class="s">&quot;c&quot;</span>] 
-    <span class="o">|&gt;</span> <span class="i">Gen</span><span class="o">.</span><span class="i">map</span> (<span class="k">fun</span> <span class="i">x</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs26', 69)" onmouseover="showTip(event, 'fs26', 69)" class="i">XElement</span>(<span onmouseout="hideTip(event, 'fs16', 70)" onmouseover="showTip(event, 'fs16', 70)" class="i">XName</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs17', 71)" onmouseover="showTip(event, 'fs17', 71)" class="i">Get</span>(<span class="s">&quot;baz&quot;</span>), <span class="i">x</span>))
+    <span class="o">|&gt;</span> <span class="i">Gen</span><span class="o">.</span><span class="i">map</span> (<span class="k">fun</span> <span class="i">x</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs26', 69)" onmouseover="showTip(event, 'fs26', 69)" class="i">XElement</span>(<span onmouseout="hideTip(event, 'fs16', 70)" onmouseover="showTip(event, 'fs16', 70)" class="i">XName</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs17', 71)" onmouseover="showTip(event, 'fs17', 71)" class="i">Get</span> <span class="s">&quot;baz&quot;</span>, <span class="i">x</span>))
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs36', 72)" onmouseover="showTip(event, 'fs36', 72)" class="i">cus</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs31', 73)" onmouseover="showTip(event, 'fs31', 73)" class="t">CustomGenerators</span>()<span class="o">.</span><span class="f">ForElement</span>(<span onmouseout="hideTip(event, 'fs34', 74)" onmouseover="showTip(event, 'fs34', 74)" class="i">baz</span>, <span onmouseout="hideTip(event, 'fs35', 75)" onmouseover="showTip(event, 'fs35', 75)" class="i">abcGen</span>)
 <span onmouseout="hideTip(event, 'fs7', 76)" onmouseover="showTip(event, 'fs7', 76)" class="t">Schema</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs32', 77)" onmouseover="showTip(event, 'fs32', 77)" class="f">CreateFromText</span>(<span onmouseout="hideTip(event, 'fs5', 78)" onmouseover="showTip(event, 'fs5', 78)" class="i">xsdText</span>)<span class="o">.</span><span class="f">Arbitrary</span>(<span onmouseout="hideTip(event, 'fs23', 79)" onmouseover="showTip(event, 'fs23', 79)" class="i">foo</span>, <span onmouseout="hideTip(event, 'fs36', 80)" onmouseover="showTip(event, 'fs36', 80)" class="i">cus</span>)<span class="o">.</span><span class="i">Generator</span>
 <span class="o">|&gt;</span> <span class="i">Gen</span><span class="o">.</span><span class="i">sample</span> <span class="n">5</span> <span class="n">2</span>
