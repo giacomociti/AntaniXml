@@ -1,3 +1,7 @@
+#### 0.7.0 - March 23 2016
+* increased size of samples 
+
+
 #### 0.6.0 - October 09 2015
 * abstract elements support
 
