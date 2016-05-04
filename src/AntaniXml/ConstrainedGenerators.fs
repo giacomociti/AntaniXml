@@ -29,12 +29,12 @@ module ConstrainedGenerators =
         
     /// mix generators by choosing the best (if can be reasonably built)
     /// and enforcing on it also the properties of the other ones
-    let probeAndMix gens =
+    let mix gens =
         match gens with
-        | [] -> None, []
+        | [] -> failwith "unexpected empty list of generators"
         | [x] -> // only an optimization, but really worth it:
            // with a single generator we do not bother with probing it
-           Some(x.Gen) , []
+           x.Gen //, []
         | _  ->
             let samplesNo, thresholdPercentage = 100, 60
             let probeResults = probe samplesNo gens
@@ -42,15 +42,20 @@ module ConstrainedGenerators =
             let best = probeResults |> List.maxBy totalSuccesses
             let mixedGenerator =
                 if (totalSuccesses best) * 100 / samplesNo > thresholdPercentage 
-                then (fst best).Gen |> Gen.suchThat (all gens) |> Some
-                else None
-            mixedGenerator, probeResults
+                then (fst best).Gen |> Gen.suchThat (all gens)
+                else 
+//                    gens 
+//                    |> List.map (fun g -> g.Description) 
+//                    |> printfn "cannot mix constraints for %A" 
+                    (fst best).Gen // likely invalid
+                    //None
+            mixedGenerator//, probeResults
 
 
-    let mix gens =
-        match probeAndMix gens with
-        | Some g, _ -> g
-        | None, ranks -> failwithf "cannot mix constraints: %A" ranks
+//    let mix gens =
+//        match probeAndMix gens with
+//        | Some g, _ -> g
+//        | None, ranks -> failwithf "cannot mix constraints: %A" ranks
 
 
     let tryParse parse x =

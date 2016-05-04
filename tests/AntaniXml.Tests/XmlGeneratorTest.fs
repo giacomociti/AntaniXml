@@ -610,10 +610,11 @@ module CombinedConstraintsTest =
                    Prop = fun x -> 10 <= int x && int x <= 99 } 
         let intGen = Arb.Default.Int32().Generator
         let g2 = boundedGen intGen LexicalMappings.XsdInt XsdFactory.emptyFacets 8 95 1
-        let g3, probeResults = probeAndMix [g1; g2] 
+        //let g3, probeResults = probeAndMix [g1; g2] 
         //printfn "probe results: %A" probeResults
-        Assert.True(g3.IsSome)
-        Gen.sample 10 50 g3.Value
+        //Assert.True(g3.IsSome)
+        let g3 = mix [g1; g2] 
+        Gen.sample 10 50 g3
         |> List.map int
         |> List.iter (fun x ->
             //printf "%A " x

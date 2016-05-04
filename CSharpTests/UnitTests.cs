@@ -65,24 +65,69 @@ namespace CSharpTests
         }
 
         [TestMethod]
+        public void ImportCreditRegistry()
+        {
+            CheckSchema(@"C:\temp\schemas\ImportCreditRegistry_v.3.xsd");
+        }
+
+        [TestMethod]
         public void CheckSchemas()
         {
             var path = @"C:\temp\Schemas\";
 
             foreach (var xsd in Directory.EnumerateFiles(path, "*.xsd", SearchOption.AllDirectories)
                 .GroupBy(x => Path.GetFileNameWithoutExtension(x))
-                .Select(x => x.First()))
+                .Select(x => x.First())
+                //.Take(10)
+                )
             {
                 CheckSchema(xsd);
+                //WriteTP(xsd);
             }
 
             //var file = Path.Combine(path, @"Common2015\Schemas\voicexml\files\vxml-attribs.xsd");
             //CheckSchema(file);
         }
 
-        static void Error(string category, string msg)
+        void WriteTP(string uri)
         {
-            Console.WriteLine("ERROR " + category + ": " + msg);
+//#r "../../bin/FSharp.Data.dll"
+//#r "System.Xml.Linq.dll"
+            Func<string, string> clean = x => 
+                x.Replace('.', '_')
+                 .Replace(':', '_')
+                 .Replace('-', '_')
+                 .Replace('\\', '_')
+                 .Replace('/', '_');
+    try
+            {
+                var schema = Schema.CreateFromUri(uri);
+                schema.GlobalElements.GroupBy(x => x.Namespace).ToList().ForEach(group =>
+                {
+                    var ns = clean(group.Key);
+                    Console.WriteLine("module {0}_{1} =", clean(uri), ns);
+                    foreach (var elm in group)
+                    {
+                        var path = Path.GetDirectoryName(uri);
+                        var format = @"    type ``{0}`` = XmlProviderFromSchema< @""{1}"", ElementName = ""{2}"", ElementNamespace = ""{3}"", ResolutionFolder = ""{4}"" > ";
+                        Console.WriteLine(format, clean(elm.Name), uri, elm.Name, elm.Namespace, path);
+                    }
+                    Console.WriteLine();
+                });
+
+                   
+            }
+            catch (XmlSchemaException e)
+            {
+                Console.WriteLine(@"// XmlSchemaException: " + uri + ": " + e.Message);
+            }
+
+        }
+
+        static void Log(string category, string msg)
+        {
+            //Console.WriteLine("ERROR " + category + ": " + msg);
+            File.WriteAllText("xsd.log", $"{DateTime.Now} {category}: {msg}");
         }
 
         // UBL-CommonAggregateComponents-2.1
@@ -92,17 +137,23 @@ namespace CSharpTests
             try
             {
                 var schema = Schema.CreateFromUri(uri);
+                Log("schema", uri);
                 var cust = GetCustomGenerators(Path.GetFileNameWithoutExtension(uri));
                 foreach (var elm in schema.GlobalElements)
                 {
-                    //Console.Write("element " + elm.ElementName.Name);
+                    Log("element ", elm.Name);
                     var gen = schema.Arbitrary(elm, cust).Generator;
                     // collect samples of increasing size
-                    var samples = gen.Sample(0, 1)
-                        .Concat(gen.Sample(5, 4))
-                        .Concat(gen.Sample(20, 4))
-                        .Concat(gen.Sample(1000, 1))
+
+                    var samples = Enumerable.Range(0, 10).
+                        SelectMany(x => gen.Sample(x*10, 5))
                         .ToArray();
+
+                    //var samples = gen.Sample(10, 5)
+                    //    //.Concat(gen.Sample(5, 4))
+                    //    //.Concat(gen.Sample(20, 4))
+                    //    //.Concat(gen.Sample(10000, 9))
+                    //    .ToArray();
                     var invalid = String.Join(Environment.NewLine,
                         samples
                         .Select(x => schema.Validate(x))
@@ -113,40 +164,40 @@ namespace CSharpTests
                     //Console.WriteLine(allValid ? " all valid" : " validation errors");
                     if (!allValid)
                     {
-                        Console.WriteLine("VALIDATION_ERROR for " + elm + " in " + uri);
-                        Console.WriteLine(invalid);
+                        Log("VALIDATION_ERR", elm + " in " + uri);
+                        Log("Invalid element", invalid);
                     }
                 }
             }
             catch (XmlSchemaException e)
             {
-                Error("XmlSchemaException", e.Message);
+                Log("XmlSchemaException", e.Message);
             }
             catch (Exception e)
             {
                 if (e.Source == "Fare")
                 {
-                    Error("Fare", e.Message);
+                    Log("Fare", e.Message);
                 }
                 else if (e.Message.EndsWith("is an invalid character."))
                 {
-                    Error("is an invalid character.", e.Message);
+                    Log("is an invalid character.", e.Message);
                 }
                 else if (e.Message.StartsWith("unsupported type"))
                 {
-                    Error("unsupported type", e.Message); 
+                    Log("unsupported type", e.Message); 
                 }
                 else if (e.Message.StartsWith("cannot mix constraints"))
                 {
-                    Error("cannot mix constraints", e.Message.Substring(0, 100)); 
+                    Log("cannot mix constraints", e.Message.Substring(0, 100)); 
                 }
                 else if (e.Source == "AntaniXml")
                 {
-                    Error("AntaniXml", e.Message);
+                    Log("AntaniXml", e.Message);
                 }
                 else
                 {
-                    Error("Unknown", e.Message);
+                    Log("Unknown", e.Message);
                 }
 
             }
