@@ -33,12 +33,10 @@
         <div class="span9" id="main">
           
 <p>AntaniXml is a .NET library for generating random xml based on a schema.</p>
-
-<p>This is useful mainly for testing, especially to produce stress test data, 
+<p>This is useful mainly for testing, especially to produce stress test data,
 but also for unit and property based testing.
-Of course generating samples may also help in figuring out concretely what 
+Of course generating samples may also help in figuring out concretely what
 kind of xml is defined by a certain schema.</p>
-
 <div class="row">
   <div class="span1"></div>
   <div class="span6">
@@ -49,16 +47,12 @@ kind of xml is defined by a certain schema.</p>
   </div>
   <div class="span1"></div>
 </div>
-
 <p>AntaniXml is developed in <a href="http://fsharp.org">F#</a> but the public API is usable also from C#.
 In fact most examples are given in both languages.</p>
-
 <h2><a name="Example" class="anchor" href="#Example">Example</a></h2>
-
-<p>The first example is straightforward, given a schema file you have to choose an element 
-definition to use as a template. Then you call the <code>Generate</code> method to get the 
+<p>The first example is straightforward, given a schema file you have to choose an element
+definition to use as a template. Then you call the <code>Generate</code> method to get the
 desired number of samples:</p>
-
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
@@ -79,9 +73,7 @@ desired number of samples:</p>
 </code></pre></td>
 </tr>
 </table>
-
 <p>The C# code is almost the same:</p>
-
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
@@ -92,36 +84,30 @@ desired number of samples:</p>
 </code></pre></td>
 </tr>
 </table>
-
 <p>There is also a <code>GenerateInfinite</code> method allowing never ending sequences of random xml to be created on demand.
 This may be handy for stress testing so that you don't have to produce and store up-front huge amounts of data.</p>
-
-<p>AntaniXml is built on top of the awesome <a href="https://github.com/fscheck/FsCheck">FsCheck</a> library, 
+<p>AntaniXml is built on top of the awesome <a href="https://github.com/fscheck/FsCheck">FsCheck</a> library,
 and you can use it for property based testing with FsCheck.
-Property based testing is an interesting and effective technique. 
-FsCheck is well documented to get you started. This library provides <code>Arbitrary</code> instances 
+Property based testing is an interesting and effective technique.
+FsCheck is well documented to get you started. This library provides <code>Arbitrary</code> instances
 so that you can feed tests with random (but valid) xml.</p>
-
-<p>While the first example shows the easiest way to use the library, there is another public API 
-allowing finer control on random generators. This API also exposes FsCheck types so that you can 
+<p>While the first example shows the easiest way to use the library, there is another public API
+allowing finer control on random generators. This API also exposes FsCheck types so that you can
 directly use their advanced features. Examples are available in the rest of the documentation.</p>
-
 <h2><a name="Documentation" class="anchor" href="#Documentation">Documentation</a></h2>
-
 <ul>
 <li><p><a href="tutorial.html">Tutorial</a> contains a further explanation of this library.</p></li>
 <li><p><a href="customizations.html">Customizations</a> hints at ways to tweak generators.</p></li>
-<li><p><a href="reference/index.html">API Reference</a> contains automatically generated documentation for all types, modules
-and functions in the library.</p></li>
+<li>
+<p><a href="reference/index.html">API Reference</a> contains automatically generated documentation for all types, modules
+and functions in the library.</p>
+</li>
 </ul>
-
 <h2><a name="Contributing-and-copyright" class="anchor" href="#Contributing-and-copyright">Contributing and copyright</a></h2>
-
-<p>The project is hosted on <a href="https://github.com/giacomociti/AntaniXml">GitHub</a> where you can <a href="https://github.com/giacomociti/AntaniXml/issues">report issues</a>, fork 
+<p>The project is hosted on <a href="https://github.com/giacomociti/AntaniXml">GitHub</a> where you can <a href="https://github.com/giacomociti/AntaniXml/issues">report issues</a>, fork
 the project and submit pull requests.</p>
-
-<p>The library is available under a public domain license, which allows modification and 
-redistribution for both commercial and non-commercial purposes. For more information see the 
+<p>The library is available under a public domain license, which allows modification and
+redistribution for both commercial and non-commercial purposes. For more information see the
 <a href="https://github.com/giacomociti/AntaniXml/blob/master/LICENSE.txt">License file</a> in the GitHub repository.</p>
 
 <div class="tip" id="fs1">namespace AntaniXml</div>

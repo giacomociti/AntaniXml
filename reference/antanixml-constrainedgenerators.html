@@ -43,7 +43,6 @@
 <p>This module provides support for simple types featuring multiple facets.
 For example when a simple type has both a Length facet and a pattern.</p>
 
-
 </div>
 
 <!-- Render nested types and modules, if there are any -->
@@ -59,7 +58,6 @@ For example when a simple type has both a Length facet and a pattern.</p>
             <a href="antanixml-constrainedgenerators-constrgen-1.html">ConstrGen<'a></a>
           </td>
           <td class="xmldoc"><p>a generator paired with a property satisfied by its samples</p>
-
 
 </td>
         </tr>
@@ -81,8 +79,8 @@ For example when a simple type has both a Length facet and a pattern.</p>
             all gens x
           </code>
           <div class="tip" id="38">
-            <strong>Signature:</strong> gens:ConstrGen&lt;&#39;?7147&gt; list -&gt; x:&#39;?7147 -&gt; bool<br />
-                          <strong>Type parameters:</strong> '?7147          </div>
+            <strong>Signature:</strong> gens:ConstrGen&lt;&#39;?7428&gt; list -&gt; x:&#39;?7428 -&gt; bool<br />
+                          <strong>Type parameters:</strong> '?7428          </div>
         </td>
         <td class="xmldoc">
             <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L13-13" class="github-link">
@@ -90,7 +88,6 @@ For example when a simple type has both a Length facet and a pattern.</p>
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
           <p>logical and of the properties of all generators in a list</p>
-
 
 
         </td>
@@ -102,11 +99,11 @@ For example when a simple type has both a Length facet and a pattern.</p>
             canParse parse x
           </code>
           <div class="tip" id="39">
-            <strong>Signature:</strong> parse:(&#39;?7158 -&gt; &#39;?7159) -&gt; x:&#39;?7158 -&gt; bool<br />
-                          <strong>Type parameters:</strong> '?7158, '?7159          </div>
+            <strong>Signature:</strong> parse:(&#39;?7437 -&gt; &#39;?7438) -&gt; x:&#39;?7437 -&gt; bool<br />
+                          <strong>Type parameters:</strong> '?7437, '?7438          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L60-60" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L65-65" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -124,7 +121,7 @@ For example when a simple type has both a Length facet and a pattern.</p>
                           <strong>Type parameters:</strong> 'b          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L63-63" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L68-68" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -142,7 +139,7 @@ For example when a simple type has both a Length facet and a pattern.</p>
                           <strong>Type parameters:</strong> 'b          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L74-74" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L79-79" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -160,11 +157,14 @@ For example when a simple type has both a Length facet and a pattern.</p>
                           <strong>Type parameters:</strong> 'a          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L50-50" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L32-32" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>mix generators by choosing the best (if can be reasonably built)
+and enforcing on it also the properties of the other ones</p>
+
+
         </td>
       </tr>
       <tr>
@@ -174,8 +174,8 @@ For example when a simple type has both a Length facet and a pattern.</p>
             probe samplesNo gens
           </code>
           <div class="tip" id="43">
-            <strong>Signature:</strong> samplesNo:int -&gt; gens:ConstrGen&lt;&#39;?7149&gt; list -&gt; (ConstrGen&lt;&#39;?7149&gt; * (&#39;?7149 list * &#39;?7149 list)) list<br />
-                          <strong>Type parameters:</strong> '?7149          </div>
+            <strong>Signature:</strong> samplesNo:int -&gt; gens:ConstrGen&lt;&#39;?7430&gt; list -&gt; (ConstrGen&lt;&#39;?7430&gt; * (&#39;?7430 list * &#39;?7430 list)) list<br />
+                          <strong>Type parameters:</strong> '?7430          </div>
         </td>
         <td class="xmldoc">
             <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L18-18" class="github-link">
@@ -187,43 +187,20 @@ the samples satisfying the properties of all the generators,
 the other list with the remaining samples</p>
 
 
-
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '44', 44)" onmouseover="showTip(event, '44', 44)">
-            probeAndMix gens
-          </code>
-          <div class="tip" id="44">
-            <strong>Signature:</strong> gens:ConstrGen&lt;&#39;?7151&gt; list -&gt; Gen&lt;&#39;?7151&gt; option * (ConstrGen&lt;&#39;?7151&gt; * (&#39;?7151 list * &#39;?7151 list)) list<br />
-                          <strong>Type parameters:</strong> '?7151          </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L32-32" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>mix generators by choosing the best (if can be reasonably built)
-and enforcing on it also the properties of the other ones</p>
-
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '45', 45)" onmouseover="showTip(event, '45', 45)">
             tryParse parse x
           </code>
-          <div class="tip" id="45">
-            <strong>Signature:</strong> parse:(&#39;?7155 -&gt; &#39;?7156) -&gt; x:&#39;?7155 -&gt; &#39;?7156 option<br />
-                          <strong>Type parameters:</strong> '?7155, '?7156          </div>
+          <div class="tip" id="44">
+            <strong>Signature:</strong> parse:(&#39;?7434 -&gt; &#39;?7435) -&gt; x:&#39;?7434 -&gt; &#39;?7435 option<br />
+                          <strong>Type parameters:</strong> '?7434, '?7435          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L56-56" class="github-link">
+            <a href="http://github.com/giacomociti/AntaniXml/tree/master/src/AntaniXml/ConstrainedGenerators.fs#L61-61" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>

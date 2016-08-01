@@ -34,16 +34,12 @@
         <div class="span9" id="main">
           
 <h1><a name="Customizations" class="anchor" href="#Customizations">Customizations</a></h1>
-
 <p>For some schemas the generator may produce something not correct (for example ignoring identity constraints).
 Or maybe the generated values simply look ugly to you (you may want meaningful words instead of random gibberish).
 There are a few options to customize  the generated output:</p>
-
 <h3><a name="Simply-change-the-output" class="anchor" href="#Simply-change-the-output">Simply change the output</a></h3>
-
-<p>Obviously one option is to change the produced output by using XSLT or by any other means. 
+<p>Obviously one option is to change the produced output by using XSLT or by any other means.
 For example since the output is an <code>XElement</code>, the <code>System.Xml.Linq</code> API is already well suited for this task:</p>
-
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
 <span class="l"> 2: </span>
 <span class="l"> 3: </span>
@@ -72,9 +68,7 @@ For example since the output is an <code>XElement</code>, the <code>System.Xml.L
 </code></pre></td>
 </tr>
 </table>
-
 <p>The same in C# is:</p>
-
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
 <span class="l"> 2: </span>
 <span class="l"> 3: </span>
@@ -103,48 +97,37 @@ For example since the output is an <code>XElement</code>, the <code>System.Xml.L
 </code></pre></td>
 </tr>
 </table>
-
 <p>The above example is just to get the idea. If you don't like imperative code
 you can map the element to another one, but for little fixes the
 mutability allowed in <code>System.Xml.Linq</code> may be just fine.</p>
-
 <h3><a name="Providing-your-own-generators" class="anchor" href="#Providing-your-own-generators">Providing your own generators</a></h3>
-
 <p>Custom generators are of course a superior alternative.</p>
-
 <p>To keep things simple, customizations are allowed only for elements and for global complex types.
-The only way to customize attributes and values of simple types, is to provide 
-custom generators for the enclosing elements or global complex types. 
+The only way to customize attributes and values of simple types, is to provide
+custom generators for the enclosing elements or global complex types.
 Hopefully this is an acceptable limitation for most practical purposes.</p>
-
 <p>FsCheck provides excellent documentation about creating custom generators, both in F# and in C#.
-Anyway in AntaniXml there is also an option to provide only a mapping function, so the default 
+Anyway in AntaniXml there is also an option to provide only a mapping function, so the default
 generators are still used but the generated elements are then transformed with a custom function.
 Custom generators are expected to produce <code>XElement</code> instances.
 In case of complex types the name of the generated element actually is not important because it
 will be replaced by the proper element name required in each context.</p>
-
 <h4><a name="Customizing-a-global-complex-type" class="anchor" href="#Customizing-a-global-complex-type">Customizing a global complex type</a></h4>
-
 <p>The qualified name of the complex type is used as an identifier to pick up a custom generator for all the
 elements explicitly defined to be of such a type.
 Hence only global types can be customized since anonymous types lack a name to be used as an identifier.
-Also in case of an element whose anonymous type is derived from a global one for which a customization is provided, 
+Also in case of an element whose anonymous type is derived from a global one for which a customization is provided,
 the custom generator is <em>not</em> picked up.</p>
-
 <h4><a name="Customizing-elements" class="anchor" href="#Customizing-elements">Customizing elements</a></h4>
-
 <p>Custom generators for elements instead may have a broader reach.
 When a custom generator is provided for elements with a given qualified name, that generator is used for all
 elements with such a name, regardless of their type.
 So, in case the schema is designed in <em>Russian doll</em> style, custom generators for elements are a better bet.
-Just beware of (nasty) schemas where two distinct element definitions describe elements with the exact same name 
+Just beware of (nasty) schemas where two distinct element definitions describe elements with the exact same name
 but different content models. In this case a custom generator may not be used because it would apply to
 both element definitions.</p>
-
-<p>Let's give a few concrete examples. In the following we'll be using this schema 
+<p>Let's give a few concrete examples. In the following we'll be using this schema
 (assuming a string variable <code>xsdText</code> holds it):</p>
-
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
 <span class="l"> 2: </span>
 <span class="l"> 3: </span>
@@ -169,15 +152,13 @@ both element definitions.</p>
         <span class="k">&lt;</span><span class="i">xs:complexType</span><span class="k">&gt;</span>
             <span class="k">&lt;</span><span class="i">xs:sequence</span><span class="k">&gt;</span>
                 <span class="k">&lt;</span><span class="i">xs:element</span> <span class="o">name</span><span class="k">="bar"</span> <span class="o">type</span><span class="k">="barType"</span> <span class="k">/&gt;</span>
-                <span class="k">&lt;</span><span class="i">xs:element</span> <span class="o">name</span><span class="k">="baz"</span> <span class="o">type</span><span class="k">="xs:string"</span> <span class="k">/&gt;</span>
+              <span class="k">&lt;</span><span class="i">xs:element</span> <span class="o">name</span><span class="k">="baz"</span> <span class="o">type</span><span class="k">="xs:string"</span> <span class="k">/&gt;</span>
             <span class="k">&lt;/</span><span class="i">xs:sequence</span><span class="k">&gt;</span>
         <span class="k">&lt;/</span><span class="i">xs:complexType</span><span class="k">&gt;</span>
     <span class="k">&lt;/</span><span class="i">xs:element</span><span class="k">&gt;</span>
 <span class="k">&lt;/</span><span class="i">xs:schema</span><span class="k">&gt;</span>
 </code></pre></td></tr></table>
-
 <p>First we show a customization for a complex type:</p>
-
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
 <span class="l"> 2: </span>
 <span class="l"> 3: </span>
@@ -206,9 +187,7 @@ both element definitions.</p>
 </code></pre></td>
 </tr>
 </table>
-
 <p>The equivalent C# code is the following:</p>
-
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
 <span class="l"> 2: </span>
 <span class="l"> 3: </span>
@@ -237,7 +216,6 @@ both element definitions.</p>
 </code></pre></td>
 </tr>
 </table>
-
 <p>The main thing to notice is the <code>CustomGenerators</code> type and its <code>ForComplexType</code> method accepting a mapping
 for transforming in uppercase the value of the <code>id</code> attribute for all the elements of type <code>barType</code>.
 This example is about customizing the default generator with a custom mapping.
@@ -246,7 +224,6 @@ The <code>Arbitrary</code> instance created embeds a generator, and <code>Gen.sa
 samples, specifying a size (5 in the example but let's ignore the concept of size for now)
 and the number of samples to create.
 The element generated may look like this:</p>
-
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
@@ -257,15 +234,12 @@ The element generated may look like this:</p>
   <span class="k">&lt;</span><span class="i">baz</span><span class="k">&gt;</span>j慬X@V'yQy[y9O~r~rTH2kwkwkMA+dzdЁdz:$]s<span class="k">&lt;/</span><span class="i">baz</span><span class="k">&gt;</span>
 <span class="k">&lt;/</span><span class="i">foo</span><span class="k">&gt;</span>
 </code></pre></td></tr></table>
-
 <p>Yes, text is gibberish (but for testing purposes usually it's a good idea to probe a system
-with strange data), anyway you see the value of attribute <code>id</code> is all upper case thanks to 
+with strange data), anyway you see the value of attribute <code>id</code> is all upper case thanks to
 the customization.</p>
-
 <p>In the next example instead we are creating a generator from scratch using the FsCheck combinators.
 Starting from a set of fixed string values, a generator ranging over such a set is built and then mapped
 to another one that wraps the random string values in xml elements.</p>
-
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
@@ -286,9 +260,7 @@ to another one that wraps the random string values in xml elements.</p>
 </code></pre></td>
 </tr>
 </table>
-
 <p>Here's the C# version of the same example:</p>
-
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
@@ -307,9 +279,7 @@ to another one that wraps the random string values in xml elements.</p>
 </code></pre></td>
 </tr>
 </table>
-
 <p>Now <code>baz</code> is no more gibberish because we took full control of the random generation:</p>
-
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
@@ -328,7 +298,6 @@ to another one that wraps the random string values in xml elements.</p>
   <span class="k">&lt;</span><span class="i">baz</span><span class="k">&gt;</span>c<span class="k">&lt;/</span><span class="i">baz</span><span class="k">&gt;</span>
 <span class="k">&lt;/</span><span class="i">foo</span><span class="k">&gt;</span>
 </code></pre></td></tr></table>
-
 <p>FsCheck provides many more combinators to compositionally create many kinds of generators.</p>
 
 <div class="tip" id="fs1">namespace AntaniXml</div>
@@ -356,7 +325,7 @@ to another one that wraps the random string values in xml elements.</p>
 <div class="tip" id="fs23">val foo : XmlQualifiedName<br /><br />Full name: Customizations.foo</div>
 <div class="tip" id="fs24">val barType : XmlQualifiedName<br /><br />Full name: Customizations.barType</div>
 <div class="tip" id="fs25">val toUpper : xml:XElement -&gt; XElement<br /><br />Full name: Customizations.toUpper</div>
-<div class="tip" id="fs26">Multiple items<br />type XElement =<br />&#160;&#160;inherit XContainer<br />&#160;&#160;new : name:XName -&gt; XElement + 4 overloads<br />&#160;&#160;member AncestorsAndSelf : unit -&gt; IEnumerable&lt;XElement&gt; + 1 overload<br />&#160;&#160;member Attribute : name:XName -&gt; XAttribute<br />&#160;&#160;member Attributes : unit -&gt; IEnumerable&lt;XAttribute&gt; + 1 overload<br />&#160;&#160;member DescendantNodesAndSelf : unit -&gt; IEnumerable&lt;XNode&gt;<br />&#160;&#160;member DescendantsAndSelf : unit -&gt; IEnumerable&lt;XElement&gt; + 1 overload<br />&#160;&#160;member FirstAttribute : XAttribute<br />&#160;&#160;member GetDefaultNamespace : unit -&gt; XNamespace<br />&#160;&#160;member GetNamespaceOfPrefix : prefix:string -&gt; XNamespace<br />&#160;&#160;member GetPrefixOfNamespace : ns:XNamespace -&gt; string<br />&#160;&#160;...<br /><br />Full name: System.Xml.Linq.XElement<br /><br />--------------------<br />XElement(name: XName) : unit<br />XElement(other: XElement) : unit<br />XElement(other: XStreamingElement) : unit<br />XElement(name: XName, content: obj) : unit<br />XElement(name: XName, params content: obj []) : unit</div>
+<div class="tip" id="fs26">Multiple items<br />type XElement =<br />&#160;&#160;inherit XContainer<br />&#160;&#160;new : name:XName -&gt; XElement + 4 overloads<br />&#160;&#160;member AncestorsAndSelf : unit -&gt; IEnumerable&lt;XElement&gt; + 1 overload<br />&#160;&#160;member Attribute : name:XName -&gt; XAttribute<br />&#160;&#160;member Attributes : unit -&gt; IEnumerable&lt;XAttribute&gt; + 1 overload<br />&#160;&#160;member DescendantNodesAndSelf : unit -&gt; IEnumerable&lt;XNode&gt;<br />&#160;&#160;member DescendantsAndSelf : unit -&gt; IEnumerable&lt;XElement&gt; + 1 overload<br />&#160;&#160;member FirstAttribute : XAttribute<br />&#160;&#160;member GetDefaultNamespace : unit -&gt; XNamespace<br />&#160;&#160;member GetNamespaceOfPrefix : prefix:string -&gt; XNamespace<br />&#160;&#160;member GetPrefixOfNamespace : ns:XNamespace -&gt; string<br />&#160;&#160;...<br /><br />Full name: System.Xml.Linq.XElement<br /><br />--------------------<br />XElement(name: XName) : unit<br />XElement(other: XElement) : unit<br />XElement(other: XStreamingElement) : unit<br />XElement(name: XName, content: obj) : unit<br />XElement(name: XName, [&lt;System.ParamArray&gt;] content: obj []) : unit</div>
 <div class="tip" id="fs27">val id : XAttribute</div>
 <div class="tip" id="fs28">property XAttribute.Value: string</div>
 <div class="tip" id="fs29">System.String.ToUpper() : string<br />System.String.ToUpper(culture: System.Globalization.CultureInfo) : string</div>

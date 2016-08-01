@@ -34,13 +34,11 @@
         <div class="span9" id="main">
           
 <h1><a name="Tutorial" class="anchor" href="#Tutorial">Tutorial</a></h1>
-
-<p>The <a href="http://giacomociti.github.io/AntaniXml/reference/antanixml-schema.html">public API</a> 
+<p>The <a href="http://giacomociti.github.io/AntaniXml/reference/antanixml-schema.html">public API</a>
 comprises factory methods to load a schema.
 Usually schema definitions are given as xsd files, so you need to specify their Uri.
-Overloads accepting xsd as plain text are also provided; they're handy for experimenting with 
+Overloads accepting xsd as plain text are also provided; they're handy for experimenting with
 little xsd snippets:</p>
-
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
 <span class="l"> 2: </span>
 <span class="l"> 3: </span>
@@ -69,10 +67,8 @@ little xsd snippets:</p>
 </code></pre></td>
 </tr>
 </table>
-
 <p>Choosing a global element we can get a generator for it.
 The same example in C# is:</p>
-
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
 <span class="l"> 2: </span>
 <span class="l"> 3: </span>
@@ -103,9 +99,7 @@ The same example in C# is:</p>
 </code></pre></td>
 </tr>
 </table>
-
 <p>and may generate something like this:</p>
-
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
@@ -113,17 +107,14 @@ The same example in C# is:</p>
 <span class="l">5: </span>
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="xml"><span class="k">&lt;</span><span class="i">e1</span><span class="k">&gt;</span>0<span class="k">&lt;/</span><span class="i">e1</span><span class="k">&gt;</span>
-<span class="k">&lt;</span><span class="i">e1</span><span class="k">&gt;</span>    -3<span class="k">&lt;/</span><span class="i">e1</span><span class="k">&gt;</span>
+<span class="k">&lt;</span><span class="i">e1</span><span class="k">&gt;</span>  -3<span class="k">&lt;/</span><span class="i">e1</span><span class="k">&gt;</span>
 <span class="k">&lt;</span><span class="i">e1</span><span class="k">&gt;</span>0<span class="k">&lt;/</span><span class="i">e1</span><span class="k">&gt;</span>
 <span class="k">&lt;</span><span class="i">e1</span><span class="k">&gt;</span>4<span class="k">&lt;/</span><span class="i">e1</span><span class="k">&gt;</span>
 <span class="k">&lt;</span><span class="i">e1</span><span class="k">&gt;</span>-1<span class="k">&lt;/</span><span class="i">e1</span><span class="k">&gt;</span>
 </code></pre></td></tr></table>
-
 <h3><a name="Property-based-testing" class="anchor" href="#Property-based-testing">Property based testing</a></h3>
-
 <p>For property based testing we can get instances of the
 <code>Arbitrary</code> type <a href="https://fscheck.github.io/FsCheck/TestData.html">defined by FsCheck</a>:</p>
-
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
@@ -134,9 +125,7 @@ The same example in C# is:</p>
 </code></pre></td>
 </tr>
 </table>
-
 <p>Again, the C# version is almost the same:</p>
-
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 </pre></td>
@@ -145,19 +134,15 @@ The same example in C# is:</p>
 </code></pre></td>
 </tr>
 </table>
-
 <p>The idea of property based testing is to express a specification with boolean functions (properties).
 But instead of trying to <em>prove</em> that a property holds, we simply check that the function is true for a big number of randomly
 generated input values.</p>
-
 <p>In our context the first, obligatory example is validity.
-This is of course a property we always expect to hold and hopefully AntaniXml produces valid elements, 
+This is of course a property we always expect to hold and hopefully AntaniXml produces valid elements,
 but it's worth checking it because for some schema it may not be the case,
 and you may discover the need to customize generators in order to obtain valid elements.</p>
-
 <p>The <code>Check.Quick</code> function generates a certain number of values using the given <code>Arbitrary</code> instance and,
 for each one, checks if the property holds; in this case it checks if the generated element is valid:</p>
-
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
@@ -174,9 +159,7 @@ for each one, checks if the property holds; in this case it checks if the genera
 </code></pre></td>
 </tr>
 </table>
-
 <p>The same in C# is:</p>
-
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
@@ -189,29 +172,24 @@ for each one, checks if the property holds; in this case it checks if the genera
 </code></pre></td>
 </tr>
 </table>
-
 <p>In the standard output a message like the following should be printed</p>
-
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">Ok</span>, <span class="i">passed</span> <span class="n">100</span> <span class="i">tests</span><span class="o">.</span>
 </code></pre></td>
 </tr>
 </table>
-
 <p>In case a counter-example is found, it is printed instead.
 FsCheck has a concept of shrinking aimed at minimizing counter-examples.
-At the moment AntaniXml lacks proper support for shrinking so counter-examples 
+At the moment AntaniXml lacks proper support for shrinking so counter-examples
 provided for failing tests may be bigger than necessary.</p>
-
-<p>When checking properties in a unit test, the function <code>Check.QuickThrowOnFailure</code> may be used instead of <code>Check.Quick</code> 
+<p>When checking properties in a unit test, the function <code>Check.QuickThrowOnFailure</code> may be used instead of <code>Check.Quick</code>
 so that a test failure is triggered when a property does not hold.
-For popular unit testing frameworks like NUnit and XUnit there are also extensions enabling to 
+For popular unit testing frameworks like NUnit and XUnit there are also extensions enabling to
 express FsCheck properties more directly.</p>
-
 <p>A more interesting example of property based testing is about XML data binding and serialization.
 Suppose you have a class representing a global element in a schema.
-This kind of data binding classes are often obtained with tools 
+This kind of data binding classes are often obtained with tools
 like <a href="https://msdn.microsoft.com/en-us/library/x6c1kb0s(v=vs.110).aspx"><code>xsd.exe</code></a>.
 It may be interesting to check that all valid elements can be properly deserialized into instances
 of the corresponding class. And serializing such instances back to XML should result in equivalent elements.
@@ -219,11 +197,9 @@ Probably it's not required for the resulting elements to be identical to the ori
 comes to formatting details; but at least we should expect no loss of contents.
 You may be surprised to discover that for many schemas it is quite hard or impossible to get a suitable data binding class.
 This is due to the <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.105.1550&amp;rep=rep1&amp;type=pdf">X/O impedance mismatch</a>.</p>
-
 <p>One more use case is schema evolution. Evolving a schema ensuring backward compatibility means that all the
 elements valid according to the old version of the schema should also be valid for the new version.
 This can be checked with property based testing.</p>
-
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
 <span class="l"> 2: </span>
 <span class="l"> 3: </span>
@@ -248,9 +224,7 @@ This can be checked with property based testing.</p>
 </code></pre></td>
 </tr>
 </table>
-
 <p>The same in C# is:</p>
-
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
@@ -265,19 +239,14 @@ This can be checked with property based testing.</p>
 </code></pre></td>
 </tr>
 </table>
-
-<p>In this example we also see in action a conditional property, 
+<p>In this example we also see in action a conditional property,
 expressed in F# with the <code>==&gt;</code> operator and in C# with the fluent method <code>When</code>.
-Again, the concept of conditional property is well explained 
+Again, the concept of conditional property is well explained
 in the <a href="https://fscheck.github.io/FsCheck/Properties.html">FsCheck documentation</a>.</p>
-
 <h3><a name="Creating-samples-for-the-XML-type-provider" class="anchor" href="#Creating-samples-for-the-XML-type-provider"><a href="#XMLTypeProvider">Creating samples for the XML type provider</a></a></h3>
-
 <p>Another possible usage scenario is creating samples for the XML type provider.</p>
-
 <p><a href="http://fsharp.github.io/FSharp.Data">FSharp.Data</a> is a popular F# library featuring many type providers, including one for XML.
 Strongly typed access to xml documents is achieved with inference on samples. AntaniXml may help to produce the needed samples:</p>
-
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
 <span class="l"> 2: </span>
 <span class="l"> 3: </span>
@@ -302,49 +271,35 @@ Strongly typed access to xml documents is achieved with inference on samples. An
               <span class="o">.</span><span class="f">Generate</span>(<span class="n">5</span>)
     <span onmouseout="hideTip(event, 'fs29', 61)" onmouseover="showTip(event, 'fs29', 61)" class="t">XElement</span>(<span onmouseout="hideTip(event, 'fs30', 62)" onmouseover="showTip(event, 'fs30', 62)" class="t">XName</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs31', 63)" onmouseover="showTip(event, 'fs31', 63)" class="f">Get</span> <span class="s">&quot;root&quot;</span>, <span onmouseout="hideTip(event, 'fs28', 64)" onmouseover="showTip(event, 'fs28', 64)" class="i">samples</span>)<span class="o">.</span><span class="f">Save</span>(<span class="s">@&quot;C:\temp\samples.xml&quot;</span>)
 
-    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs32', 65)" onmouseover="showTip(event, 'fs32', 65)" class="t">po</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs33', 66)" onmouseover="showTip(event, 'fs33', 66)" class="t">XmlProvider</span><span class="o">&lt;</span> <span class="s">@&quot;C:\temp\samples.xml&quot;</span>, <span class="i">SampleIsList</span> <span class="o">=</span> <span class="k">true</span><span class="o">&gt;</span>
+    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs32', 65)" onmouseover="showTip(event, 'fs32', 65)" class="t">po</span> <span class="o">=</span> <span class="i">XmlProvider</span><span class="o">&lt;</span> <span class="s">@&quot;C:\temp\samples.xml&quot;</span>, <span class="i">SampleIsList</span> <span class="o">=</span> <span class="k">true</span><span class="o">&gt;</span>
 </code></pre></td>
 </tr>
 </table>
-
 <p>Of course when a schema is available it would be a better option to infer types directly from it.
 Future versions of FSharp.Data may support xsd.</p>
-
 <h3><a name="Known-Limitations" class="anchor" href="#Known-Limitations">Known Limitations</a></h3>
-
 <p><a href="http://www.w3.org/XML/Schema">XML Schema</a> is rich and complex, it's inevitable to have some limitations.
 A few ones are known and listed below. Some of them may hopefully be addressed in the future.
 But likely there are many more unknown limitations. If you find one please raise an <a href="https://github.com/giacomociti/AntaniXml/issues">issue</a>.
-Anyway don't be too scared of this disclaimer. AntaniXml can cope with many nuances and support many features 
+Anyway don't be too scared of this disclaimer. AntaniXml can cope with many nuances and support many features
 (like regex patterns thanks to <a href="https://github.com/moodmosaic/Fare">Fare</a>).
 The main limitations currently known are:</p>
-
 <h4><a name="built-in-types" class="anchor" href="#built-in-types">built-in types</a></h4>
-
 <p>A few built-in types are not supported: Notation, NmTokens, Id, Idref, Idrefs, Entity and Entities.</p>
-
 <h4><a name="identity-and-subset-constraint" class="anchor" href="#identity-and-subset-constraint">identity and subset constraint</a></h4>
-
 <p>XML Schema provides rough equivalents of primary and foreign keys in databases.
 Version 1.1 also introduced assertions to allow further constraints.
 Schemas are primarily grammar based, so they are a good fit for random generators.
 But these complementary features for specifying constraints are at odd with the generative approach.</p>
-
 <h4><a name="wildcards" class="anchor" href="#wildcards">wildcards</a></h4>
-
 <p>With certain kinds of wildcards (e.g. <code>##other</code>) it may be impossible to generate valid contents.</p>
-
 <h4><a name="regex-patterns" class="anchor" href="#regex-patterns">regex patterns</a></h4>
-
-<p>Some regex patterns may not be properly supported, for example those using the character 
+<p>Some regex patterns may not be properly supported, for example those using the character
 classes <code>\i</code> and <code>\c</code> which are specific to W3C XML Schema.</p>
-
 <h3><a name="Public-API" class="anchor" href="#Public-API">Public API</a></h3>
-
 <p>The public types of the <code>AntaniXml</code> namespace constitute the public API.
-Users of the library are expected to interact only with the <code>Schema</code> class and 
+Users of the library are expected to interact only with the <code>Schema</code> class and
 sometimes with the <code>CustomGenerators</code> class.</p>
-
 <p>The rest of the library is organized in modules.
 Even if they are public they are not designed to be directly used by C# client code.</p>
 
@@ -372,15 +327,14 @@ Even if they are public they are not designed to be directly used by C# client c
 <div class="tip" id="fs22">val arbFooOld : FsCheck.Arbitrary&lt;Linq.XElement&gt;<br /><br />Full name: Tutorial.arbFooOld</div>
 <div class="tip" id="fs23">val elm : &#39;a (requires &#39;a :&gt; Linq.XElement)</div>
 <div class="tip" id="fs24">namespace System.IO</div>
-<div class="tip" id="fs25">namespace FSharp</div>
-<div class="tip" id="fs26">namespace FSharp.Data</div>
+<div class="tip" id="fs25">namespace Microsoft.FSharp</div>
+<div class="tip" id="fs26">namespace Microsoft.FSharp.Data</div>
 <div class="tip" id="fs27">namespace System.Xml.Linq</div>
 <div class="tip" id="fs28">val samples : XElement array<br /><br />Full name: Tutorial.samples</div>
-<div class="tip" id="fs29">Multiple items<br />type XElement =<br />&#160;&#160;inherit XContainer<br />&#160;&#160;new : name:XName -&gt; XElement + 4 overloads<br />&#160;&#160;member AncestorsAndSelf : unit -&gt; IEnumerable&lt;XElement&gt; + 1 overload<br />&#160;&#160;member Attribute : name:XName -&gt; XAttribute<br />&#160;&#160;member Attributes : unit -&gt; IEnumerable&lt;XAttribute&gt; + 1 overload<br />&#160;&#160;member DescendantNodesAndSelf : unit -&gt; IEnumerable&lt;XNode&gt;<br />&#160;&#160;member DescendantsAndSelf : unit -&gt; IEnumerable&lt;XElement&gt; + 1 overload<br />&#160;&#160;member FirstAttribute : XAttribute<br />&#160;&#160;member GetDefaultNamespace : unit -&gt; XNamespace<br />&#160;&#160;member GetNamespaceOfPrefix : prefix:string -&gt; XNamespace<br />&#160;&#160;member GetPrefixOfNamespace : ns:XNamespace -&gt; string<br />&#160;&#160;...<br /><br />Full name: System.Xml.Linq.XElement<br /><br />--------------------<br />XElement(name: XName) : unit<br />XElement(other: XElement) : unit<br />XElement(other: XStreamingElement) : unit<br />XElement(name: XName, content: obj) : unit<br />XElement(name: XName, params content: obj []) : unit</div>
+<div class="tip" id="fs29">Multiple items<br />type XElement =<br />&#160;&#160;inherit XContainer<br />&#160;&#160;new : name:XName -&gt; XElement + 4 overloads<br />&#160;&#160;member AncestorsAndSelf : unit -&gt; IEnumerable&lt;XElement&gt; + 1 overload<br />&#160;&#160;member Attribute : name:XName -&gt; XAttribute<br />&#160;&#160;member Attributes : unit -&gt; IEnumerable&lt;XAttribute&gt; + 1 overload<br />&#160;&#160;member DescendantNodesAndSelf : unit -&gt; IEnumerable&lt;XNode&gt;<br />&#160;&#160;member DescendantsAndSelf : unit -&gt; IEnumerable&lt;XElement&gt; + 1 overload<br />&#160;&#160;member FirstAttribute : XAttribute<br />&#160;&#160;member GetDefaultNamespace : unit -&gt; XNamespace<br />&#160;&#160;member GetNamespaceOfPrefix : prefix:string -&gt; XNamespace<br />&#160;&#160;member GetPrefixOfNamespace : ns:XNamespace -&gt; string<br />&#160;&#160;...<br /><br />Full name: System.Xml.Linq.XElement<br /><br />--------------------<br />XElement(name: XName) : unit<br />XElement(other: XElement) : unit<br />XElement(other: XStreamingElement) : unit<br />XElement(name: XName, content: obj) : unit<br />XElement(name: XName, [&lt;System.ParamArray&gt;] content: obj []) : unit</div>
 <div class="tip" id="fs30">type XName =<br />&#160;&#160;member Equals : obj:obj -&gt; bool<br />&#160;&#160;member GetHashCode : unit -&gt; int<br />&#160;&#160;member LocalName : string<br />&#160;&#160;member Namespace : XNamespace<br />&#160;&#160;member NamespaceName : string<br />&#160;&#160;member ToString : unit -&gt; string<br />&#160;&#160;static member Get : expandedName:string -&gt; XName + 1 overload<br /><br />Full name: System.Xml.Linq.XName</div>
 <div class="tip" id="fs31">XName.Get(expandedName: string) : XName<br />XName.Get(localName: string, namespaceName: string) : XName</div>
-<div class="tip" id="fs32">type po = XmlProvider&lt;...&gt;<br /><br />Full name: Tutorial.po</div>
-<div class="tip" id="fs33">type XmlProvider<br /><br />Full name: FSharp.Data.XmlProvider<br /><em><br /><br />&lt;summary&gt;Typed representation of a XML file.&lt;/summary&gt;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;Sample&#39;&gt;Location of a XML sample file or a string containing a sample XML document.&lt;/param&gt;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;SampleIsList&#39;&gt;If true, the children of the root in the sample document represent individual samples for the inference.&lt;/param&gt;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;Global&#39;&gt;If true, the inference unifies all XML elements with the same name.&lt;/param&gt;                     <br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;Culture&#39;&gt;The culture used for parsing numbers and dates. Defaults to the invariant culture.&lt;/param&gt;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;Encoding&#39;&gt;The encoding used to read the sample. You can specify either the character set name or the codepage number. Defaults to UTF8 for files, and to ISO-8859-1 the for HTTP requests, unless `charset` is specified in the `Content-Type` response header.&lt;/param&gt;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;ResolutionFolder&#39;&gt;A directory that is used when resolving relative file references (at design time and in hosted execution).&lt;/param&gt;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;EmbeddedResource&#39;&gt;When specified, the type provider first attempts to load the sample from the specified resource <br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;(e.g. &#39;MyCompany.MyAssembly, resource_name.xml&#39;). This is useful when exposing types generated by the type provider.&lt;/param&gt;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;param name=&#39;InferTypesFromValues&#39;&gt;If true, turns on additional type inference from values. <br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;(e.g. type inference infers string values such as &quot;123&quot; as ints and values constrained to 0 and 1 as booleans. The XmlProvider also infers string values as JSON.)&lt;/param&gt;</em></div>
+<div class="tip" id="fs32">type po = obj<br /><br />Full name: Tutorial.po</div>
 
         </div>
         <div class="span3">
