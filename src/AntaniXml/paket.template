@@ -14,7 +14,7 @@ requireLicenseAcceptance
 copyright
     Copyright 2015
 tags
-    random xml xsd schema fsharp
+    random xml xsd fscheck fsharp
 summary
     xml random generator
 description

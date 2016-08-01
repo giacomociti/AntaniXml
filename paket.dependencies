@@ -1,7 +1,7 @@
 source https://nuget.org/api/v2
 
 nuget FSharp.Formatting
-nuget Fare 1.0.0
+nuget Fare >= 1.0.3
 nuget FsCheck >= 2.0.4
 nuget FsCheck.NUnit
 nuget NUnit 

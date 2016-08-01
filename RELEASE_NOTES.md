@@ -1,3 +1,11 @@
+#### 0.7.2 - August 02 2016
+* requires the latest version of Fare for improved regex support
+
+
+### 0.7.1 - May 04 2016
+* prefer invalid data (when cannot mix constraints) instead of throwing
+
+
 #### 0.7.0 - March 23 2016
 * increased size of samples 
 
