@@ -166,7 +166,7 @@ The same in C# is:
     var oldSchema = Schema.CreateFromUri("old.xsd");
     var newSchema = Schema.CreateFromUri("new.xsd");
     var arbFooOld = oldSchema.Arbitrary(new XmlQualifiedName("foo"));
-    Prop.ForAll(arbFooOld, x => oldSchema.IsValid(x).When(newSchema.IsValid(x)))
+    Prop.ForAll(arbFooOld, x => newSchema.IsValid(x).When(oldSchema.IsValid(x)))
         .QuickCheck();
 
 In this example we also see in action a conditional property, 
